@@ -7,7 +7,7 @@ import meetingServiceCardImg from "./images/meeting-service-card.svg";
 import chattingServiceCardImg from "./images/chatting-service-card.svg";
 import homePageBackgroung from "./images/homepage-background.png";
 import logo from "./images/logo.svg";
-
+import chatAi from "./images/chatAi.svg"
 // icons
 import frame from "./icons/Frame.svg";
 import audio from "./icons/audio-lines 1.svg";
@@ -34,6 +34,7 @@ export const images = {
 	chattingServiceCardImg,
 	homePageBackgroung,
 	logo,
+	chatAi
 	
 };
 export const icons = {

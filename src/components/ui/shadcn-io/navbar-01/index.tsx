@@ -11,11 +11,15 @@ import {
 import { images } from "@/shared/assets";
 import { Link, NavLink } from "react-router-dom";
 import {
+  BellIcon,
   CalendarDaysIcon,
   FolderIcon,
   MailIcon,
   VideoIcon,
 } from "lucide-react";
+import AvatarProfile from "@/shared/settings/AvatarProfile";
+import { Avatar, AvatarFallback } from "../../avatar";
+import { Badge } from "../../badge";
 
 // Hamburger icon component
 const HamburgerIcon = ({
@@ -92,158 +96,148 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
       ...props
     },
     ref
-  ) =>
-    //  ref
-    {
-      const [isMobile, setIsMobile] = useState(false);
-      const containerRef = useRef<HTMLElement>(null);
+  ) => {
+    const [isMobile, setIsMobile] = useState(false);
+    const containerRef = useRef<HTMLElement>(null);
 
-      useEffect(() => {
-        const checkWidth = () => {
-          if (containerRef.current) {
-            const width = containerRef.current.offsetWidth;
-            setIsMobile(width < 768); // 768px is md breakpoint
-          }
-        };
-
-        checkWidth();
-
-        const resizeObserver = new ResizeObserver(checkWidth);
+    useEffect(() => {
+      const checkWidth = () => {
         if (containerRef.current) {
-          resizeObserver.observe(containerRef.current);
+          const width = containerRef.current.offsetWidth;
+          setIsMobile(width < 768); // 768px is md breakpoint
         }
+      };
 
-        return () => {
-          resizeObserver.disconnect();
-        };
-      }, []);
+      checkWidth();
 
-      // Combine refs
-      const combinedRef = React.useCallback(
-        (node: HTMLElement | null) => {
-          containerRef.current = node;
-          if (typeof ref === "function") {
-            ref(node);
-          } else if (ref) {
-            ref.current = node;
-          }
-        },
-        [ref]
-      );
+      const resizeObserver = new ResizeObserver(checkWidth);
+      if (containerRef.current) {
+        resizeObserver.observe(containerRef.current);
+      }
 
-      return (
-        <header
-          ref={combinedRef}
-          className={cn(
-            "sticky top-0 z-50 w-full border-b bg-skyblue-500 backdrop-blur px-4 md:px-6 ",
-            className
-          )}
-          {...props}
-        >
-          <div className="container mx-auto flex h-[72px] max-w-screen-2xl items-center justify-between gap-4">
-            {/* Left side */}
-            <div className="flex items-center gap-2">
-              {/* Mobile menu trigger */}
-              {isMobile && (
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      className="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
-                      variant="ghost"
-                      size="icon"
-                    >
-                      <HamburgerIcon />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent align="start" className="w-48 p-2">
-                    <NavigationMenu className="max-w-none">
-                      <NavigationMenuList className="flex-col items-start gap-1">
-                        {navigationLinks.map((link, index) => (
-                          <NavigationMenuItem key={index} className="w-full">
-                            <button
-                              onClick={(e) => e.preventDefault()}
-                              className={cn(
-                                "flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer no-underline",
-                                link.active
-                                  ? "bg-accent text-accent-foreground"
-                                  : "text-foreground/80"
-                              )}
-                            >
-                              {link.label}
-                            </button>
-                          </NavigationMenuItem>
-                        ))}
-                      </NavigationMenuList>
-                    </NavigationMenu>
-                  </PopoverContent>
-                </Popover>
-              )}
-              {/* Main nav */}
-              <div className="flex items-center gap-6">
-                <Link
-                  to={logoHref}
-                  className="flex items-center space-x-2 cursor-pointer"
-                >
-                  <img src={images.logo} alt="Logo" className="w-24 h-24 p-1" />
-                </Link>
-                {/* Navigation menu */}
-                {!isMobile && (
-                  <NavigationMenu className="flex">
-                    <NavigationMenuList className="gap-3">
+      return () => {
+        resizeObserver.disconnect();
+      };
+    }, []);
+
+    // Combine refs
+    const combinedRef = React.useCallback(
+      (node: HTMLElement | null) => {
+        containerRef.current = node;
+        if (typeof ref === "function") {
+          ref(node);
+        } else if (ref) {
+          ref.current = node;
+        }
+      },
+      [ref]
+    );
+
+    return (
+      <header
+        ref={combinedRef}
+        className={cn(
+          "sticky top-0 z-50 w-full border-b bg-skyblue-500 backdrop-blur px-4 md:px-6 ",
+          className
+        )}
+        {...props}
+      >
+        <div className="container mx-auto flex h-[72px] max-w-screen-2xl items-center justify-between gap-4">
+          {/* Left side */}
+          <div className="flex items-center gap-2">
+            {/* Mobile menu trigger */}
+            {isMobile && (
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    className="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
+                    variant="ghost"
+                    size="icon"
+                  >
+                    <HamburgerIcon />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="start" className="w-48 p-2">
+                  <NavigationMenu className="max-w-none">
+                    <NavigationMenuList className="flex-col items-start gap-1">
                       {navigationLinks.map((link, index) => (
-                        <NavigationMenuItem key={index}>
-                          <NavLink
-                            to={link.href}
-                            className={({ isActive }) =>
-                              `group inline-flex h-10 w-max items-center justify-center
+                        <NavigationMenuItem key={index} className="w-full">
+                          <button
+                            onClick={(e) => e.preventDefault()}
+                            className={cn(
+                              "flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer no-underline",
+                              link.active
+                                ? "bg-accent text-accent-foreground"
+                                : "text-foreground/80"
+                            )}
+                          >
+                            {link.label}
+                          </button>
+                        </NavigationMenuItem>
+                      ))}
+                    </NavigationMenuList>
+                  </NavigationMenu>
+                </PopoverContent>
+              </Popover>
+            )}
+            {/* Main nav */}
+            <div className="flex items-center gap-6">
+              <Link
+                to={logoHref}
+                className="flex items-center space-x-2 cursor-pointer"
+              >
+                <img src={images.logo} alt="Logo" className="w-24 h-24 p-1" />
+              </Link>
+              {/* Navigation menu */}
+              {!isMobile && (
+                <NavigationMenu className="flex">
+                  <NavigationMenuList className="gap-3">
+                    {navigationLinks.map((link, index) => (
+                      <NavigationMenuItem key={index}>
+                        <NavLink
+                          to={link.href}
+                          className={({ isActive }) =>
+                            `group inline-flex h-10 w-max items-center justify-center
                              rounded-3xl px-5 py-3 font-medium transition-colors
                                 no-underline ${
                                   isActive
                                     ? "bg-primary-heading-text-color text-secondary-text-color "
                                     : "text-primary-heading-text-color hover:bg-primary-heading-text-color hover:text-secondary-text-color border-primary-heading-text-color border"
                                 }`
-                            }
-                          >
-                            {link.icon && (
-                              <link.icon className="mr-2 h-4 w-4" />
-                            )}
-                            <span>{link.label}</span>
-                          </NavLink>
-                        </NavigationMenuItem>
-                      ))}
-                    </NavigationMenuList>
-                  </NavigationMenu>
-                )}
-              </div>
-            </div>
-            {/* Right side */}
-            <div className="flex items-center gap-3">
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (onSignInClick) onSignInClick();
-                }}
-              >
-                {signInText}
-              </Button>
-              <Button
-                size="sm"
-                className="text-sm font-medium px-4 h-9 rounded-md shadow-sm"
-                onClick={(e) => {
-                  e.preventDefault();
-                  if (onCtaClick) onCtaClick();
-                }}
-              >
-                {ctaText}
-              </Button>
+                          }
+                        >
+                          {link.icon && <link.icon className="mr-2 h-4 w-4" />}
+                          <span>{link.label}</span>
+                        </NavLink>
+                      </NavigationMenuItem>
+                    ))}
+                  </NavigationMenuList>
+                </NavigationMenu>
+              )}
             </div>
           </div>
-        </header>
-      );
-    }
+          {/* Right side */}
+          <div className="flex items-center gap-3">
+           <div> <AvatarProfile /></div>
+            <div className="relative ">
+              <Avatar>
+                <AvatarFallback>
+                  <BellIcon className="text-sky-950 w-[18px] h-[18px] bg-skyblue-50 " />
+                </AvatarFallback>
+              </Avatar>
+              <Badge className="absolute bg-red-500 top-1.5 left-[17px] h-1.5 w-1.5 p-0 rounded-full"></Badge>
+            </div>
+            <div>
+              <Link to={'/chat'} className="flex items-center gap-2 px-4.5 py-2.5 bg-sky-50 rounded-full hover:bg-white">
+                <img src={images.chatAi} alt="Chat AI" className="w-6 h-6 " />
+                <span className="text-primary-heading-text-color font-medium">Chat</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      </header>
+    );
+  }
 );
 
 Navbar01.displayName = "Navbar01";
