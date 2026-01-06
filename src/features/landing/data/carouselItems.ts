@@ -1,30 +1,25 @@
-import { images, icons } from "@/shared/assets";
+import { images } from "@/features/landing/assets";
+import type { CarouselItem } from "../types/CarouselItem";
 
-interface ICarouselItemData {
-	img: string;
-	title: string;
-	features: { icon: string; text: string }[];
-}
-
-export const carouselItemsData: ICarouselItemData[] = [
+export const carouselItemsData: CarouselItem[] = [
 	{
 		img: images.fileServiceCardImg,
 		title: "Smart File Hub",
 		features: [
 			{
-				icon: icons.cloud,
+				icon: images.cloud,
 				text: "Upload and access files",
 			},
 			{
-				icon: icons.slidersHorizontal,
+				icon: images.slidersHorizontal,
 				text: "Files organization",
 			},
 			{
-				icon: icons.share,
+				icon: images.share,
 				text: "Files sharing",
 			},
 			{
-				icon: icons.book,
+				icon: images.book,
 				text: "AI summarization files",
 			},
 		],
@@ -34,15 +29,15 @@ export const carouselItemsData: ICarouselItemData[] = [
 		title: "Meeting Room",
 		features: [
 			{
-				icon: icons.video,
+				icon: images.video,
 				text: "Start and join meetings",
 			},
 			{
-				icon: icons.audio,
+				icon: images.audio,
 				text: "Auto-Recording sessions",
 			},
 			{
-				icon: icons.lightbulb,
+				icon: images.lightbulb,
 				text: "AI summaries and task extraction",
 			},
 		],
@@ -52,19 +47,19 @@ export const carouselItemsData: ICarouselItemData[] = [
 		title: "AI Chatbot",
 		features: [
 			{
-				icon: icons.audio,
+				icon: images.audio,
 				text: "Auto-Recording Meetings",
 			},
 			{
-				icon: icons.play,
+				icon: images.play,
 				text: "Video and files summarization",
 			},
 			{
-				icon: icons.lightbulb,
+				icon: images.lightbulb,
 				text: "Key insights extraction",
 			},
 			{
-				icon: icons.book,
+				icon: images.book,
 				text: "Making Quizzes",
 			},
 		],
@@ -74,15 +69,15 @@ export const carouselItemsData: ICarouselItemData[] = [
 		title: "Calendar Creation",
 		features: [
 			{
-				icon: icons.calendar,
+				icon: images.calendar,
 				text: "Create and update your calendar",
 			},
 			{
-				icon: icons.calendarPlus,
+				icon: images.calendarPlus,
 				text: "Add tasks",
 			},
 			{
-				icon: icons.slidersHorizontal,
+				icon: images.slidersHorizontal,
 				text: "Organize your schedule",
 			},
 		],
@@ -92,11 +87,11 @@ export const carouselItemsData: ICarouselItemData[] = [
 		title: "Mail Service",
 		features: [
 			{
-				icon: icons.mail,
+				icon: images.mail,
 				text: "Manage your emails",
 			},
 			{
-				icon: icons.send,
+				icon: images.send,
 				text: "Send and schedule emails",
 			},
 		],
@@ -106,15 +101,15 @@ export const carouselItemsData: ICarouselItemData[] = [
 		title: "Chatting and Contacts Creation",
 		features: [
 			{
-				icon: icons.speech,
+				icon: images.speech,
 				text: "Connected with your team",
 			},
 			{
-				icon: icons.frame,
+				icon: images.frame,
 				text: "Create contacts for collaboration",
 			},
 			{
-				icon: icons.users,
+				icon: images.users,
 				text: "Invite your colleagues",
 			},
 		],

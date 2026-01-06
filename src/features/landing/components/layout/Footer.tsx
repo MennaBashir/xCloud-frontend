@@ -1,8 +1,8 @@
+import { useIsMobile } from "@/hooks/use-mobile"
 import { Button } from "@/components/ui/button";
-import { useIsMobile } from "@/hooks/use-mobile";
 import { ArrowRight } from "lucide-react";
 
-const Footer = () => {
+const LandingFooter = () => {
 	const isMobile = useIsMobile();
 	return (
 		<div className='w-full container mx-auto flex justify-end p-4'>
@@ -22,4 +22,4 @@ const Footer = () => {
 	);
 };
 
-export default Footer;
+export default LandingFooter;

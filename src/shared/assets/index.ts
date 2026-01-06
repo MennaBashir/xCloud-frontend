@@ -1,14 +1,5 @@
-// images
-import fileServiceCardImg from "./images/file-service-card.svg";
-import calendarServiceCardImg from "./images/calendar-service-card.svg";
-import chatbotServiceCardImg from "./images/chatbot-service-card.svg";
-import mailServiceCardImg from "./images/mail-service-card.svg";
-import meetingServiceCardImg from "./images/meeting-service-card.svg";
-import chattingServiceCardImg from "./images/chatting-service-card.svg";
-import homePageBackgroung from "./images/homepage-background.png";
 import logo from "./images/logo.svg";
 import chatAi from "./images/chatAi.svg"
-// icons
 import frame from "./icons/Frame.svg";
 import audio from "./icons/audio-lines 1.svg";
 import book from "./icons/book-text 1.svg";
@@ -25,32 +16,9 @@ import speech from "./icons/speech 1.svg";
 import users from "./icons/users 1.svg";
 import video from "./icons/video 1.svg";
 
+
 export const images = {
-	fileServiceCardImg,
-	calendarServiceCardImg,
-	chatbotServiceCardImg,
-	mailServiceCardImg,
-	meetingServiceCardImg,
-	chattingServiceCardImg,
-	homePageBackgroung,
 	logo,
 	chatAi
 	
-};
-export const icons = {
-	frame,
-	audio,
-	book,
-	calendar,
-	calendarPlus,
-	cloud,
-	lightbulb,
-	mail,
-	play,
-	send,
-	share,
-	slidersHorizontal,
-	speech,
-	users,
-	video,
 };

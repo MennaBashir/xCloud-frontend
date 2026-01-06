@@ -1,7 +1,7 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { images } from "@/shared/assets";
+import { images } from "@/features/landing/assets";
 
-const Navbar = () => {
+const LandingNavbar = () => {
 	return (
 		<nav className='container mx-auto w-full p-4 flex items-center justify-between'>
 			<img
@@ -19,4 +19,4 @@ const Navbar = () => {
 	);
 };
 
-export default Navbar;
+export default LandingNavbar;

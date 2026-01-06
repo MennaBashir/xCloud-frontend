@@ -1,0 +1,73 @@
+/* Remove the outer border from the scrollgrid */
+.fc-scrollgrid {
+  border: none !important;
+}
+
+/* Add vertical borders to columns */
+.fc-theme-standard td,
+.fc-theme-standard th {
+  border-right: 1px solid #D5D9E2 !important;
+  border-left: none !important;
+  border-top: none !important;
+  border-bottom: none !important;
+}
+
+/* Remove border from the last column so it doesn't double up */
+.fc-theme-standard td:last-of-type,
+.fc-theme-standard th:last-of-type {
+  border-right: none !important;
+}
+
+/* Add spacing to the first row of cells */
+.fc-theme-standard td:first-child {
+  padding-top: 10px !important;
+}
+
+/* Header Styling (Mon, Tue, Wed...) */
+.fc-theme-standard .fc-col-header-cell {
+  background-color: #EEF5FF;
+  color: #64748B;
+  height: 56px;
+  border-bottom: none !important;
+}
+
+.fc-col-header-cell-cushion {
+  text-transform: uppercase;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding-top: 20px !important;
+  padding-bottom: 20px !important;
+}
+
+/* Day Grid Styling */
+.fc-day {
+  border: none !important;
+}
+
+.fc-daygrid-day-top {
+  justify-content: center;
+}
+
+.fc-daygrid-day-number {
+  font-size: 1rem;
+  font-weight: 500;
+  color: #162E54;
+  text-decoration: none !important;
+}
+
+.fc .fc-day-today {
+  background-color: #EEF5FF !important;
+}
+
+.fc .fc-day-today .fc-daygrid-day-top .fc-daygrid-day-number {
+  color: #3B82F6;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+}
+
+/* Hide  */
+.fc-scroller {
+  overflow: visible !important;
+}
