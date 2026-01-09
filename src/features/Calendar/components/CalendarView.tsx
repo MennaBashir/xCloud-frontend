@@ -11,7 +11,7 @@ import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
-import "../Styles/fullcalendar.css";
+import "../styles/fullcalendar.css";
 import { images } from "../assets";
 import { useCalendarController } from "../hooks/useCalendarController";
 
