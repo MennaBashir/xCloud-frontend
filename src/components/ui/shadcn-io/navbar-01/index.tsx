@@ -75,17 +75,17 @@ export interface Navbar01Props extends React.HTMLAttributes<HTMLElement> {
 
 // Default navigation links
 const defaultNavigationLinks: Navbar01NavLink[] = [
-  { href: "/file", label: "File", icon: FolderIcon },
-  { href: "/meeting", label: "Meeting", icon: VideoIcon },
-  { href: "/gmail", label: "Gmail", icon: MailIcon },
-  { href: "/calendar", label: "Calendar", icon: CalendarDaysIcon },
+  { href: "/app", label: "File", icon: FolderIcon },
+  { href: "/app/meeting", label: "Meeting", icon: VideoIcon },
+  { href: "/app/gmail", label: "Gmail", icon: MailIcon },
+  { href: "/app/calendar", label: "Calendar", icon: CalendarDaysIcon },
 ];
 
-export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
+export const Navbar = React.forwardRef<HTMLElement, Navbar01Props>(
   (
     {
       className,
-      logoHref = "/file",
+      logoHref = "/",
       navigationLinks = defaultNavigationLinks,
       signInText = "Sign In",
       signInHref = "/signin",
@@ -104,7 +104,7 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
       const checkWidth = () => {
         if (containerRef.current) {
           const width = containerRef.current.offsetWidth;
-          setIsMobile(width < 768); // 768px is md breakpoint
+          setIsMobile(width < 992); // 992px is lg breakpoint
         }
       };
 
@@ -150,7 +150,7 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
               <Popover>
                 <PopoverTrigger asChild>
                   <Button
-                    className="group h-9 w-9 hover:bg-accent hover:text-accent-foreground"
+                    className="group h-10 w-10 hover:bg-accent hover:text-accent-foreground"
                     variant="ghost"
                     size="icon"
                   >
@@ -158,23 +158,33 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent align="start" className="w-48 p-2">
-                  <NavigationMenu className="max-w-none">
-                    <NavigationMenuList className="flex-col items-start gap-1">
+                  <NavigationMenu className="max-w-none w-full block">
+                    <NavigationMenuList className="flex-col items-start gap-1 w-full">
                       {navigationLinks.map((link, index) => (
                         <NavigationMenuItem key={index} className="w-full">
-                          <button
-                            onClick={(e) => e.preventDefault()}
+                          <Link
+                            to={link.href}
                             className={cn(
-                              "flex w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer no-underline",
+                              "block text-center w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer no-underline",
                               link.active
                                 ? "bg-accent text-accent-foreground"
                                 : "text-foreground/80"
                             )}
                           >
                             {link.label}
-                          </button>
+                          </Link>
                         </NavigationMenuItem>
                       ))}
+                      <NavigationMenuItem className="w-full">
+                        <Link
+                          to={"/logout"}
+                          className={cn(
+                            "block text-center text-foreground/80 w-full items-center rounded-md px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground cursor-pointer no-underline"
+                          )}
+                        >
+                          Logout
+                        </Link>
+                      </NavigationMenuItem>
                     </NavigationMenuList>
                   </NavigationMenu>
                 </PopoverContent>
@@ -218,7 +228,10 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
           </div>
           {/* Right side */}
           <div className="flex items-center gap-3">
-           <div> <AvatarProfile /></div>
+            <div className="max-sm:hidden block">
+              {" "}
+              <AvatarProfile />
+            </div>
             <div className="relative ">
               <Avatar>
                 <AvatarFallback>
@@ -228,9 +241,14 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
               <Badge className="absolute bg-red-500 top-1.5 left-[17px] h-1.5 w-1.5 p-0 rounded-full"></Badge>
             </div>
             <div>
-              <Link to={'/chat'} className="flex items-center gap-2 px-4.5 py-2.5 bg-sky-50 rounded-full hover:bg-white">
+              <Link
+                to={"/app/chat"}
+                className="flex items-center gap-2 px-4.5 py-2.5 bg-sky-50 rounded-full hover:bg-white"
+              >
                 <img src={images.chatAi} alt="Chat AI" className="w-6 h-6 " />
-                <span className="text-primary-heading-text-color font-medium">Chat</span>
+                <span className="text-primary-heading-text-color font-medium">
+                  Chat
+                </span>
               </Link>
             </div>
           </div>
@@ -239,7 +257,5 @@ export const Navbar01 = React.forwardRef<HTMLElement, Navbar01Props>(
     );
   }
 );
-
-Navbar01.displayName = "Navbar01";
 
 export { HamburgerIcon };
