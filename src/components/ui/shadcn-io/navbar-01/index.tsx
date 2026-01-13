@@ -137,7 +137,7 @@ export const Navbar = React.forwardRef<HTMLElement, Navbar01Props>(
       <header
         ref={combinedRef}
         className={cn(
-          "sticky top-0 z-50 w-full border-b bg-skyblue-500 backdrop-blur px-4 md:px-6 ",
+          "fixed top-0 z-50 w-full border-b bg-skyblue-500 backdrop-blur px-4 md:px-6 ",
           className
         )}
         {...props}
