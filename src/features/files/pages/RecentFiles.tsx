@@ -1,0 +1,32 @@
+import React from "react";
+import { mockFiles } from "../utils/data/mockData";
+import { HeroVideoDialog } from "@/components/ui/hero-video-dialog";
+
+function RecentFiles() {
+  return (
+    <div>
+      <h2 className="text-skyblue-950 text-3xl font-bold mb-6">
+        Recent
+      </h2>
+      <div className="flex flex-wrap gap-4 justify-center">
+      {
+        /* Recently edited files will be displayed here in the future */
+        mockFiles.map((file) => (
+          <React.Fragment key={file.id}>
+            <HeroVideoDialog
+              className="block"
+              animationStyle="from-center"
+              videoSrc={file.url}
+              thumbnailSrc="https://image-processor-storage.s3.us-west-2.amazonaws.com/images/3cf61c1011912a2173ea4dfa260f1108/halo-of-neon-ring-illuminated-in-the-stunning-landscape-of-yosemite.jpg"
+              thumbnailAlt="Dummy Video Thumbnail"
+              file={file}
+            />
+          </React.Fragment>
+        ))
+      }
+    </div>
+    </div>
+  );
+}
+
+export default RecentFiles;
