@@ -8,9 +8,9 @@ export default function LayoutSidebar() {
   return (
     <SidebarProvider className="min-h-0 ">
       <AppSidebar setCurrentTab={setCurrentTab} currentTab={currentTab} />
-      <main>
+      <main className="w-full"> 
         <SidebarTrigger className="relative hidden max-md:block" />
-        <div className="p-4">
+        <div className="p-5">
           <MainContentSidebar currentTab={currentTab} />
         </div>
       </main>
