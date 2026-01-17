@@ -5,10 +5,13 @@ import { HeroVideoDialog } from "@/components/ui/hero-video-dialog";
 function RecentFiles() {
   return (
     <div>
-      <h2 className="text-skyblue-950 text-3xl font-bold mb-6">
+     <div className="mb-7">
+       <h2 className="text-skyblue-950 text-3xl font-bold mb-2 ">
         Recent
       </h2>
-      <div className="flex flex-wrap gap-4 justify-center">
+      <p className="text-skyblue-950 text-2xl font-medium">Here are your recently summarized files.</p>
+     </div>
+      <div className="flex flex-wrap gap-4  max-sm:justify-center">
       {
         /* Recently edited files will be displayed here in the future */
         mockFiles.map((file) => (

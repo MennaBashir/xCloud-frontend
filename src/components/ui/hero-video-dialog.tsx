@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { File, Play, XIcon } from "lucide-react";
+import { File, MoveUpRight, Play, XIcon } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
 import { cn } from "@/lib/utils";
@@ -95,8 +95,6 @@ export function HeroVideoDialog({
           <img
             src={thumbnailSrc}
             alt={thumbnailAlt}
-            // width={400}
-            // height={500}
             className="w-80 h-64 rounded-t-3xl border shadow-lg transition-all duration-200 ease-out group-hover:brightness-[0.8]"
           />
           {file.type === "audio" ? (
@@ -163,6 +161,15 @@ export function HeroVideoDialog({
                 <XIcon className="size-5" />
               </motion.button>
               <div className="relative isolate z-[1] size-full overflow-hidden rounded-2xl border-2 border-white">
+                {/* Open in new window */}
+                {file.type === "pdf" && (
+                  <a href={videoSrc} target="_blank" rel="noopener noreferrer">
+                    <motion.button className="absolute bottom-4 right-20 w-12 h-12 cursor-pointer rounded-full bg-skyblue-300 p-2 text-xl text-sky-300  ring-1 backdrop-blur-md border-none z-[2]">
+                      <MoveUpRight className="size-5 text-black flex justify-center items-center w-full" />
+                    </motion.button>
+                  </a>
+                )}
+
                 <iframe
                   src={videoSrc}
                   title="Hero Video player"
