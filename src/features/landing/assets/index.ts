@@ -1,5 +1,5 @@
 import logo from "./images/logo.svg";
-import homePageBackgroung from "./images/homepage-background.png";
+import homePageBackground from "./images/homepage-background.png";
 import fileServiceCardImg from "./images/file-service-card.svg";
 import calendarServiceCardImg from "./images/calendar-service-card.svg";
 import chatbotServiceCardImg from "./images/chatbot-service-card.svg";
@@ -25,7 +25,7 @@ import video from "./images/video 1.svg";
 export const images = {
 	fileServiceCardImg,
 	calendarServiceCardImg,
-	homePageBackgroung,
+	homePageBackground,
 	chatbotServiceCardImg,
 	mailServiceCardImg,
 	meetingServiceCardImg,

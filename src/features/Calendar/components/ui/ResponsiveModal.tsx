@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
 	Sheet,
 	SheetContent,
@@ -25,11 +24,7 @@ export default function ResponsiveModal({ children }: ResponsiveModalProps) {
 	return (
 		<Sheet>
 			<SheetTrigger asChild>
-				<Button
-					className='absolute top-[25px] lg:top-10 right-4'
-					variant={"ghost"}>
-					<ListCheck />
-				</Button>
+				<ListCheck className='absolute top-[25px] right-4 h-9 w-9 lg:top-10 md:h-11 md:w-11 p-2 hover:bg-accent hover:cursor-pointer rounded-md' />
 			</SheetTrigger>
 			<SheetContent className='w-fit bg-transparent border-none'>
 				<div className='sr-only'>
