@@ -7,7 +7,7 @@ const HeroHeading = () => {
 				TO SprintifAI
 			</h1>
 			<p className='font-bold text-center text-xs xs:text-[16px] sm:text-[24px] md:text-[32px] text-primary-heading-text-color'>
-				Varified Services from SAAS Portal
+				Your AI-Powered Sprint Planning Assistant
 			</p>
 		</div>
 	);
