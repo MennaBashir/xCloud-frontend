@@ -1,4 +1,3 @@
-import logo from "./images/logo.svg";
 import homePageBackground from "./images/homepage-background.png";
 import fileServiceCardImg from "./images/file-service-card.svg";
 import calendarServiceCardImg from "./images/calendar-service-card.svg";
@@ -30,7 +29,6 @@ export const images = {
 	mailServiceCardImg,
 	meetingServiceCardImg,
 	chattingServiceCardImg,
-	logo,
 	frame,
 	audio,
 	book,
