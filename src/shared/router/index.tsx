@@ -7,6 +7,7 @@ import MainLayout from "../layout/MainLayout";
 import LandingPage from "@/pages/Landing";
 import CalendarPage from "@/pages/Calendar";
 import LayoutSidebar from "../ui/layoutSidebar";
+import Chat from "@/features/chat/Chat";
 
 export const router = createBrowserRouter(
   createRoutesFromElements(
@@ -18,8 +19,8 @@ export const router = createBrowserRouter(
           <Route path="calendar" element={<CalendarPage />} />
           <Route path="gmail" element={<p>Gmail</p>} />
           <Route path="meeting" element={<p>Meeting</p>} />
-          <Route path="chat" element={<p>Chat</p>} />
         </Route>
+          <Route path="chat" element={<Chat />} />
       </Route>
     </>
   )
