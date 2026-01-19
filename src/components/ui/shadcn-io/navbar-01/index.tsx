@@ -242,7 +242,7 @@ export const Navbar = React.forwardRef<HTMLElement, Navbar01Props>(
             </div>
             <div>
               <Link
-                to={"/app/chat"}
+                to={"/chat"}
                 className="flex items-center gap-2 px-4.5 py-2.5 bg-sky-50 rounded-full hover:bg-white"
               >
                 <img src={images.chatAi} alt="Chat AI" className="w-6 h-6 " />
