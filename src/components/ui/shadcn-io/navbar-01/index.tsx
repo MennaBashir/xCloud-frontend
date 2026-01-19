@@ -204,6 +204,7 @@ export const Navbar = React.forwardRef<HTMLElement, Navbar01Props>(
 											<NavigationMenuItem key={index}>
 												<NavLink
 													to={link.href}
+													 end={link.href === "/app"}
 													className={({ isActive }) =>
 														`group inline-flex h-10 w-max items-center justify-center
                              rounded-3xl px-5 py-3 font-medium transition-colors
@@ -239,7 +240,7 @@ export const Navbar = React.forwardRef<HTMLElement, Navbar01Props>(
 						</div>
 						<div>
 							<Link
-								to={"/app/chat"}
+								to={"/chat"}
 								className='flex items-center gap-2 px-4.5 py-2.5 bg-sky-50 rounded-full hover:bg-white'>
 								<img src={images.chatAi} alt='Chat AI' className='w-6 h-6 ' />
 								<span className='text-primary-heading-text-color font-medium'>
