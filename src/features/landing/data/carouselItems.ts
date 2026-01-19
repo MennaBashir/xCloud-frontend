@@ -96,22 +96,22 @@ export const carouselItemsData: CarouselItem[] = [
 			},
 		],
 	},
-	{
-		img: images.chattingServiceCardImg,
-		title: "Chatting and Contacts Creation",
-		features: [
-			{
-				icon: images.speech,
-				text: "Connected with your team",
-			},
-			{
-				icon: images.frame,
-				text: "Create contacts for collaboration",
-			},
-			{
-				icon: images.users,
-				text: "Invite your colleagues",
-			},
-		],
-	},
+	// {
+	// 	img: images.chattingServiceCardImg,
+	// 	title: "Chatting and Contacts Creation",
+	// 	features: [
+	// 		{
+	// 			icon: images.speech,
+	// 			text: "Connected with your team",
+	// 		},
+	// 		{
+	// 			icon: images.frame,
+	// 			text: "Create contacts for collaboration",
+	// 		},
+	// 		{
+	// 			icon: images.users,
+	// 			text: "Invite your colleagues",
+	// 		},
+	// 	],
+	// },
 ];

@@ -4,7 +4,7 @@ const HeroHeading = () => {
 			<h1 className='font-bold text-center text-skyblue-50 text-sm xs:text-[24px] sm:text-[32px] md:text-[45px] xl:text-[62px] '>
 				Welcome
 				<span> User Name </span>
-				TO X-Cloud
+				TO SprintifAI
 			</h1>
 			<p className='font-bold text-center text-xs xs:text-[16px] sm:text-[24px] md:text-[32px] text-primary-heading-text-color'>
 				Varified Services from SAAS Portal
