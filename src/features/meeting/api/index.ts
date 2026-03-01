@@ -15,5 +15,6 @@ export const createMeeting = async (token: string): Promise<string> => {
 };
 
 export const getAuthToken = () => {
+	console.log("authToken",authToken)
 	return authToken;
 };
