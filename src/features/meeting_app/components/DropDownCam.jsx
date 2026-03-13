@@ -26,13 +26,13 @@ export default function DropDownCam({
               onMouseEnter={() => { setIsHovered(true) }}
               onMouseLeave={() => { setIsHovered(false) }}
               disabled={!isCameraPermissionAllowed}
-              className={`focus:outline-none hover:ring-1 hover:ring-gray-250 hover:bg-black 
+              className={`focus:outline-none hover:ring-1 hover:ring-gray-300 hover:bg-black 
               ${open
-                  ? "text-white ring-1 ring-gray-250 bg-black"
-                  : "text-customGray-250 hover:text-white"
+                  ? "text-white ring-1 ring-gray-300 bg-black"
+                  : "text-orange-300 hover:text-white border border-gray-300"
                 }
               group inline-flex items-center rounded-md px-1 py-1 w-full text-base font-normal
-              ${!isCameraPermissionAllowed ? "opacity-50" : ""}`}
+              ${!isCameraPermissionAllowed ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               <div>
                 <DropCAM fillColor={isHovered || open ? "#FFF" : "#B4B4B4"} />
@@ -60,7 +60,7 @@ export default function DropDownCam({
             >
               <Popover.Panel className="absolute bottom-full z-10 mt-3 w-full px-4 sm:px-0 pb-2">
                 <div className="rounded-lg shadow-lg">
-                  <div className="bg-gray-350 rounded-lg">
+                  <div className="bg-gray-400 rounded-lg">
                     <div>
                       <div className="flex flex-col">
                         {webcams.map(

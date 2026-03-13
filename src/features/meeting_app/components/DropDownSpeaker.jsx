@@ -56,13 +56,13 @@ export default function DropDownSpeaker({ speakers }) {
               onMouseEnter={() => { setIsHovered(true) }}
               onMouseLeave={() => { setIsHovered(false) }}
               disabled={!isMicrophonePermissionAllowed}
-              className={`focus:outline-none hover:ring-1 hover:ring-gray-250 hover:bg-black 
+              className={`focus:outline-none hover:ring-1 hover:ring-gray-300 hover:bg-black 
               ${open
-                  ? "text-white ring-1 ring-gray-250 bg-black"
-                  : "text-customGray-250 hover:text-white"
+                  ? "text-white ring-1 ring-gray-300 bg-black"
+                  : "text-orange-300 hover:text-white border border-gray-300"
                 }
               group inline-flex items-center rounded-md px-1 py-1 w-full text-base font-normal
-              ${!isMicrophonePermissionAllowed ? "opacity-50" : ""}`}
+              ${!isMicrophonePermissionAllowed ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               <div>
                 <DropSpeaker fillColor={isHovered || open ? "#FFF" : "#B4B4B4"} />
@@ -88,7 +88,7 @@ export default function DropDownSpeaker({ speakers }) {
             >
               <Popover.Panel className="absolute bottom-full z-10 mt-3 w-full px-4 sm:px-0 pb-2">
                 <div className="rounded-lg shadow-lg">
-                  <div className={"bg-gray-350 rounded-lg"} >
+                  <div className={"bg-gray-400 rounded-lg"} >
                     <div>
                       <div className="flex flex-col">
                         {speakers.map(
@@ -136,7 +136,7 @@ export default function DropDownSpeaker({ speakers }) {
                               <span className="mr-3">
                                 <TestSpeaker />
                               </span>
-                              {isPlaying ? <div className="w-52 mt-2 bg-gray-450 rounded-full h-2 dark:bg-gray-700">
+                              {isPlaying ? <div className="w-52 mt-2 bg-gray-400 rounded-full h-2 dark:bg-gray-700">
                                 <div className="bg-white opacity-50 h-2 rounded-full" style={{ width: `${audioProgress}%` }}></div>
                               </div>
                                 : <span>Test Speakers</span>

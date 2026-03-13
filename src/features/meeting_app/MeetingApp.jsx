@@ -5,6 +5,7 @@ import { MeetingAppProvider } from "./MeetingAppContextDef";
 import { MeetingContainer } from "./meeting/MeetingContainer";
 import { LeaveScreen } from "./components/screens/LeaveScreen";
 import { JoiningScreen } from "./components/screens/JoiningScreen";
+import { ToastContainer } from "react-toastify";
 
 function MeetingApp() {
   const [token, setToken] = useState("");
@@ -14,7 +15,7 @@ function MeetingApp() {
   const [webcamOn, setWebcamOn] = useState(false);
   const [customAudioStream, setCustomAudioStream] = useState(null);
   const [customVideoStream, setCustomVideoStream] = useState(null);
-  const [isMeetingStarted, setMeetingStarted] = useState(false);
+  const [isMeetingStarted, setMeetingStarted] = useState(true);
   const [isMeetingLeft, setIsMeetingLeft] = useState(false);
 
   const isMobile = window.matchMedia(
@@ -31,11 +32,14 @@ function MeetingApp() {
 
   return (
     <>
+      <ToastContainer />
       <MeetingAppProvider>
         {isMeetingStarted ? (
           <MeetingProvider
             config={{
-              meetingId,
+              meetingId: meetingId
+                ? meetingId
+                : sessionStorage.getItem("videosdk_meetingId"), // get meetingId from session storage if not in state
               micEnabled: micOn,
               webcamEnabled: webcamOn,
               name: participantName ? participantName : "TestUser",
@@ -43,14 +47,16 @@ function MeetingApp() {
               customCameraVideoTrack: customVideoStream,
               customMicrophoneAudioTrack: customAudioStream,
             }}
-            token={token}
+            token={token ? token : sessionStorage.getItem("videosdk_token")} // get token from session storage if not in state
             reinitialiseMeetingOnConfigChange={true}
             joinWithoutUserInteraction={true}
           >
             <MeetingContainer
               onMeetingLeave={() => {
                 setToken("");
+                sessionStorage.removeItem("videosdk_token"); // remove token from session storage on meeting leave
                 setMeetingId("");
+                sessionStorage.removeItem("videosdk_meetingId"); // remove meetingId from session storage on meeting leave
                 setParticipantName("");
                 setWebcamOn(false);
                 setMicOn(false);

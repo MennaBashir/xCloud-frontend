@@ -184,14 +184,14 @@ export function MeetingContainer({
     onMeetingJoined,
     onMeetingStateChanged: ({state}) => {
       toast(`Meeting is in ${state} state`, {
-        position: "bottom-left",
+        position: "top-left",
         autoClose: 4000,
         hideProgressBar: true,
-        closeButton: false,
+        closeButton: true,
         pauseOnHover: true,
         draggable: true,
         progress: undefined,
-        theme: "light",
+        theme: "dark",
       });
     },
     onMeetingLeft,

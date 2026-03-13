@@ -172,13 +172,13 @@ export default function DropDown({
               onMouseEnter={() => { setIsHovered(true) }}
               onMouseLeave={() => { setIsHovered(false) }}
               disabled={!isMicrophonePermissionAllowed}
-              className={`focus:outline-none hover:ring-1 hover:ring-gray-250 hover:bg-black 
+              className={`focus:outline-none hover:ring-1 hover:ring-gray-300 hover:bg-black 
               ${open
-                  ? "text-white ring-1 ring-gray-250 bg-black"
-                  : "text-customGray-250 hover:text-white"
+                  ? "text-white ring-1 ring-gray-300 bg-black"
+                  : "text-orange-300 hover:text-white border border-gray-300"
                 }
               group inline-flex items-center rounded-md px-1 py-1 w-full text-base font-normal
-              ${!isMicrophonePermissionAllowed ? "opacity-50" : ""}`}
+              ${!isMicrophonePermissionAllowed ? "opacity-50 cursor-not-allowed" : ""}`}
               onClick={() => {
                 if (mediaRecorder.current != null && mediaRecorder.current.state == "recording") { stopRecording() }
                 setRecordingProgress(0)
@@ -193,7 +193,7 @@ export default function DropDown({
                 {isMicrophonePermissionAllowed ? selectedMic?.label : "Permission Needed"}
               </span>
               <ChevronDownIcon
-                className={`${open ? 'text-white' : 'text-customGray-250 hover:text-white'}
+                className={`${open ? 'text-white' : 'text-orange-300 hover:text-white'}
                 ml-8 h-5 w-10 transition duration-150 ease-in-out group-hover:text-orange-300/80 mt-1`}
                 aria-hidden="true"
               />
@@ -210,7 +210,7 @@ export default function DropDown({
             >
               <Popover.Panel className="absolute bottom-full z-10 mt-3 w-full px-4 sm:px-0 pb-2">
                 <div className="rounded-lg shadow-lg">
-                  <div className="bg-gray-350 rounded-lg">
+                  <div className="bg-gray-400 rounded-lg">
                     <div>
                       <div className="flex flex-col">
                         {mics.map(
@@ -263,28 +263,28 @@ export default function DropDown({
                               <TestMic />
                             </span>
 
-                            <div className={`${isMobile ? "w-full mr-5" : "w-36"} mt-3 bg-gray-450 rounded-full h-1 dark:bg-gray-700`}>
+                            <div className={`${isMobile ? "w-full mr-5" : "w-36"} mt-3 bg-gray-400 rounded-full h-1 dark:bg-gray-700`}>
                               <div className="bg-white opacity-50 h-1 rounded-full" style={{ width: `${volume / 256 * 100}%` }} ></div>
                             </div>
                           </div>
 
                           {!isMobile && <div className={`${!isMobile && "w-1/3"} w-full flex justify-center `}>
-                            {recordingStatus == "inactive" && <button className=' p-2 text-xs rounded  bg-gray-450' onClick={startRecording}>
+                            {recordingStatus == "inactive" && <button className=' p-2 text-xs rounded  bg-gray-400' onClick={startRecording}>
                               Record
                             </button>}
 
 
-                            {recordingStatus == "stopped recording" && <button className=' p-2 text-xs rounded  bg-gray-450' onClick={handlePlaying}>
+                            {recordingStatus == "stopped recording" && <button className=' p-2 text-xs rounded  bg-gray-400' onClick={handlePlaying}>
                               Play
                             </button>}
 
-                            {recordingStatus == "recording" && <button className=' p-2 mx-1 py-4 text-xs rounded w-full  bg-gray-450 relative z-0' onClick={stopRecording}>
+                            {recordingStatus == "recording" && <button className=' p-2 mx-1 py-4 text-xs rounded w-full  bg-gray-400 relative z-0' onClick={stopRecording}>
                               <div className=' h-full rounded bg-[#6F767E] absolute top-0 left-0 ' style={{ width: `${recordingProgress}%` }} >
                                 <PauseButton />
                               </div>
                             </button>}
 
-                            {recordingStatus == "playing" && <button className=' p-2 mx-1 py-4 text-xs rounded w-full  bg-gray-450 relative z-0' onClick={handlePlaying}>
+                            {recordingStatus == "playing" && <button className=' p-2 mx-1 py-4 text-xs rounded w-full  bg-gray-400 relative z-0' onClick={handlePlaying}>
                               <div className=' h-full rounded bg-[#6F767E] absolute top-0 left-0 ' style={{ width: `${audioProgress}%` }} >
                                 <PauseButton />
                               </div>
@@ -293,7 +293,7 @@ export default function DropDown({
                           {isMobile &&
                             <div className='flex flex-col mt-1 items-center justify-center'>
                               {testSpeaker && <p className='text-xs text-gray-100 text-center'>Speak to test mic & speakers...</p>}
-                              <button className='p-2 text-xs mt-1 rounded w-fit  bg-gray-450' onClick={testingSpeaker}>
+                              <button className='p-2 text-xs mt-1 rounded w-fit  bg-gray-400' onClick={testingSpeaker}>
                                 {!testSpeaker ? "Test Mic and Speaker" : "Stop Test"}
                               </button></div>
                           }

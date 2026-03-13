@@ -10,7 +10,6 @@ import { toast } from "react-toastify";
 import { Constants, useMediaDevice } from "@videosdk.live/react-sdk";
 import MicPermissionDenied from "../../icons/MicPermissionDenied";
 import CameraPermissionDenied from "../../icons/CameraPermissionDenied";
-import NetworkStats from "../NetworkStats";
 import DropDownCam from "../DropDownCam";
 import DropDownSpeaker from "../DropDownSpeaker";
 import DropDown from "../DropDown";
@@ -42,7 +41,7 @@ export function JoiningScreen({
     isMicrophonePermissionAllowed,
     setIsCameraPermissionAllowed,
     setIsMicrophonePermissionAllowed,
-  } = useMeetingAppContext()
+  } = useMeetingAppContext();
   const isMobile = useIsMobile();
 
   const [{ webcams, mics, speakers }, setDevices] = useState({
@@ -63,7 +62,7 @@ export function JoiningScreen({
   const [dlgMuted, setDlgMuted] = useState(false);
   const [dlgDevices, setDlgDevices] = useState(false);
   const [didDeviceChange, setDidDeviceChange] = useState(false);
-  const [testSpeaker, setTestSpeaker] = useState(false)
+  const [testSpeaker, setTestSpeaker] = useState(false);
 
   const videoPlayerRef = useRef();
   const audioPlayerRef = useRef();
@@ -123,7 +122,6 @@ export function JoiningScreen({
 
   useEffect(() => {
     if (webcamOn) {
-
       // Close the existing video track if there's a new one
       if (videoTrackRef.current && videoTrackRef.current !== videoTrack) {
         videoTrackRef.current.stop(); // Stop the existing video track
@@ -136,7 +134,7 @@ export function JoiningScreen({
         !videoPlayerRef.current.paused &&
         !videoPlayerRef.current.ended &&
         videoPlayerRef.current.readyState >
-        videoPlayerRef.current.HAVE_CURRENT_DATA;
+          videoPlayerRef.current.HAVE_CURRENT_DATA;
 
       if (videoTrack) {
         const videoSrcObject = new MediaStream([videoTrack]);
@@ -167,7 +165,7 @@ export function JoiningScreen({
 
   useEffect(() => {
     checkMediaPermission();
-    return () => { };
+    return () => {};
   }, []);
 
   const _toggleWebcam = () => {
@@ -324,10 +322,10 @@ export function JoiningScreen({
     try {
       const checkAudioVideoPermission = await checkPermissions();
       const cameraPermissionAllowed = checkAudioVideoPermission.get(
-        Constants.permission.VIDEO
+        Constants.permission.VIDEO,
       );
       const microphonePermissionAllowed = checkAudioVideoPermission.get(
-        Constants.permission.AUDIO
+        Constants.permission.AUDIO,
       );
 
       setIsCameraPermissionAllowed(cameraPermissionAllowed);
@@ -393,10 +391,9 @@ export function JoiningScreen({
     }
   };
 
-
   useEffect(() => {
-    getAudioDevices()
-  }, [])
+    getAudioDevices();
+  }, []);
 
   const ButtonWithTooltip = ({ onClick, onState, OnIcon, OffIcon }) => {
     const btnRef = useRef();
@@ -407,7 +404,7 @@ export function JoiningScreen({
             ref={btnRef}
             onClick={onClick}
             className={`rounded-full min-w-auto w-12 h-12 flex items-center justify-center 
-            ${onState ? "bg-white" : "bg-red-650 text-white"}`}
+            ${onState ? "bg-white" : "bg-red-700 text-white"}`}
           >
             {onState ? (
               <OnIcon fillcolor={onState ? "#050A0E" : "#fff"} />
@@ -429,18 +426,23 @@ export function JoiningScreen({
               <div className="md:col-span-7 2xl:col-span-7 col-span-12">
                 <div className="flex items-center justify-center p-1.5 sm:p-4 lg:p-6">
                   <div className="relative w-full md:pl-4  sm:pl-10  pl-5  md:pr-4 sm:pr-10 pr-5">
-
-                    <div className="w-full relative" style={{ height: isMobile ? "45vh" : "55vh" }}>
-                      <div className={`absolute  z-10 ${isMobile ? "right-0" : " right-2 top-2"}`}>
-                        {/* <NetworkStats /> */}
-                      </div>
-                      {isMobile && <audio
-                        autoPlay
-                        playsInline
-                        muted={!testSpeaker}
-                        ref={audioPlayerRef}
-                        controls={false}
-                      />}
+                    <div
+                      className="w-full relative"
+                      style={{ height: isMobile ? "45vh" : "55vh" }}
+                    >
+                      <div
+                        className={`absolute  z-10 ${isMobile ? "right-0" : " right-2 top-2"}`}
+                      ></div>
+                      {isMobile && (
+                        <audio
+                          autoPlay
+                          playsInline
+                          muted={!testSpeaker}
+                          ref={audioPlayerRef}
+                          controls={false}
+                        />
+                      )}
+                      {/* video in host view  befor start meeting*/}
                       <video
                         autoPlay
                         playsInline
@@ -450,14 +452,13 @@ export function JoiningScreen({
                         style={{
                           backgroundColor: "#1c1c1c",
                           transform: "scaleX(-1)",
-                          WebkitTransform: "scaleX(-1)"
+                          WebkitTransform: "scaleX(-1)",
                         }}
                         className={
                           "rounded-[10px] h-full w-full object-cover flex items-center justify-center flip"
                         }
-
                       />
-
+                      {/* mic and camera buttons on video */}
                       <div className="absolute xl:bottom-6 bottom-4 left-0 right-0">
                         <div className="container grid grid-flow-col space-x-4 items-center justify-center md:-m-2">
                           {isMicrophonePermissionAllowed ? (
@@ -488,10 +489,13 @@ export function JoiningScreen({
                     </div>
 
                     <>
-
-
-                      <div className={`flex mt-3  ${isMobile ? "flex-col" : "flex-row "} `}>
-                        <div className={`${isMobile ? "w-full mt-1" : "w-1/3"}`}>
+                    {/* Three drobdown  camera, speaker and mic*/}
+                      <div
+                        className={`flex mt-3  ${isMobile ? "flex-col" : "flex-row "} `}
+                      >
+                        <div
+                          className={`${isMobile ? "w-full mt-1" : "w-1/3"}`}
+                        >
                           <DropDown
                             mics={mics}
                             changeMic={changeMic}
@@ -504,18 +508,19 @@ export function JoiningScreen({
                             setTestSpeaker={setTestSpeaker}
                           />
                         </div>
-                        <div className={`lg:ml-3 ${isMobile ? "w-full" : "w-1/3 "}`}>
-                          {!isMobile && <DropDownSpeaker speakers={speakers} />}
+                        <div
+                          className={`lg:ml-3 ${isMobile ? "w-full mt-1" : "w-1/3 "}`}
+                        >
+                          { <DropDownSpeaker speakers={speakers} />}
                         </div>
-                        <div className={`lg:ml-3 ${isMobile ? "w-full mt-1" : "w-1/3 "}`}>
+                        <div
+                          className={`lg:ml-3 ${isMobile ? "w-full mt-1" : "w-1/3 "}`}
+                        >
                           <DropDownCam
                             changeWebcam={changeWebcam}
                             webcams={webcams}
                           />
                         </div>
-
-
-
                       </div>
                     </>
                   </div>
@@ -537,18 +542,21 @@ export function JoiningScreen({
                       });
                       if (meetingId === id) {
                         setToken(token);
-                        setMeetingId(id);
+                        setMeetingId(id);                     
                         onClickStartMeeting();
+                        // save token & meetingId in session storage in future will encrypt it before saving
+                        sessionStorage.setItem('videosdk_token', token);
+                        sessionStorage.setItem('videosdk_meetingId', id);
                       } else {
-                        toast(`${err}`, {
-                          position: "bottom-left",
+                        toast.error(`${err}`, {
+                          position: "top-left",
                           autoClose: 4000,
                           hideProgressBar: true,
-                          closeButton: false,
+                          closeButton: true,
                           pauseOnHover: true,
                           draggable: true,
                           progress: undefined,
-                          theme: "light",
+                          theme: "dark",
                         });
                       }
                     }}
@@ -559,6 +567,8 @@ export function JoiningScreen({
                       if (meetingId) {
                         setToken(token);
                         setMeetingId(meetingId);
+                        sessionStorage.setItem('videosdk_token', token);
+                        sessionStorage.setItem('videosdk_meetingId', meetingId);
                       }
                       return { meetingId: meetingId, err: err };
                     }}

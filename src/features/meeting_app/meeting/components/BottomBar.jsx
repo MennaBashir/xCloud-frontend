@@ -31,6 +31,7 @@ import { ClipboardIcon } from "lucide-react";
 import { CheckIcon } from "lucide-react";
 import { Ellipsis } from "lucide-react";
 import { ChevronDownIcon } from "lucide-react";
+import RecordingBTN from "./RecordingBTN";
 
 function PipBTN({ isMobile, isTab }) {
   const { pipMode, setPipMode } = useMeetingAppContext();
@@ -107,7 +108,7 @@ function PipBTN({ isMobile, isTab }) {
                   j < 1 ? 0 : source.width / (columns / j),
                   i < 1 ? 0 : source.height / (rows / i),
                   source.width / columns,
-                  source.height / rows
+                  source.height / rows,
                 );
               }
             }
@@ -169,20 +170,22 @@ const MicBTN = () => {
   const changeMic = mMeeting?.changeMic;
 
   useMediaDevice({
-    onDeviceChanged
-  })
+    onDeviceChanged,
+  });
 
   function onDeviceChanged(devices) {
     getMics();
-    const newSpeakerList = devices.devices.filter(device => device.kind === 'audiooutput');
+    const newSpeakerList = devices.devices.filter(
+      (device) => device.kind === "audiooutput",
+    );
 
     if (newSpeakerList.length > 0) {
-      setSelectedSpeaker({ id: newSpeakerList[0].deviceId, label: newSpeakerList[0].label });
+      setSelectedSpeaker({
+        id: newSpeakerList[0].deviceId,
+        label: newSpeakerList[0].label,
+      });
     }
-
   }
-
-
 
   const getMics = async () => {
     const mics = await getMicrophones();
@@ -268,14 +271,16 @@ const MicBTN = () => {
                               <div className="flex flex-col">
                                 {mics.map(({ deviceId, label }, index) => (
                                   <div
-                                    className={`px-3 py-1 my-1 pl-6 text-white text-left ${deviceId === selectedMic.id &&
+                                    className={`px-3 py-1 my-1 pl-6 text-white text-left ${
+                                      deviceId === selectedMic.id &&
                                       "bg-gray-150"
-                                      }`}
+                                    }`}
                                   >
                                     <button
-                                      className={`flex flex-1 w-full text-left ${deviceId === selectedMic.id &&
+                                      className={`flex flex-1 w-full text-left ${
+                                        deviceId === selectedMic.id &&
                                         "bg-gray-150"
-                                        }`}
+                                      }`}
                                       key={`mics_${deviceId}`}
                                       onClick={() => {
                                         setSelectedMic({ id: deviceId });
@@ -299,14 +304,16 @@ const MicBTN = () => {
                               <div className="flex flex-col ">
                                 {speakers.map(({ deviceId, label }, index) => (
                                   <div
-                                    className={`px-3 py-1 my-1 pl-6 text-white ${deviceId === selectedSpeaker.id &&
+                                    className={`px-3 py-1 my-1 pl-6 text-white ${
+                                      deviceId === selectedSpeaker.id &&
                                       "bg-gray-150"
-                                      }`}
+                                    }`}
                                   >
                                     <button
-                                      className={`flex flex-1 w-full text-left ${deviceId === selectedSpeaker.id &&
+                                      className={`flex flex-1 w-full text-left ${
+                                        deviceId === selectedSpeaker.id &&
                                         "bg-gray-150"
-                                        }`}
+                                      }`}
                                       key={`speakers_${deviceId}`}
                                       onClick={() => {
                                         setSelectedSpeaker({ id: deviceId });
@@ -328,8 +335,9 @@ const MicBTN = () => {
               </Popover>
               <div
                 style={{ zIndex: 999 }}
-                className={`${tooltipShow ? "" : "hidden"
-                  } overflow-hidden flex flex-col items-center justify-center pb-4`}
+                className={`${
+                  tooltipShow ? "" : "hidden"
+                } overflow-hidden flex flex-col items-center justify-center pb-4`}
                 ref={tooltipRef}
               >
                 <div className={"rounded-md p-1.5 bg-black "}>
@@ -443,14 +451,16 @@ const WebCamBTN = () => {
                               <div className="flex flex-col">
                                 {webcams.map(({ deviceId, label }, index) => (
                                   <div
-                                    className={`px-3 py-1 my-1 pl-6 text-white ${deviceId === selectedWebcam.id &&
+                                    className={`px-3 py-1 my-1 pl-6 text-white ${
+                                      deviceId === selectedWebcam.id &&
                                       "bg-gray-150"
-                                      }`}
+                                    }`}
                                   >
                                     <button
-                                      className={`flex flex-1 w-full text-left ${deviceId === selectedWebcam.id &&
+                                      className={`flex flex-1 w-full text-left ${
+                                        deviceId === selectedWebcam.id &&
                                         "bg-gray-150"
-                                        }`}
+                                      }`}
                                       key={`output_webcams_${deviceId}`}
                                       onClick={() => {
                                         setSelectedWebcam({ id: deviceId });
@@ -473,8 +483,9 @@ const WebCamBTN = () => {
               </Popover>
               <div
                 style={{ zIndex: 999 }}
-                className={`${tooltipShow ? "" : "hidden"
-                  } overflow-hidden flex flex-col items-center justify-center pb-4`}
+                className={`${
+                  tooltipShow ? "" : "hidden"
+                } overflow-hidden flex flex-col items-center justify-center pb-4`}
                 ref={tooltipRef}
               >
                 <div className={"rounded-md p-1.5 bg-black "}>
@@ -497,7 +508,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       try {
         publish("Raise Hand");
       } catch (e) {
-        console.log("Error in pubsub", e)
+        console.log("Error in pubsub", e);
       }
     };
 
@@ -514,67 +525,6 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         onClick={RaiseHand}
         tooltip={"Raise Hand"}
         Icon={RaiseHandIcon}
-      />
-    );
-  };
-
-  const RecordingBTN = () => {
-    const { startRecording, stopRecording, recordingState } = useMeeting();
-    const defaultOptions = {
-      loop: true,
-      autoplay: true,
-      animationData: recordingBlink,
-      rendererSettings: {
-        preserveAspectRatio: "xMidYMid slice",
-      },
-      height: 64,
-      width: 160,
-    };
-
-    const isRecording = useIsRecording();
-    const isRecordingRef = useRef(isRecording);
-
-    useEffect(() => {
-      isRecordingRef.current = isRecording;
-    }, [isRecording]);
-
-    const { isRequestProcessing } = useMemo(
-      () => ({
-        isRequestProcessing:
-          recordingState === Constants.recordingEvents.RECORDING_STARTING ||
-          recordingState === Constants.recordingEvents.RECORDING_STOPPING,
-      }),
-      [recordingState]
-    );
-
-    const _handleClick = () => {
-      const isRecording = isRecordingRef.current;
-
-      if (isRecording) {
-        stopRecording();
-      } else {
-        startRecording();
-      }
-    };
-
-    return (
-      <OutlinedButton
-        Icon={RecordingIcon}
-        onClick={_handleClick}
-        isFocused={isRecording}
-        tooltip={
-          recordingState === Constants.recordingEvents.RECORDING_STARTED
-            ? "Stop Recording"
-            : recordingState === Constants.recordingEvents.RECORDING_STARTING
-              ? "Starting Recording"
-              : recordingState === Constants.recordingEvents.RECORDING_STOPPED
-                ? "Start Recording"
-                : recordingState === Constants.recordingEvents.RECORDING_STOPPING
-                  ? "Stopping Recording"
-                  : "Start Recording"
-        }
-        lottieOption={isRecording ? defaultOptions : null}
-        isRequestProcessing={isRequestProcessing}
       />
     );
   };
@@ -658,7 +608,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         isFocused={sideBarMode === sideBarModes.CHAT}
         onClick={() => {
           setSideBarMode((s) =>
-            s === sideBarModes.CHAT ? null : sideBarModes.CHAT
+            s === sideBarModes.CHAT ? null : sideBarModes.CHAT,
           );
         }}
       />
@@ -667,7 +617,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         Icon={ChatIcon}
         onClick={() => {
           setSideBarMode((s) =>
-            s === sideBarModes.CHAT ? null : sideBarModes.CHAT
+            s === sideBarModes.CHAT ? null : sideBarModes.CHAT,
           );
         }}
         isFocused={sideBarMode === "CHAT"}
@@ -687,7 +637,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         Icon={ParticipantsIcon}
         onClick={() => {
           setSideBarMode((s) =>
-            s === sideBarModes.PARTICIPANTS ? null : sideBarModes.PARTICIPANTS
+            s === sideBarModes.PARTICIPANTS ? null : sideBarModes.PARTICIPANTS,
           );
         }}
         badge={`${new Map(participants)?.size}`}
@@ -697,7 +647,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
         Icon={ParticipantsIcon}
         onClick={() => {
           setSideBarMode((s) =>
-            s === sideBarModes.PARTICIPANTS ? null : sideBarModes.PARTICIPANTS
+            s === sideBarModes.PARTICIPANTS ? null : sideBarModes.PARTICIPANTS,
           );
         }}
         isFocused={sideBarMode === sideBarModes.PARTICIPANTS}
@@ -761,7 +711,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       PIP: "PIP",
       MEETING_ID_COPY: "MEETING_ID_COPY",
     }),
-    []
+    [],
   );
 
   const otherFeatures = [
@@ -819,10 +769,11 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
                       {otherFeatures.map(({ icon }) => {
                         return (
                           <div
-                            className={`grid items-center justify-center ${icon === BottomBarButtonTypes.MEETING_ID_COPY
+                            className={`grid items-center justify-center ${
+                              icon === BottomBarButtonTypes.MEETING_ID_COPY
                                 ? "col-span-7 sm:col-span-5 md:col-span-3"
                                 : "col-span-4 sm:col-span-3 md:col-span-2"
-                              }`}
+                            }`}
                           >
                             {icon === BottomBarButtonTypes.RAISE_HAND ? (
                               <RaiseHandBTN isMobile={isMobile} isTab={isTab} />
