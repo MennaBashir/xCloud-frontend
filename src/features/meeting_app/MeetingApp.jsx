@@ -15,7 +15,7 @@ function MeetingApp() {
   const [webcamOn, setWebcamOn] = useState(false);
   const [customAudioStream, setCustomAudioStream] = useState(null);
   const [customVideoStream, setCustomVideoStream] = useState(null);
-  const [isMeetingStarted, setMeetingStarted] = useState(true);
+  const [isMeetingStarted, setMeetingStarted] = useState(false);
   const [isMeetingLeft, setIsMeetingLeft] = useState(false);
 
   const isMobile = window.matchMedia(

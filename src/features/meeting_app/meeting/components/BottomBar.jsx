@@ -1,13 +1,9 @@
 import {
-  Constants,
   useMeeting,
   usePubSub,
   useMediaDevice,
 } from "@videosdk.live/react-sdk";
-import React, { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import recordingBlink from "../../static/animations/recording-blink.json";
-import useIsRecording from "../../hooks/useIsRecording";
-import RecordingIcon from "../../icons/Bottombar/RecordingIcon";
+import { Fragment, useMemo, useRef, useState } from "react";
 import MicOnIcon from "../../icons/Bottombar/MicOnIcon";
 import MicOffIcon from "../../icons/Bottombar/MicOffIcon";
 import WebcamOnIcon from "../../icons/Bottombar/WebcamOnIcon";
@@ -31,7 +27,7 @@ import { ClipboardIcon } from "lucide-react";
 import { CheckIcon } from "lucide-react";
 import { Ellipsis } from "lucide-react";
 import { ChevronDownIcon } from "lucide-react";
-import RecordingBTN from "./RecordingBTN";
+import RecordingControl from "./RecordingControl";
 
 function PipBTN({ isMobile, isTab }) {
   const { pipMode, setPipMode } = useMeetingAppContext();
@@ -731,7 +727,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       <LeaveBTN />
       <MicBTN />
       <WebCamBTN />
-      <RecordingBTN />
+      <RecordingControl />
       <OutlinedButton Icon={Ellipsis} onClick={handleClickFAB} />
       <Transition appear show={Boolean(open)} as={Fragment}>
         <Dialog
@@ -815,7 +811,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       <MeetingIdCopyBTN />
 
       <div className="flex flex-1 items-center justify-center" ref={tollTipEl}>
-        <RecordingBTN />
+        <RecordingControl />
         <RaiseHandBTN isMobile={isMobile} isTab={isTab} />
         <MicBTN />
         <WebCamBTN />
