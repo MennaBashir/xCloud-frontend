@@ -7,7 +7,7 @@ import { ParticipantPanel } from "./ParticipantPanel";
 import { Dialog, Transition } from "@headlessui/react";
 import { useMediaQuery } from "react-responsive";
 import { useMeetingAppContext } from "../../MeetingAppContextDef";
-import { BookMarked } from "lucide-react";
+import { X } from "lucide-react";
 
 const SideBarTabView = ({
   height,
@@ -23,7 +23,7 @@ const SideBarTabView = ({
 
   return (
     <div
-      className="bg-gray-800"
+      className="bg-[#F9FAFB]"
       style={{
         height,
         width: sideBarContainerWidth,
@@ -35,24 +35,23 @@ const SideBarTabView = ({
     >
       <div>
         <div
-          className="bg-gray-750"
+          className="bg-[#F9FAFB] border border-slate-200 shadow-sm"
           style={{
             height: height,
-            borderRadius: 10,
+            borderRadius: 16,
             overflow: "hidden",
           }}
         >
           <>
             {sideBarMode && (
               <div
-                className={`flex items-center justify-between`}
+                className="flex items-center justify-between bg-[#B2CBF6]"
                 style={{
                   padding: panelHeaderPadding,
                   height: panelHeaderHeight - 1,
-                  borderBottom: "1px solid #70707033",
                 }}
               >
-                <p className="text-base text-white font-bold">
+                <p className="text-base text-[#162E54] font-bold">
                   {sideBarMode === "PARTICIPANTS"
                     ? `${
                         sideBarMode.charAt(0).toUpperCase() +
@@ -62,11 +61,11 @@ const SideBarTabView = ({
                         sideBarMode.slice(1).toLowerCase() || ""}
                 </p>
                 <button
-                  className="text-white"
+                  className="text-[#162E54] cursor-pointer"
                   onClick={handleClose}
                   style={{ margin: 0, padding: 0 }}
                 >
-                  <BookMarked className="h-5 w-5" />
+                  <X className="h-5 w-5" />
                 </button>
               </div>
             )}
@@ -150,7 +149,7 @@ export function SidebarConatiner({ height, sideBarContainerWidth }) {
           >
             <div className="fixed inset-0 overflow-y-hidden">
               <div className="flex h-screen items-center justify-center text-center">
-                <Dialog.Panel className="w-screen transform overflow-hidden bg-gray-800 shadow-xl transition-all">
+                <Dialog.Panel className="w-screen transform overflow-hidden bg-[#F9FAFB] shadow-xl transition-all">
                   <SideBarTabView
                     height={"100%"}
                     sideBarContainerWidth={"100%"}

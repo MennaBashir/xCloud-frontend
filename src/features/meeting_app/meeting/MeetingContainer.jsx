@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, createRef, memo } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import { Constants, useMeeting, useParticipant, usePubSub } from "@videosdk.live/react-sdk";
 import { BottomBar } from "./components/BottomBar";
 import { SidebarConatiner } from "../components/sidebar/SidebarContainer";
@@ -26,25 +26,22 @@ export function MeetingContainer({
   const [participantsData, setParticipantsData] = useState([]);
 
   const ParticipantMicStream = memo(({ participantId }) => {
-    // Individual hook for each participant
     const { micStream, isLocal } = useParticipant(participantId);
 
     useEffect(() => {
-
       if (micStream) {
         const mediaStream = new MediaStream();
         mediaStream.addTrack(micStream.track);
 
         const audioElement = new Audio();
         audioElement.srcObject = mediaStream;
-        audioElement.muted = isLocal
+        audioElement.muted = isLocal;
         audioElement.play();
-
       }
-    }, [micStream, participantId]);
+    }, [micStream, participantId, isLocal]);
 
     return null;
-  }, [participantsData]);
+  }, (prevProps, nextProps) => prevProps.participantId === nextProps.participantId);
 
   const { useRaisedHandParticipants } = useMeetingAppContext();
   const bottomBarHeight = 60;
@@ -56,7 +53,7 @@ export function MeetingContainer({
   const [meetingError, setMeetingError] = useState(false);
 
   const mMeetingRef = useRef();
-  const containerRef = createRef();
+  const containerRef = useRef();
   const containerHeightRef = useRef();
   const containerWidthRef = useRef();
 
@@ -281,12 +278,12 @@ export function MeetingContainer({
 
   return (
     <div className="fixed inset-0">
-      <div ref={containerRef} className="h-full flex flex-col bg-gray-800">
+      <div ref={containerRef} className="h-full flex flex-col bg-[#F3F4F6]">
         {typeof localParticipantAllowedJoin === "boolean" ? (
           localParticipantAllowedJoin ? (
             <>
-              <div className={` flex flex-1 flex-row bg-gray-800 `}>
-                <div className={`flex flex-1 `}>
+              <div className="flex flex-1 flex-row bg-[#F3F4F6] overflow-hidden p-4 gap-4">
+                <div className="flex flex-1 flex-col gap-4 overflow-hidden">
                   {isPresenting ? (
                     <PresenterView height={containerHeight - bottomBarHeight} />
                   ) : null}
@@ -305,10 +302,12 @@ export function MeetingContainer({
                 />
               </div>
 
-              <BottomBar
-                bottomBarHeight={bottomBarHeight}
-                setIsMeetingLeft={setIsMeetingLeft}
-              />
+              <div className="h-auto w-full z-10 shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+                <BottomBar
+                  bottomBarHeight={bottomBarHeight}
+                  setIsMeetingLeft={setIsMeetingLeft}
+                />
+              </div>
             </>
           ) : (
             <></>

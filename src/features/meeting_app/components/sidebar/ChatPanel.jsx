@@ -11,28 +11,32 @@ const ChatMessage = ({ senderId, senderName, text, timestamp }) => {
 
   return (
     <div
-      className={`flex ${localSender ? "justify-end" : "justify-start"} mt-4`}
-      style={{
-        maxWidth: "100%",
-      }}
+      className={`flex w-full mb-4 ${localSender ? "justify-end" : "justify-start"}`}
     >
       <div
-        className={`flex ${localSender ? "items-end" : "items-start"
-          } flex-col py-1 px-2 rounded-md bg-gray-700`}
+        className={`flex flex-col max-w-[75%] ${localSender ? "items-end" : "items-start"}`}
       >
-        <p style={{ color: "#ffffff80" }}>
-          {localSender ? "You" : nameTructed(senderName, 15)}
-        </p>
-        <div>
-          <p className="inline-block whitespace-pre-wrap break-words text-right text-white">
-            {text}
-          </p>
+        {!localSender && (
+          <span className="text-[#162E54] text-sm font-bold mb-1 ml-1">
+            {nameTructed(senderName, 15)}
+          </span>
+        )}
+        <div
+          className={`px-4 py-2 text-sm rounded-2xl ${
+            localSender
+              ? "bg-[#B2CBF6] text-[#162E54] rounded-br-sm"
+              : "bg-[#F4F7FB] text-[#475569] rounded-bl-sm"
+          }`}
+          style={{ wordBreak: "break-word" }}
+        >
+          {text}
         </div>
-        <div className="mt-1">
-          <p className="text-xs italic" style={{ color: "#ffffff80" }}>
-            {formatAMPM(new Date(timestamp))}
-          </p>
-        </div>
+        <span className="text-[10px] text-slate-400 mt-1 mx-1">
+          {new Date(timestamp).toLocaleTimeString([], {
+            hour: "2-digit",
+            minute: "2-digit",
+          })}
+        </span>
       </div>
     </div>
   );
@@ -45,47 +49,21 @@ const ChatInput = ({ inputHeight }) => {
 
   return (
     <div
-      className="w-full flex items-center px-2"
+      className="w-full flex items-center px-2 mt-auto pt-2"
       style={{ height: inputHeight }}
     >
-      <div class="relative  w-full">
-        <span class="absolute inset-y-0 right-0 flex mr-2 rotate-90 ">
-          <button
-            disabled={message.length < 2}
-            type="submit"
-            className="p-1 focus:outline-none focus:shadow-outline"
-            onClick={() => {
-              const messageText = message.trim();
-              if (messageText.length > 0) {
-                try {
-                  publish(messageText, { persist: true });
-                  setTimeout(() => {
-                    setMessage("");
-                  }, 100);
-                  input.current?.focus();
-                } catch (e) {
-                  console.log("Error in pubsub", e)
-                }
-              }
-            }}
-          >
-            <Paperclip
-              className={`w-6 h-6 -rotate-90 ${message.length < 2 ? "text-gray-500 " : "text-white"
-                }`}
-            />
-          </button>
-        </span>
+      <div className="flex items-center bg-gray-100 rounded-full border border-slate-200 overflow-hidden shadow-sm w-full">
         <input
           type="text"
-          className="py-4 text-base text-white border-gray-400 border bg-gray-750 rounded pr-10 pl-2 focus:outline-none w-full"
-          placeholder="Write your message"
-          autocomplete="off"
+          className="flex-1 pl-4 py-3 border-none bg-transparent text-sm text-[#162E54] outline-none"
+          placeholder="Type your message here..."
+          autoComplete="off"
           ref={input}
           value={message}
           onChange={(e) => {
             setMessage(e.target.value);
           }}
-          onKeyPress={(e) => {
+          onKeyDown={(e) => {
             if (e.key === "Enter" && !e.shiftKey) {
               e.preventDefault();
               const messageText = message.trim();
@@ -104,6 +82,29 @@ const ChatInput = ({ inputHeight }) => {
             }
           }}
         />
+        <button
+          disabled={message.length < 2}
+          type="submit"
+          className="p-2 mr-1 rounded-full hover:bg-blue-50 transition-colors"
+          onClick={() => {
+            const messageText = message.trim();
+            if (messageText.length > 0) {
+              try {
+                publish(messageText, { persist: true });
+                setTimeout(() => {
+                  setMessage("");
+                }, 100);
+                input.current?.focus();
+              } catch (e) {
+                console.log("Error in pubsub", e)
+              }
+            }
+          }}
+        >
+          <Paperclip
+            className={`w-5 h-5 ${message.length < 2 ? "text-gray-400" : "text-[#3B82F6]"}`}
+          />
+        </button>
       </div>
     </div>
   );

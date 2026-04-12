@@ -36,7 +36,7 @@ function ParticipantGrid({ participantIds, isPresenting }) {
 
   return (
     <div
-      className={`flex flex-col md:flex-row flex-grow m-3 items-center justify-center ${
+      className={`flex flex-col md:flex-row flex-grow items-center justify-center bg-white rounded-2xl shadow-sm border border-slate-200 p-4 ${
         participantIds.length < 2 && !sideBarMode && !isPresenting
           ? "md:px-16 md:py-2"
           : participantIds.length < 3 && !sideBarMode && !isPresenting

@@ -1,6 +1,5 @@
 import { useMeeting, useParticipant, VideoPlayer } from "@videosdk.live/react-sdk";
-import { useEffect, useMemo, useRef } from "react";
-import ReactPlayer from "react-player";
+import { useEffect, useRef } from "react";
 import MicOffSmallIcon from "../icons/MicOffSmallIcon";
 import ScreenShareIcon from "../icons/ScreenShareIcon";
 import SpeakerIcon from "../icons/SpeakerIcon";
@@ -49,8 +48,8 @@ export function PresenterView({ height }) {
 
   return (
     <div
-      className={` bg-gray-750 rounded m-2 relative overflow-hidden w-full h-[${height - "xl:p-6 lg:p-[52px] md:p-[26px] p-1"
-        }] `}
+      className="bg-slate-900 rounded-2xl m-2 relative overflow-hidden w-full border border-slate-700 shadow-lg"
+      style={{ height }}
     >
       <audio autoPlay playsInline controls={false} ref={audioPlayer} />
       <div className={"video-contain absolute h-full w-full"}>
@@ -70,14 +69,11 @@ export function PresenterView({ height }) {
         />
 
         <div
-          className="bottom-2 left-2 bg-gray-750 p-2 absolute rounded-md flex items-center justify-center"
-          style={{
-            transition: "all 200ms",
-            transitionTimingFunction: "linear",
-          }}
+          className="absolute top-4 left-4 bg-black/70 backdrop-blur text-white px-3 py-1.5 rounded-lg z-10 text-sm flex items-center gap-2"
         >
+          <span className="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
           {!micOn ? (
-            <MicOffSmallIcon fillcolor="white" />
+            <MicOffSmallIcon fillcolor="#8695AA" />
           ) : micOn && isActiveSpeaker ? (
             <SpeakerIcon />
           ) : (
@@ -92,7 +88,7 @@ export function PresenterView({ height }) {
         </div>
         {isLocal ? (
           <>
-            <div className="p-10 rounded-2xl flex flex-col items-center justify-center absolute top-1/2 left-1/2 bg-gray-750 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="p-10 rounded-2xl flex flex-col items-center justify-center absolute top-1/2 left-1/2 bg-black/70 backdrop-blur transform -translate-x-1/2 -translate-y-1/2">
               <ScreenShareIcon
                 style={{ height: 48, width: 48, color: "white" }}
               />
@@ -103,7 +99,7 @@ export function PresenterView({ height }) {
               </div>
               <div className="mt-8">
                 <button
-                  className="bg-purple-550 text-white px-4 py-2 rounded text-sm text-center font-medium"
+                  className="bg-[#3B82F6] hover:bg-[#2563EB] text-white px-4 py-2 rounded-lg text-sm text-center font-medium transition-colors"
                   onClick={(e) => {
                     e.stopPropagation();
                     mMeeting.toggleScreenShare();

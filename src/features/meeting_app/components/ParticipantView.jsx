@@ -219,20 +219,14 @@ export const CornerDisplayName = ({
   return (
     <>
       <div
-        className="absolute bottom-2 left-2 rounded-md flex items-center justify-center p-2"
+        className="absolute top-2 left-2 flex items-center gap-2 px-2 py-1"
         style={{
-          backgroundColor: "#00000066",
           transition: "all 200ms",
           transitionTimingFunction: "linear",
           transform: `scale(${show ? 1 : 0})`,
         }}
       >
-        {!micOn && !isPresenting ? (
-          <MicOffSmallIcon fillcolor="white" />
-        ) : micOn && isActiveSpeaker ? (
-          <SpeakerIcon />
-        ) : null}
-        <p className="text-sm text-white ml-0.5">
+        <span className="bg-[#DCE8FE] px-2 py-1 rounded-lg text-xs text-[#798BA9]">
           {isPresenting
             ? isLocal
               ? `You are presenting`
@@ -240,7 +234,12 @@ export const CornerDisplayName = ({
             : isLocal
               ? "You"
               : nameTructed(displayName, 26)}
-        </p>
+        </span>
+        {!micOn && !isPresenting ? (
+          <MicOffSmallIcon fillcolor="#8695AA" />
+        ) : micOn && isActiveSpeaker ? (
+          <SpeakerIcon />
+        ) : null}
       </div>
 
       {(webcamStream || micStream || screenShareStream) && (
@@ -462,7 +461,7 @@ export function ParticipantView({ participantId }) {
       onMouseLeave={() => {
         setMouseOver(false);
       }}
-      className={`h-full w-full  bg-gray-750 relative overflow-hidden rounded-lg video-cover`}
+      className={`h-full w-full relative overflow-hidden rounded-2xl border shadow-lg video-cover ${isActiveSpeaker ? "border-[#698F07]" : "border-[#B1BBC7]"}`}
     >
       <audio ref={micRef} autoPlay muted={isLocal} />
       {webcamOn ? (
@@ -478,9 +477,9 @@ export function ParticipantView({ participantId }) {
           videoStyle={{}}
         />
       ) : (
-        <div className="h-full w-full flex items-center justify-center">
+        <div className="h-full w-full flex items-center justify-center bg-slate-100">
           <div
-            className={`z-10 flex items-center justify-center rounded-full bg-gray-800 2xl:h-[92px] h-[52px] 2xl:w-[92px] w-[52px]`}
+            className={`z-10 flex items-center justify-center rounded-full bg-[#3B82F6] 2xl:h-[92px] h-[52px] 2xl:w-[92px] w-[52px]`}
           >
             <p className="text-2xl text-white">
               {String(displayName).charAt(0).toUpperCase()}

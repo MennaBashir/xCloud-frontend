@@ -38,15 +38,15 @@ const ConfirmBox = ({
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-11/12 max-w-md transform overflow-hidden rounded bg-gray-750 p-4 text-left align-middle shadow-xl transition-all">
-                  <Dialog.Title className="text-base font-medium  text-white ">
+                <Dialog.Panel className="w-11/12 max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all border border-slate-200">
+                  <Dialog.Title className="text-base font-bold text-[#162E54]">
                     {title}
                   </Dialog.Title>
                   <div className="mt-2">
                     <p
-                      className="text-base"
+                      className="text-sm"
                       style={{
-                        color: subTitleColor ? subTitleColor : "#9FA0A7",
+                        color: subTitleColor ? subTitleColor : "#64748B",
                       }}
                     >
                       {subTitle}
@@ -57,7 +57,7 @@ const ConfirmBox = ({
                     {rejectText && (
                       <button
                         type="button"
-                        className="mr-2 rounded px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 "
+                        className="mr-2 rounded-lg px-4 py-2 text-sm font-medium text-[#162E54] hover:bg-slate-50 transition-colors"
                         onClick={onReject}
                       >
                         {rejectText}
@@ -65,7 +65,7 @@ const ConfirmBox = ({
                     )}
                     <button
                       type="button"
-                      className="rounded border border-white bg-transparent px-4 py-2 text-sm font-medium text-white hover:bg-gray-700"
+                      className="rounded-lg bg-[#3B82F6] hover:bg-[#2563EB] px-4 py-2 text-sm font-medium text-white transition-colors"
                       onClick={onSuccess}
                     >
                       {successText}

@@ -21,8 +21,8 @@ export function MeetingDetailsScreen({
       className={`flex flex-1 flex-col justify-center w-full md:p-[6px] sm:p-1 p-1.5`}
     >
       {iscreateMeetingClicked ? (
-        <div className="border border-solid border-gray-400 rounded-xl px-4 py-3  flex items-center justify-center">
-          <p className="text-white text-base">
+        <div className="border border-solid border-slate-200 bg-white rounded-xl px-4 py-3 flex items-center justify-center shadow-sm">
+          <p className="text-[#162E54] text-base font-medium">
             {`Meeting code : ${meetingId}`}
           </p>
           <button
@@ -36,9 +36,9 @@ export function MeetingDetailsScreen({
             }}
           >
             {isCopied ? (
-              <CheckIcon className="h-5 w-5 text-green-400" />
+              <CheckIcon className="h-5 w-5 text-green-500" />
             ) : (
-              <ClipboardCopyIcon className="h-5 w-5 text-white" />
+              <ClipboardCopyIcon className="h-5 w-5 text-[#8695AA]" />
             )}
           </button>
         </div>
@@ -50,7 +50,7 @@ export function MeetingDetailsScreen({
               setMeetingId(e.target.value);
             }}
             placeholder={"Enter meeting Id"}
-            className="px-4 py-3 border border-gray-400 rounded-xl text-white w-full text-center"
+            className="px-4 py-3 border border-slate-200 rounded-xl text-[#162E54] bg-white w-full text-center shadow-sm"
           />
           {/* toast error if meetingId is invalid
           {meetingIdError ? (
@@ -80,15 +80,15 @@ export function MeetingDetailsScreen({
             value={participantName}
             onChange={(e) => setParticipantName(e.target.value)}
             placeholder="Enter your name"
-            className="px-4 py-3 mt-5 border border-gray-400 rounded-xl text-white w-full text-center"
+            className="px-4 py-3 mt-5 border border-slate-200 rounded-xl text-[#162E54] bg-white w-full text-center shadow-sm"
           />
           <button
             disabled={participantName.length < 3}
             className={`w-full ${
               participantName.length < 3
-                ? "bg-black cursor-not-allowed"
-                : "bg-purple cursor-pointer"
-            }  text-white px-2 py-3 rounded-xl mt-5`}
+                ? "bg-gray-300 cursor-not-allowed text-gray-500"
+                : "bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer text-white"
+            } px-2 py-3 rounded-xl mt-5 font-medium transition-colors`}
             onClick={(e) => {
               if (iscreateMeetingClicked) {
                 onClickStartMeeting();
@@ -106,7 +106,7 @@ export function MeetingDetailsScreen({
           </button>
           {/* button to back to create meeting */}
           <button
-            className="w-full bg-gray-500 cursor-pointer text-white px-2 py-3 rounded-xl mt-5"
+            className="w-full bg-white border border-slate-200 cursor-pointer text-[#162E54] px-2 py-3 rounded-xl mt-5 font-medium hover:bg-slate-50 transition-colors"
             onClick={(e) => {
               setIscreateMeetingClicked(false);
               setIsJoinMeetingClicked(false);
@@ -124,7 +124,7 @@ export function MeetingDetailsScreen({
         <div className="w-full md:mt-0 mt-4 flex flex-col">
           <div className="flex items-center justify-center flex-col w-full ">
             <button
-              className="w-full bg-black cursor-pointer text-white px-2 py-3 rounded-xl"
+              className="w-full bg-[#3B82F6] hover:bg-[#2563EB] cursor-pointer text-white px-2 py-3 rounded-xl font-medium transition-colors"
               onClick={async (e) => {
                 const { meetingId, err } = await _handleOnCreateMeeting();
 
@@ -148,7 +148,7 @@ export function MeetingDetailsScreen({
               Create a meeting
             </button>
             <button
-              className="w-full bg-black cursor-pointer text-white px-2 py-3 rounded-xl mt-5"
+              className="w-full bg-white border border-slate-200 cursor-pointer text-[#162E54] px-2 py-3 rounded-xl mt-5 font-medium hover:bg-slate-50 transition-colors"
               onClick={(e) => {
                 setIsJoinMeetingClicked(true);
               }}

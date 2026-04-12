@@ -403,8 +403,8 @@ export function JoiningScreen({
           <button
             ref={btnRef}
             onClick={onClick}
-            className={`rounded-full min-w-auto w-12 h-12 flex items-center justify-center 
-            ${onState ? "bg-white" : "bg-red-700 text-white"}`}
+            className={`rounded-full min-w-auto w-12 h-12 flex items-center justify-center shadow-lg cursor-pointer transition-colors
+            ${onState ? "bg-secondary text-secondary-foreground" : "bg-destructive text-white"}`}
           >
             {onState ? (
               <OnIcon fillcolor={onState ? "#050A0E" : "#fff"} />
@@ -419,7 +419,7 @@ export function JoiningScreen({
 
   return (
     <>
-      <div className="overflow-y-auto flex flex-col flex-1  h-screen bg-gray-800">
+      <div className="overflow-y-auto flex flex-col flex-1 h-screen bg-white">
         <div className="flex flex-1 flex-col md:flex-row  items-center justify-center m-10 md:m-[30px] lg:m-16">
           <div className="container grid  md:grid-flow-col grid-flow-row ">
             <div className="grid grid-cols-12">
@@ -450,12 +450,12 @@ export function JoiningScreen({
                         ref={videoPlayerRef}
                         controls={false}
                         style={{
-                          backgroundColor: "#1c1c1c",
+                          backgroundColor: "#1f2937",
                           transform: "scaleX(-1)",
                           WebkitTransform: "scaleX(-1)",
                         }}
                         className={
-                          "rounded-[10px] h-full w-full object-cover flex items-center justify-center flip"
+                          "rounded-2xl h-full w-full object-cover flex items-center justify-center flip shadow-xl"
                         }
                       />
                       {/* mic and camera buttons on video */}

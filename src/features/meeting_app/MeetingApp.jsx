@@ -32,7 +32,17 @@ function MeetingApp() {
 
   return (
     <>
-      <ToastContainer />
+      <ToastContainer
+        position="bottom-left"
+        autoClose={4000}
+        hideProgressBar
+        newestOnTop={false}
+        closeButton={false}
+        closeOnClick
+        pauseOnHover
+        draggable
+        theme="light"
+      />
       <MeetingAppProvider>
         {isMeetingStarted ? (
           <MeetingProvider

@@ -658,8 +658,8 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
     const [isCopied, setIsCopied] = useState(false);
     return (
       <div className="flex items-center justify-center lg:ml-0 ml-4 mt-4 xl:mt-0">
-        <div className="flex border-2 border-gray-850 p-2 rounded-md items-center justify-center">
-          <h1 className="text-white text-base ">{meetingId}</h1>
+        <div className="flex border border-slate-200 bg-white p-2 rounded-lg items-center justify-center shadow-sm">
+          <h1 className="text-[#162E54] text-sm font-medium tracking-wider">{meetingId}</h1>
           <button
             className="ml-2"
             onClick={() => {
@@ -671,9 +671,9 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
             }}
           >
             {isCopied ? (
-              <CheckIcon className="h-5 w-5 text-green-400" />
+              <CheckIcon className="h-5 w-5 text-green-500" />
             ) : (
-              <ClipboardIcon className="h-5 w-5 text-white" />
+              <ClipboardIcon className="h-5 w-5 text-[#8695AA]" />
             )}
           </button>
         </div>
@@ -721,7 +721,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   return isMobile || isTab ? (
     <div
-      className="flex items-center justify-center"
+      className="flex items-center justify-center bg-[#EEF5FF]"
       style={{ height: bottomBarHeight }}
     >
       <LeaveBTN />
@@ -759,8 +759,8 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
           >
             <div className="fixed inset-0 overflow-y-hidden">
               <div className="flex h-full items-end justify-end text-center">
-                <Dialog.Panel className="w-screen transform overflow-hidden bg-gray-800 shadow-xl transition-all">
-                  <div className="grid container bg-gray-800 py-6">
+                <Dialog.Panel className="w-screen transform overflow-hidden bg-[#EEF5FF] shadow-xl transition-all">
+                  <div className="grid container bg-[#EEF5FF] py-6">
                     <div className="grid grid-cols-12 gap-2">
                       {otherFeatures.map(({ icon }) => {
                         return (
@@ -807,7 +807,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       </Transition>
     </div>
   ) : (
-    <div className="md:flex lg:px-2 xl:px-6 pb-2 px-2 hidden">
+    <div className="md:flex lg:px-2 xl:px-6 py-4 px-6 hidden bg-[#EEF5FF] items-center justify-between">
       <MeetingIdCopyBTN />
 
       <div className="flex flex-1 items-center justify-center" ref={tollTipEl}>

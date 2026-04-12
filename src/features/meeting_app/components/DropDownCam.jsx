@@ -26,16 +26,16 @@ export default function DropDownCam({
               onMouseEnter={() => { setIsHovered(true) }}
               onMouseLeave={() => { setIsHovered(false) }}
               disabled={!isCameraPermissionAllowed}
-              className={`focus:outline-none hover:ring-1 hover:ring-gray-300 hover:bg-black 
+              className={`focus:outline-none hover:ring-1 hover:ring-[#B2CBF6] hover:bg-[#F9FAFB] 
               ${open
-                  ? "text-white ring-1 ring-gray-300 bg-black"
-                  : "text-orange-300 hover:text-white border border-gray-300"
+                  ? "text-[#162E54] ring-1 ring-[#B2CBF6] bg-[#F9FAFB]"
+                  : "text-[#64748B] hover:text-[#162E54] border border-slate-200"
                 }
-              group inline-flex items-center rounded-md px-1 py-1 w-full text-base font-normal
+              group inline-flex items-center rounded-lg px-2 py-1.5 w-full text-sm font-normal
               ${!isCameraPermissionAllowed ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               <div>
-                <DropCAM fillColor={isHovered || open ? "#FFF" : "#B4B4B4"} />
+                <DropCAM fillColor={isHovered || open ? "#3B82F6" : "#8695AA"} />
 
               </div>
               <span className=" overflow-hidden whitespace-nowrap overflow-ellipsis w-full ml-7">
@@ -43,8 +43,8 @@ export default function DropDownCam({
               </span>
 
               <ChevronDownIcon
-                className={`${open ? 'text-orange-300' : 'text-orange-300/70'}
-                ml-8 h-5 w-10 transition duration-150 ease-in-out group-hover:text-orange-300/80 mt-1`}
+                className={`${open ? 'text-[#3B82F6]' : 'text-[#8695AA]'}
+                ml-8 h-5 w-10 transition duration-150 ease-in-out group-hover:text-[#3B82F6] mt-1`}
                 aria-hidden="true"
               />
 
@@ -60,7 +60,7 @@ export default function DropDownCam({
             >
               <Popover.Panel className="absolute bottom-full z-10 mt-3 w-full px-4 sm:px-0 pb-2">
                 <div className="rounded-lg shadow-lg">
-                  <div className="bg-gray-400 rounded-lg">
+                  <div className="bg-white border border-slate-200 rounded-lg">
                     <div>
                       <div className="flex flex-col">
                         {webcams.map(

@@ -56,24 +56,24 @@ export default function DropDownSpeaker({ speakers }) {
               onMouseEnter={() => { setIsHovered(true) }}
               onMouseLeave={() => { setIsHovered(false) }}
               disabled={!isMicrophonePermissionAllowed}
-              className={`focus:outline-none hover:ring-1 hover:ring-gray-300 hover:bg-black 
+              className={`focus:outline-none hover:ring-1 hover:ring-[#B2CBF6] hover:bg-[#F9FAFB] 
               ${open
-                  ? "text-white ring-1 ring-gray-300 bg-black"
-                  : "text-orange-300 hover:text-white border border-gray-300"
+                  ? "text-[#162E54] ring-1 ring-[#B2CBF6] bg-[#F9FAFB]"
+                  : "text-[#64748B] hover:text-[#162E54] border border-slate-200"
                 }
-              group inline-flex items-center rounded-md px-1 py-1 w-full text-base font-normal
+              group inline-flex items-center rounded-lg px-2 py-1.5 w-full text-sm font-normal
               ${!isMicrophonePermissionAllowed ? "opacity-50 cursor-not-allowed" : ""}`}
             >
               <div>
-                <DropSpeaker fillColor={isHovered || open ? "#FFF" : "#B4B4B4"} />
+                <DropSpeaker fillColor={isHovered || open ? "#3B82F6" : "#8695AA"} />
 
               </div>
               <span className=" overflow-hidden whitespace-nowrap overflow-ellipsis w-full ml-6">
                 {isMicrophonePermissionAllowed ? selectedSpeaker?.label : "Permission Needed"}
               </span>
               <ChevronDownIcon
-                className={`${open ? 'text-orange-300' : 'text-orange-300/70'}
-                ml-8 h-5 w-10 transition duration-150 ease-in-out group-hover:text-orange-300/80 mt-1`}
+                className={`${open ? 'text-[#3B82F6]' : 'text-[#8695AA]'}
+                ml-8 h-5 w-10 transition duration-150 ease-in-out group-hover:text-[#3B82F6] mt-1`}
                 aria-hidden="true"
               />
             </Popover.Button>
@@ -88,7 +88,7 @@ export default function DropDownSpeaker({ speakers }) {
             >
               <Popover.Panel className="absolute bottom-full z-10 mt-3 w-full px-4 sm:px-0 pb-2">
                 <div className="rounded-lg shadow-lg">
-                  <div className={"bg-gray-400 rounded-lg"} >
+                  <div className={"bg-white border border-slate-200 rounded-lg"} >
                     <div>
                       <div className="flex flex-col">
                         {speakers.map(
@@ -127,7 +127,7 @@ export default function DropDownSpeaker({ speakers }) {
                             );
                           }
                         )}
-                        {speakers.length && <> <hr className='border border-gray-50 mt-2 mb-1' />
+                        {speakers.length > 0 && <> <hr className='border border-gray-50 mt-2 mb-1' />
                           <div className={`my-1 pl-4 pr-2 text-white text-left`} >
                             <button
                               className={`flex flex-1 w-full text-left mb-1 pl-1 focus:outline-none`}
