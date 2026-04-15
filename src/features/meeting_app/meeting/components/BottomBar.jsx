@@ -721,7 +721,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
 
   return isMobile || isTab ? (
     <div
-      className="flex items-center justify-center bg-[#EEF5FF]"
+      className="flex items-center justify-center bg-skyblue-300"
       style={{ height: bottomBarHeight }}
     >
       <LeaveBTN />
@@ -807,7 +807,7 @@ export function BottomBar({ bottomBarHeight, setIsMeetingLeft }) {
       </Transition>
     </div>
   ) : (
-    <div className="md:flex lg:px-2 xl:px-6 py-4 px-6 hidden bg-[#EEF5FF] items-center justify-between">
+    <div className="md:flex lg:px-2 xl:px-6 py-2 px-6 hidden bg-skyblue-300 items-center justify-between">
       <MeetingIdCopyBTN />
 
       <div className="flex flex-1 items-center justify-center" ref={tollTipEl}>

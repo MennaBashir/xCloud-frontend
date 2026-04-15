@@ -210,7 +210,7 @@ export default function DropDown({
             >
               <Popover.Panel className="absolute bottom-full z-10 mt-3 w-full px-4 sm:px-0 pb-2">
                 <div className="rounded-lg shadow-lg">
-                  <div className="bg-white border border-slate-200 rounded-lg">
+                  <div className="bg-skyblue-500  border border-slate-200 rounded-lg">
                     <div>
                       <div className="flex flex-col">
                         {mics.map(

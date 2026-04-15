@@ -6,6 +6,7 @@ import { MeetingContainer } from "./meeting/MeetingContainer";
 import { LeaveScreen } from "./components/screens/LeaveScreen";
 import { JoiningScreen } from "./components/screens/JoiningScreen";
 import { ToastContainer } from "react-toastify";
+import useMeetingStore from "./useMeetingStore.ts";
 
 function MeetingApp() {
   const [token, setToken] = useState("");
@@ -17,6 +18,7 @@ function MeetingApp() {
   const [customVideoStream, setCustomVideoStream] = useState(null);
   const [isMeetingStarted, setMeetingStarted] = useState(false);
   const [isMeetingLeft, setIsMeetingLeft] = useState(false);
+  const setMeetingActive = useMeetingStore((s) => s.setMeetingActive);
 
   const isMobile = window.matchMedia(
     "only screen and (max-width: 768px)",
@@ -29,6 +31,11 @@ function MeetingApp() {
       };
     }
   }, [isMobile]);
+
+  useEffect(() => {
+    setMeetingActive(isMeetingStarted);
+    return () => setMeetingActive(false);
+  }, [isMeetingStarted, setMeetingActive]);
 
   return (
     <>
@@ -49,7 +56,7 @@ function MeetingApp() {
             config={{
               meetingId: meetingId
                 ? meetingId
-                : sessionStorage.getItem("videosdk_meetingId"), // get meetingId from session storage if not in state
+                : sessionStorage.getItem("videosdk_meetingId"),
               micEnabled: micOn,
               webcamEnabled: webcamOn,
               name: participantName ? participantName : "TestUser",
@@ -57,16 +64,16 @@ function MeetingApp() {
               customCameraVideoTrack: customVideoStream,
               customMicrophoneAudioTrack: customAudioStream,
             }}
-            token={token ? token : sessionStorage.getItem("videosdk_token")} // get token from session storage if not in state
+            token={token ? token : sessionStorage.getItem("videosdk_token")}
             reinitialiseMeetingOnConfigChange={true}
             joinWithoutUserInteraction={true}
           >
             <MeetingContainer
               onMeetingLeave={() => {
                 setToken("");
-                sessionStorage.removeItem("videosdk_token"); // remove token from session storage on meeting leave
+                sessionStorage.removeItem("videosdk_token");
                 setMeetingId("");
-                sessionStorage.removeItem("videosdk_meetingId"); // remove meetingId from session storage on meeting leave
+                sessionStorage.removeItem("videosdk_meetingId");
                 setParticipantName("");
                 setWebcamOn(false);
                 setMicOn(false);
