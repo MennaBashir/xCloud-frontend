@@ -1,0 +1,73 @@
+import { create } from "zustand";
+
+import type { MeetingMode, MeetingTheme, SideBarMode } from "../types/meeting";
+
+type MeetingState = {
+	mode: MeetingMode;
+	meetingId: string;
+	participantName: string;
+	micOn: boolean;
+	webcamOn: boolean;
+	sideBar: SideBarMode;
+	theme: MeetingTheme;
+	/** Whether the active meeting is currently in fullscreen takeover. */
+	isMeetingActive: boolean;
+	/**
+	 * When true (default), recording starts automatically the moment the
+	 * meeting is joined. Audio-only — captures the user's microphone.
+	 */
+	autoRecord: boolean;
+};
+
+type MeetingActions = {
+	setMode: (mode: MeetingMode) => void;
+	setMeetingId: (id: string) => void;
+	setParticipantName: (name: string) => void;
+	setMicOn: (on: boolean) => void;
+	setWebcamOn: (on: boolean) => void;
+	setSideBar: (mode: SideBarMode) => void;
+	toggleSideBar: (mode: Exclude<SideBarMode, null>) => void;
+	setTheme: (theme: MeetingTheme) => void;
+	setMeetingActive: (active: boolean) => void;
+	setAutoRecord: (value: boolean) => void;
+	reset: () => void;
+};
+
+const INITIAL: MeetingState = {
+	mode: "joining",
+	meetingId: "",
+	participantName: "",
+	micOn: true,
+	webcamOn: true,
+	sideBar: null,
+	theme: "dark",
+	isMeetingActive: false,
+	autoRecord: true,
+};
+
+export const useMeetingStore = create<MeetingState & MeetingActions>(
+	(set) => ({
+		...INITIAL,
+		setMode: (mode) => set({ mode }),
+		setMeetingId: (meetingId) => set({ meetingId }),
+		setParticipantName: (participantName) => set({ participantName }),
+		setMicOn: (micOn) => set({ micOn }),
+		setWebcamOn: (webcamOn) => set({ webcamOn }),
+		setSideBar: (sideBar) => set({ sideBar }),
+		toggleSideBar: (mode) =>
+			set((s) => ({ sideBar: s.sideBar === mode ? null : mode })),
+		setTheme: (theme) => set({ theme }),
+		setMeetingActive: (isMeetingActive) => set({ isMeetingActive }),
+		setAutoRecord: (autoRecord) => set({ autoRecord }),
+		reset: () =>
+			set((s) => ({
+				...INITIAL,
+				// Preserve the user's auto-record preference across meetings.
+				autoRecord: s.autoRecord,
+			})),
+	}),
+);
+
+export const selectIsMeetingActive = (
+	s: MeetingState & MeetingActions,
+): boolean => s.isMeetingActive;

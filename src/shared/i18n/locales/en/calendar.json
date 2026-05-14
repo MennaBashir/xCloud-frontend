@@ -1,0 +1,45 @@
+{
+	"title": "Calendar",
+	"subtitle": "Tasks and decisions from your meetings, scheduled.",
+	"views": {
+		"month": "Month",
+		"week": "Week",
+		"day": "Day",
+		"today": "Today"
+	},
+	"actions": {
+		"addEvent": "Add event",
+		"newEvent": "New event",
+		"editEvent": "Edit event",
+		"previous": "Previous",
+		"next": "Next"
+	},
+	"form": {
+		"title": "Title",
+		"titlePlaceholder": "Sprint planning",
+		"description": "Description",
+		"descriptionPlaceholder": "Add details, agenda, or notes…",
+		"start": "Starts",
+		"end": "Ends",
+		"allDay": "All day",
+		"color": "Color",
+		"done": "Mark as done",
+		"save": "Save event",
+		"update": "Update event",
+		"delete": "Delete event"
+	},
+	"upcoming": {
+		"title": "Upcoming",
+		"subtitle": "Your next scheduled events.",
+		"today": "Today",
+		"thisWeek": "This week",
+		"later": "Later",
+		"empty": "Nothing scheduled. Add an event to get started."
+	},
+	"list": {
+		"title": "Alerts",
+		"empty": "Nothing scheduled. Add an event to get started.",
+		"deleteConfirmTitle": "Delete this event?",
+		"deleteConfirmDescription": "This can't be undone."
+	}
+}

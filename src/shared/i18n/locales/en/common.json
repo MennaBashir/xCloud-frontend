@@ -1,0 +1,87 @@
+{
+	"brand": {
+		"name": "SprintifAI",
+		"tagline": "Meetings that ship outcomes"
+	},
+	"nav": {
+		"files": "Files",
+		"meeting": "Meeting",
+		"calendar": "Calendar",
+		"chat": "Chat AI",
+		"gmail": "Inbox",
+		"home": "Home",
+		"settings": "Settings"
+	},
+	"actions": {
+		"signIn": "Sign in",
+		"signUp": "Sign up",
+		"signOut": "Sign out",
+		"continue": "Continue",
+		"cancel": "Cancel",
+		"save": "Save",
+		"delete": "Delete",
+		"edit": "Edit",
+		"close": "Close",
+		"back": "Back",
+		"next": "Next",
+		"submit": "Submit",
+		"upload": "Upload",
+		"download": "Download",
+		"search": "Search",
+		"filter": "Filter",
+		"add": "Add",
+		"create": "Create",
+		"learnMore": "Learn more",
+		"getStarted": "Get started",
+		"goToWorkspace": "Go to workspace",
+		"goToLanding": "Back to landing",
+		"backToHome": "Back to home",
+		"watchDemo": "Watch demo",
+		"viewAll": "View all",
+		"retry": "Try again"
+	},
+	"theme": {
+		"label": "Theme",
+		"light": "Light",
+		"system": "System",
+		"dark": "Dark"
+	},
+	"language": {
+		"label": "Language",
+		"english": "English",
+		"arabic": "العربية"
+	},
+	"states": {
+		"loading": "Loading…",
+		"empty": "Nothing here yet",
+		"error": "Something went wrong"
+	},
+	"time": {
+		"now": "Just now",
+		"minutesAgo_one": "{{count}} minute ago",
+		"minutesAgo_other": "{{count}} minutes ago",
+		"hoursAgo_one": "{{count}} hour ago",
+		"hoursAgo_other": "{{count}} hours ago",
+		"daysAgo_one": "{{count}} day ago",
+		"daysAgo_other": "{{count}} days ago"
+	},
+	"a11y": {
+		"skipToMain": "Skip to main content"
+	},
+	"shortcuts": {
+		"title": "Keyboard shortcuts",
+		"description": "Move faster through SprintifAI without touching your mouse.",
+		"openCommand": "Open command palette",
+		"openHelp": "Open this dialog",
+		"goFiles": "Go to Files",
+		"goCalendar": "Go to Calendar",
+		"goMeeting": "Go to Meeting",
+		"goChat": "Go to Chat AI",
+		"goInbox": "Go to Inbox",
+		"goHome": "Go to landing page",
+		"groups": {
+			"general": "General",
+			"navigate": "Navigate"
+		}
+	}
+}

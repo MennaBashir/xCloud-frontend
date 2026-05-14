@@ -1,0 +1,23 @@
+{
+	"name": "SprintifAI",
+	"short_name": "SprintifAI",
+	"description": "Turn every meeting into measurable outcomes. AI-powered meetings, files, chat, calendar, and email in one enterprise workspace.",
+	"start_url": "/app",
+	"display": "standalone",
+	"background_color": "#fafafa",
+	"theme_color": "#6366F1",
+	"icons": [
+		{
+			"src": "/favicon.svg",
+			"sizes": "any",
+			"type": "image/svg+xml",
+			"purpose": "any"
+		},
+		{
+			"src": "/logo.png",
+			"sizes": "192x192 512x512",
+			"type": "image/png",
+			"purpose": "any"
+		}
+	]
+}

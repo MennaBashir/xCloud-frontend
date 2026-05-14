@@ -1,0 +1,24 @@
+{
+	"generic": "Something went wrong. Please try again.",
+	"network": "Network error. Check your connection and retry.",
+	"notFound": {
+		"title": "Page not found",
+		"description": "The page you're looking for doesn't exist or has been moved.",
+		"cta": "Back to home"
+	},
+	"unauthorized": {
+		"title": "Sign in required",
+		"description": "You need to sign in to access this page.",
+		"cta": "Sign in"
+	},
+	"forbidden": {
+		"title": "Access denied",
+		"description": "You don't have permission to view this page."
+	},
+	"validation": {
+		"required": "This field is required.",
+		"invalidEmail": "Please enter a valid email.",
+		"tooShort": "Must be at least {{min}} characters.",
+		"tooLong": "Must be at most {{max}} characters."
+	}
+}

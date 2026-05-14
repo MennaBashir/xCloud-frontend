@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="SprintifAI">
+  <defs>
+    <linearGradient id="sprintifai-mark-bg" x1="2" y1="2" x2="30" y2="30" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#8B5CF6"/>
+      <stop offset="100%" stop-color="#3B82F6"/>
+    </linearGradient>
+    <linearGradient id="sprintifai-mark-sheen" x1="0" y1="0" x2="0" y2="32" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.16"/>
+      <stop offset="60%" stop-color="#FFFFFF" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#sprintifai-mark-bg)"/>
+  <rect x="0" y="0" width="32" height="32" rx="8" fill="url(#sprintifai-mark-sheen)"/>
+  <g fill="#FFFFFF">
+    <path d="M11 9 L14.5 9 L19 16 L17.25 19 L11 9 Z" opacity="0.55"/>
+    <path d="M8.5 14 L12 14 L17 22 L13.5 22 L8.5 14 Z" opacity="0.78"/>
+    <path d="M6 19 L9.5 19 L14.5 27 L11 27 L6 19 Z"/>
+    <rect x="17" y="14" width="6.5" height="2.4" rx="1.2" transform="rotate(28 17 14)"/>
+    <circle cx="24.5" cy="9.5" r="1.6"/>
+  </g>
+</svg>

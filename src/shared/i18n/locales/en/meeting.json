@@ -1,0 +1,105 @@
+{
+	"title": "Meeting",
+	"subtitle": "Host or join a meeting that ships outcomes.",
+	"prejoin": {
+		"eyebrow": "Get set up",
+		"title": "Ready to join?",
+		"subtitle": "Check your camera and microphone before you enter.",
+		"nameLabel": "Your display name",
+		"namePlaceholder": "Alex Morgan",
+		"roomIdLabel": "Meeting ID",
+		"roomIdPlaceholder": "abcd-efgh-ijkl",
+		"create": "Create a new meeting",
+		"join": "Join meeting",
+		"orJoinExisting": "Or join an existing meeting",
+		"creating": "Creating meeting…",
+		"validating": "Validating…",
+		"deviceMic": "Microphone",
+		"deviceCamera": "Camera",
+		"deviceSpeaker": "Speaker",
+		"cameraOff": "Camera is off",
+		"micOff": "Mic muted",
+		"errors": {
+			"nameRequired": "Enter your name to continue.",
+			"invalidId": "We couldn't find that meeting.",
+			"createFailed": "Could not create a meeting. Try again.",
+			"permission": "We need camera and microphone permission to continue.",
+			"permissionTitle": "Permission needed",
+			"unsupported": "Your browser doesn't support this feature."
+		}
+	},
+	"controls": {
+		"mic": "Microphone",
+		"camera": "Camera",
+		"micOn": "Mute",
+		"micOff": "Unmute",
+		"camOn": "Stop video",
+		"camOff": "Start video",
+		"shareScreen": "Share screen",
+		"stopSharing": "Stop sharing",
+		"chat": "Chat",
+		"participants": "Participants",
+		"raiseHand": "Raise hand",
+		"record": "Record",
+		"stopRecord": "Stop recording",
+		"more": "More",
+		"copyLink": "Copy invite",
+		"copied": "Copied",
+		"theme": "Theme",
+		"leave": "Leave"
+	},
+	"recording": {
+		"start": "Record audio",
+		"stop": "Stop",
+		"recording": "Recording",
+		"starting": "Starting…",
+		"saved": "Recording saved",
+		"download": "Download recording",
+		"autoStarted": "Auto-recording started",
+		"autoLabel": "Auto-record meeting (audio only)",
+		"autoHint": "Records your mic when the meeting starts. Downloads as audio when you stop.",
+		"error": {
+			"unsupported": "Your browser doesn't support recording.",
+			"permission": "Microphone permission denied. Allow microphone access to record.",
+			"autoFailed": "Couldn't auto-start recording. You can start it manually from the bottom bar."
+		}
+	},
+	"sidebar": {
+		"chat": "Chat",
+		"participants": "Participants",
+		"close": "Close panel"
+	},
+	"chat": {
+		"placeholder": "Send a message to everyone…",
+		"send": "Send",
+		"empty": "No messages yet. Say hi.",
+		"system": "System",
+		"you": "You"
+	},
+	"participants": {
+		"empty": "Just you in here so far.",
+		"host": "Host",
+		"raised": "Raised hand",
+		"count_one": "{{count}} participant",
+		"count_other": "{{count}} participants"
+	},
+	"room": {
+		"connecting": "Connecting to the room…",
+		"reconnecting": "Reconnecting…",
+		"hostBadge": "Host"
+	},
+	"leave": {
+		"title": "You left the meeting",
+		"subtitle": "We've saved the transcript and any decisions.",
+		"rejoin": "Rejoin",
+		"newMeeting": "Start a new meeting",
+		"returnHome": "Back to workspace"
+	},
+	"toasts": {
+		"joined": "{{name}} joined",
+		"left": "{{name}} left",
+		"recordingStarted": "Recording started",
+		"recordingStopped": "Recording stopped",
+		"linkCopied": "Invite link copied"
+	}
+}

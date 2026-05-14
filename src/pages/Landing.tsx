@@ -1,16 +1,28 @@
 import {
-	FeaturesSection,
-	HeroSection,
+	Features,
+	FinalCta,
+	Hero,
+	HowItWorks,
 	LandingFooter,
+	LandingNavbar,
+	LogosStrip,
+	Testimonial,
 } from "@/features/landing/components";
 
 const LandingPage = () => {
 	return (
-		<>
-			<HeroSection />
-			<FeaturesSection />
+		<div className="relative">
+			<LandingNavbar />
+			<main>
+				<Hero />
+				<LogosStrip />
+				<Features />
+				<HowItWorks />
+				<Testimonial />
+				<FinalCta />
+			</main>
 			<LandingFooter />
-		</>
+		</div>
 	);
 };
 

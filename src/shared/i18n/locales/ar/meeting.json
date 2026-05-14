@@ -1,0 +1,108 @@
+{
+	"title": "الاجتماع",
+	"subtitle": "استضِف أو انضم إلى اجتماع يُسلّم النتائج.",
+	"prejoin": {
+		"eyebrow": "تجهيز",
+		"title": "مستعد للانضمام؟",
+		"subtitle": "تحقّق من الكاميرا والميكروفون قبل الدخول.",
+		"nameLabel": "اسمك للعرض",
+		"namePlaceholder": "أحمد محمد",
+		"roomIdLabel": "معرّف الاجتماع",
+		"roomIdPlaceholder": "abcd-efgh-ijkl",
+		"create": "إنشاء اجتماع جديد",
+		"join": "انضم للاجتماع",
+		"orJoinExisting": "أو انضم إلى اجتماع موجود",
+		"creating": "جارٍ إنشاء الاجتماع…",
+		"validating": "جارٍ التحقق…",
+		"deviceMic": "الميكروفون",
+		"deviceCamera": "الكاميرا",
+		"deviceSpeaker": "السمّاعة",
+		"cameraOff": "الكاميرا مغلقة",
+		"micOff": "الميكروفون مكتوم",
+		"errors": {
+			"nameRequired": "أدخل اسمك للمتابعة.",
+			"invalidId": "لم نتمكّن من إيجاد هذا الاجتماع.",
+			"createFailed": "تعذّر إنشاء الاجتماع. حاول مجددًا.",
+			"permission": "نحتاج إذن الكاميرا والميكروفون للمتابعة.",
+			"permissionTitle": "الإذن مطلوب",
+			"unsupported": "متصفّحك لا يدعم هذه الميزة."
+		}
+	},
+	"controls": {
+		"mic": "الميكروفون",
+		"camera": "الكاميرا",
+		"micOn": "كتم الصوت",
+		"micOff": "إلغاء الكتم",
+		"camOn": "إيقاف الفيديو",
+		"camOff": "تشغيل الفيديو",
+		"shareScreen": "مشاركة الشاشة",
+		"stopSharing": "إيقاف المشاركة",
+		"chat": "الدردشة",
+		"participants": "المشاركون",
+		"raiseHand": "رفع اليد",
+		"record": "تسجيل",
+		"stopRecord": "إيقاف التسجيل",
+		"more": "المزيد",
+		"copyLink": "نسخ الدعوة",
+		"copied": "تم النسخ",
+		"theme": "المظهر",
+		"leave": "مغادرة"
+	},
+	"recording": {
+		"start": "تسجيل الصوت",
+		"stop": "إيقاف",
+		"recording": "جارٍ التسجيل",
+		"starting": "جارٍ البدء…",
+		"saved": "تم حفظ التسجيل",
+		"download": "تنزيل التسجيل",
+		"autoStarted": "بدأ التسجيل التلقائي",
+		"autoLabel": "تسجيل تلقائي للاجتماع (صوت فقط)",
+		"autoHint": "يسجّل صوت الميكروفون عند بدء الاجتماع، ويُحفظ كملف صوتي عند الإيقاف.",
+		"error": {
+			"unsupported": "متصفّحك لا يدعم التسجيل.",
+			"permission": "تم رفض إذن الميكروفون. اسمح بالوصول إليه للتسجيل.",
+			"autoFailed": "تعذّر بدء التسجيل تلقائيًا. يمكنك بدؤه يدويًا من الشريط السفلي."
+		}
+	},
+	"sidebar": {
+		"chat": "الدردشة",
+		"participants": "المشاركون",
+		"close": "إغلاق اللوحة"
+	},
+	"chat": {
+		"placeholder": "أرسل رسالة للجميع…",
+		"send": "إرسال",
+		"empty": "لا توجد رسائل بعد. سلّم على الجميع.",
+		"system": "النظام",
+		"you": "أنت"
+	},
+	"participants": {
+		"empty": "أنت وحدك هنا حتى الآن.",
+		"host": "المضيف",
+		"raised": "يد مرفوعة",
+		"count_one": "مشارك واحد",
+		"count_two": "مشاركان",
+		"count_few": "{{count}} مشاركين",
+		"count_many": "{{count}} مشاركًا",
+		"count_other": "{{count}} مشاركًا"
+	},
+	"room": {
+		"connecting": "جارٍ الاتصال بالغرفة…",
+		"reconnecting": "إعادة الاتصال…",
+		"hostBadge": "مضيف"
+	},
+	"leave": {
+		"title": "غادرت الاجتماع",
+		"subtitle": "تم حفظ النص وأي قرارات.",
+		"rejoin": "العودة للاجتماع",
+		"newMeeting": "ابدأ اجتماعًا جديدًا",
+		"returnHome": "العودة لمساحة العمل"
+	},
+	"toasts": {
+		"joined": "انضم {{name}}",
+		"left": "غادر {{name}}",
+		"recordingStarted": "بدأ التسجيل",
+		"recordingStopped": "توقف التسجيل",
+		"linkCopied": "تم نسخ رابط الدعوة"
+	}
+}

@@ -1,0 +1,47 @@
+{
+	"title": "Notifications",
+	"subtitle": "Everything that needs your attention, in one place.",
+	"bell": {
+		"open": "Open notifications",
+		"unread_one": "{{count}} unread notification",
+		"unread_other": "{{count}} unread notifications"
+	},
+	"actions": {
+		"markAllRead": "Mark all read",
+		"viewAll": "View all",
+		"dismiss": "Dismiss",
+		"open": "Open"
+	},
+	"kinds": {
+		"task": "Task",
+		"meeting": "Meeting",
+		"decision": "Decision",
+		"mention": "Mention",
+		"system": "System"
+	},
+	"filters": {
+		"all": "All",
+		"unread": "Unread",
+		"tasks": "Tasks",
+		"meetings": "Meetings",
+		"decisions": "Decisions",
+		"mentions": "Mentions",
+		"system": "System"
+	},
+	"groups": {
+		"today": "Today",
+		"thisWeek": "This week",
+		"earlier": "Earlier"
+	},
+	"empty": {
+		"title": "All caught up",
+		"description": "Nothing pending right now. Reminders and updates will show up here."
+	},
+	"loading": "Loading notifications…",
+	"arrival": {
+		"title": "Sprint planning starts in 5 minutes",
+		"body": "Priya, Marcus, Aisha, and 2 others are joining.",
+		"cta": "Join now",
+		"toast": "Sprint planning starts in 5 minutes"
+	}
+}

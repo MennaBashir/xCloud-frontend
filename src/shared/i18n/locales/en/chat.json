@@ -1,0 +1,72 @@
+{
+	"title": "Chat AI",
+	"hero": {
+		"eyebrow": "SprintifAI Assistant",
+		"title": "What can I help you ship today?",
+		"subtitle": "Ask anything across your meetings, files, and decisions — and I'll show you exactly where the answer came from."
+	},
+	"input": {
+		"placeholder": "Ask SprintifAI…",
+		"placeholderShort": "Reply to SprintifAI…",
+		"send": "Send",
+		"stop": "Stop",
+		"hint": "Enter to send · Shift + Enter for a new line"
+	},
+	"suggestions": {
+		"label": "Try asking",
+		"summarize": {
+			"title": "Summarize my last meeting",
+			"subtitle": "Decisions, owners, and next steps",
+			"prompt": "Summarize my last meeting and list every decision with its owner."
+		},
+		"extractTasks": {
+			"title": "Extract action items",
+			"subtitle": "From yesterday's standup",
+			"prompt": "Extract every action item from yesterday's standup with deadlines and owners."
+		},
+		"findDecisions": {
+			"title": "Find a past decision",
+			"subtitle": "What did we agree on?",
+			"prompt": "What did we decide about pricing in last week's planning?"
+		},
+		"draftEmail": {
+			"title": "Draft a follow-up",
+			"subtitle": "Email to the design team",
+			"prompt": "Draft a follow-up email to the design team with the action items from today's review."
+		}
+	},
+	"conversation": {
+		"new": "New chat",
+		"empty": "No conversations yet",
+		"emptyDescription": "Start a conversation. Your past chats will appear here.",
+		"history": "History",
+		"loading": "Thinking…",
+		"streaming": "Generating…",
+		"errorMessage": "Something went wrong while generating that response.",
+		"deleted": "Conversation deleted",
+		"clearAll": "Clear all",
+		"clearAllConfirm": "Delete all conversations? This can't be undone."
+	},
+	"message": {
+		"you": "You",
+		"assistant": "SprintifAI",
+		"copy": "Copy",
+		"copied": "Copied",
+		"regenerate": "Regenerate",
+		"sources": "Sources",
+		"openMeeting": "Open meeting",
+		"openFile": "Open file"
+	},
+	"model": {
+		"label": "Model",
+		"changeModel": "Change model"
+	},
+	"sidebar": {
+		"collapse": "Collapse history",
+		"expand": "Show history"
+	},
+	"scroll": {
+		"latest": "Scroll to latest",
+		"newMessages": "New messages"
+	}
+}

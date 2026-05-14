@@ -2,14 +2,96 @@
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
-		<link rel="icon" type="image/png" href="/logo.png" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>SprintifAI</title>
-		<link rel="preconnect" href="https://fonts.googleapis.com" />
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<link rel="alternate icon" type="image/png" href="/logo.png" />
+		<link rel="apple-touch-icon" href="/logo.png" />
+		<link rel="manifest" href="/manifest.webmanifest" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+		<meta
+			name="description"
+			content="SprintifAI — Turn every meeting into measurable outcomes. AI-powered meetings, files, chat, calendar, and email in one enterprise workspace."
+		/>
+		<meta
+			name="theme-color"
+			media="(prefers-color-scheme: light)"
+			content="#fafafa"
+		/>
+		<meta
+			name="theme-color"
+			media="(prefers-color-scheme: dark)"
+			content="#0a0a0a"
+		/>
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-title" content="SprintifAI" />
+		<meta name="format-detection" content="telephone=no" />
+
+		<!-- Open Graph -->
+		<meta property="og:type" content="website" />
+		<meta property="og:site_name" content="SprintifAI" />
+		<meta property="og:title" content="SprintifAI — Meetings that ship outcomes" />
+		<meta
+			property="og:description"
+			content="Turn every meeting into a clear summary, named decisions, and assigned tasks — synced straight to your team's calendar."
+		/>
+		<meta property="og:image" content="/logo.png" />
+
+		<!-- Twitter -->
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content="SprintifAI — Meetings that ship outcomes" />
+		<meta
+			name="twitter:description"
+			content="Turn every meeting into a clear summary, named decisions, and assigned tasks — synced straight to your team's calendar."
+		/>
+
+		<title>SprintifAI — Meetings that ship outcomes</title>
 		<link
-			href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-			rel="stylesheet" />
+			rel="preload"
+			href="/fonts/Geist-Variable.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<link
+			rel="preload"
+			href="/fonts/GeistMono-Variable.woff2"
+			as="font"
+			type="font/woff2"
+			crossorigin
+		/>
+		<script>
+			// Prevent FOUC on theme + language apply
+			(function () {
+				try {
+					var stored = localStorage.getItem("sprintifai.theme");
+					var prefersDark = window.matchMedia(
+						"(prefers-color-scheme: dark)",
+					).matches;
+					var resolved =
+						stored === "dark" || stored === "light"
+							? stored
+							: prefersDark
+								? "dark"
+								: "light";
+					if (resolved === "dark") {
+						document.documentElement.classList.add("dark");
+					}
+					document.documentElement.style.colorScheme = resolved;
+				} catch (e) {}
+
+				try {
+					var lang = localStorage.getItem("sprintifai.lang");
+					var supported = ["en", "ar"];
+					var rtl = ["ar"];
+					if (!lang || supported.indexOf(lang) === -1) {
+						var navLang = (navigator.language || "en").slice(0, 2);
+						lang = supported.indexOf(navLang) !== -1 ? navLang : "en";
+					}
+					document.documentElement.lang = lang;
+					document.documentElement.dir = rtl.indexOf(lang) !== -1 ? "rtl" : "ltr";
+				} catch (e) {}
+			})();
+		</script>
 	</head>
 	<body>
 		<div id="root"></div>
