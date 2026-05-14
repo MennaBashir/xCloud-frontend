@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { PanelLeftClose, PanelLeftOpen, Sparkles } from "lucide-react";
+import { Menu, PanelLeftClose, PanelLeftOpen, Sparkles } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import {
+	Sheet,
+	SheetContent,
+	SheetHeader,
+	SheetTitle,
+} from "@/components/ui/sheet";
 import {
 	selectActiveConversation,
 	selectActiveMessages,
@@ -24,9 +30,21 @@ export default function ChatPage() {
 	const conversation = useChatStore(selectActiveConversation);
 	const isStreaming = useChatStore(selectIsStreaming);
 	const createConversation = useChatStore((s) => s.createConversation);
+	const activeConversationId = useChatStore((s) => s.activeConversationId);
 	const { sendMessage, stop } = useMockChat();
 	const [seedValue] = useState<string>("");
 	const [sidebarOpen, setSidebarOpen] = useState(true);
+	const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
+	const previousActiveIdRef = useRef(activeConversationId);
+
+	// Close the mobile drawer whenever the active conversation changes
+	// (user picked an item or hit "New chat" inside the sheet).
+	useEffect(() => {
+		if (previousActiveIdRef.current !== activeConversationId) {
+			previousActiveIdRef.current = activeConversationId;
+			if (mobileSheetOpen) setMobileSheetOpen(false);
+		}
+	}, [activeConversationId, mobileSheetOpen]);
 
 	const handleSend = (value: string) => {
 		void sendMessage(value);
@@ -70,8 +88,21 @@ export default function ChatPage() {
 					)}
 				>
 					{/* Sticky chat header */}
-					<div className="flex-none flex items-center justify-between gap-3 px-5 py-3 border-b border-border bg-card">
+					<div className="flex-none flex items-center justify-between gap-3 px-4 sm:px-5 py-3 border-b border-border bg-card">
 						<div className="flex items-center gap-3 min-w-0">
+							{/* Mobile drawer trigger (<lg) */}
+							<button
+								type="button"
+								onClick={() => setMobileSheetOpen(true)}
+								aria-label={t("sidebar.open")}
+								className={cn(
+									"lg:hidden inline-flex items-center justify-center size-8 rounded-[var(--radius-sm)] -ms-1",
+									"text-muted-foreground hover:bg-accent hover:text-foreground transition-colors",
+								)}
+							>
+								<Menu className="size-4" strokeWidth={1.6} />
+							</button>
+
 							{/* Sidebar collapse toggle (lg+) */}
 							<button
 								type="button"
@@ -142,6 +173,23 @@ export default function ChatPage() {
 					</div>
 				</div>
 			</div>
+
+			{/* Mobile sidebar — Sheet (rendered outside the layout flex row) */}
+			<Sheet open={mobileSheetOpen} onOpenChange={setMobileSheetOpen}>
+				<SheetContent
+					side="left"
+					className="w-[300px] sm:w-[340px] p-0 bg-background border-e border-border"
+				>
+					<SheetHeader className="px-4 py-3 border-b border-border">
+						<SheetTitle className="text-[0.9375rem]">
+							{t("sidebar.title")}
+						</SheetTitle>
+					</SheetHeader>
+					<div className="flex-1 min-h-0 overflow-hidden">
+						<ConversationSidebar />
+					</div>
+				</SheetContent>
+			</Sheet>
 		</div>
 	);
 }

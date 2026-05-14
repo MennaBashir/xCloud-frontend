@@ -98,7 +98,7 @@ export function AuthLayout({
 			{/* Form column */}
 			<div className="md:col-span-1 lg:col-span-2 xl:col-span-2 flex flex-col">
 				{/* Top utility bar */}
-				<div className="flex items-center justify-between gap-3 px-6 sm:px-10 pt-6">
+				<div className="flex items-center justify-between gap-3 px-4 sm:px-10 pt-6">
 					<div className="flex items-center gap-4">
 						<Link
 							to="/"
@@ -122,7 +122,7 @@ export function AuthLayout({
 				</div>
 
 				{/* Form */}
-				<div className="flex-1 flex items-center justify-center px-6 sm:px-10 py-10">
+				<div className="flex-1 flex items-center justify-center px-4 sm:px-10 py-10">
 					<div className="w-full max-w-[420px] flex flex-col gap-7">
 						<header className="flex flex-col gap-2">
 							{eyebrow ? (

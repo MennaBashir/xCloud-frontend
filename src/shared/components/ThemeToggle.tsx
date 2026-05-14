@@ -1,15 +1,15 @@
-import { Monitor, Moon, Sun } from "lucide-react";
+import { Moon, Sun } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useTheme, type Theme } from "@/shared/theme/ThemeProvider";
 import { cn } from "@/lib/utils";
 
 const OPTIONS: Array<{
 	value: Theme;
-	label: string;
+	labelKey: "theme.light" | "theme.dark";
 	icon: typeof Sun;
 }> = [
-	{ value: "light", label: "Light", icon: Sun },
-	{ value: "system", label: "System", icon: Monitor },
-	{ value: "dark", label: "Dark", icon: Moon },
+	{ value: "light", labelKey: "theme.light", icon: Sun },
+	{ value: "dark", labelKey: "theme.dark", icon: Moon },
 ];
 
 type ThemeToggleProps = {
@@ -18,18 +18,20 @@ type ThemeToggleProps = {
 
 export function ThemeToggle({ className }: ThemeToggleProps) {
 	const { theme, setTheme } = useTheme();
+	const { t } = useTranslation();
 
 	return (
 		<div
 			role="radiogroup"
-			aria-label="Theme"
+			aria-label={t("theme.label")}
 			className={cn(
 				"inline-flex items-center gap-0.5 rounded-full border border-border bg-surface-muted p-0.5",
 				className,
 			)}
 		>
-			{OPTIONS.map(({ value, label, icon: Icon }) => {
+			{OPTIONS.map(({ value, labelKey, icon: Icon }) => {
 				const active = theme === value;
+				const label = t(labelKey);
 				return (
 					<button
 						key={value}
@@ -37,6 +39,7 @@ export function ThemeToggle({ className }: ThemeToggleProps) {
 						role="radio"
 						aria-checked={active}
 						aria-label={label}
+						title={label}
 						onClick={() => setTheme(value)}
 						className={cn(
 							"relative grid size-7 place-items-center rounded-full transition-all",

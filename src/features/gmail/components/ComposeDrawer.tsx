@@ -148,7 +148,12 @@ export function ComposeDrawer({ onSent }: ComposeDrawerProps) {
 					</div>
 				</div>
 
-				<footer className="border-t border-border px-6 py-4 flex items-center justify-between gap-2">
+				<footer
+					className="border-t border-border px-6 pt-4 flex items-center justify-between gap-2"
+					style={{
+						paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
+					}}
+				>
 					<Button variant="ghost" size="sm" onClick={() => close()}>
 						{t("actions.discard")}
 					</Button>

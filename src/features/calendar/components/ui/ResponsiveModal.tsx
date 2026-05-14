@@ -32,13 +32,19 @@ export default function ResponsiveModal({ children }: ResponsiveModalProps) {
 					type="button"
 					aria-label="Events list"
 					className={cn(
-						"absolute top-2 end-0 inline-grid place-items-center size-10",
-						"rounded-[var(--radius-md)] border border-border bg-card",
+						"fixed z-30 inline-grid place-items-center size-12",
+						"rounded-full border border-border bg-card",
 						"text-foreground hover:bg-accent transition-colors duration-[var(--duration-fast)]",
-						"shadow-[0_1px_2px_oklch(0_0_0/0.04)]",
+						"shadow-[0_4px_16px_oklch(0_0_0/0.18),0_1px_2px_oklch(0_0_0/0.08)]",
+						"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+						"active:scale-[0.97]",
 					)}
+					style={{
+						bottom: "max(1rem, env(safe-area-inset-bottom))",
+						insetInlineEnd: "1rem",
+					}}
 				>
-					<ListChecks className="size-4" strokeWidth={1.6} />
+					<ListChecks className="size-5" strokeWidth={1.6} />
 				</button>
 			</SheetTrigger>
 			<SheetContent

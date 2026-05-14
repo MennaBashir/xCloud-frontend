@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import {
 	Archive,
+	ArrowLeft,
 	CornerUpLeft,
 	Forward,
 	MailOpen,
@@ -36,9 +37,10 @@ import { LABELS } from "../mock/mockGmailService";
 
 type ThreadViewProps = {
 	onRefresh: () => void;
+	onBack?: () => void;
 };
 
-export function ThreadView({ onRefresh }: ThreadViewProps) {
+export function ThreadView({ onRefresh, onBack }: ThreadViewProps) {
 	const { t } = useTranslation("gmail");
 	const { language } = useLanguage();
 	const threadId = useGmailStore((s) => s.selectedThreadId);
@@ -72,10 +74,26 @@ export function ThreadView({ onRefresh }: ThreadViewProps) {
 
 	if (loading || !thread) {
 		return (
-			<div className="flex-1 min-h-0 grid place-items-center text-muted-foreground gap-2 text-[0.875rem]">
-				<div className="flex items-center gap-2">
-					<Spinner className="size-4" />
-					<span>Loading…</span>
+			<div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+				{onBack ? (
+					<div className="flex-none lg:hidden px-4 py-2 border-b border-border">
+						<Button
+							type="button"
+							size="sm"
+							variant="ghost"
+							onClick={onBack}
+							className="gap-2 -ms-2"
+						>
+							<ArrowLeft className="size-4 rtl-flip" strokeWidth={1.6} />
+							<span>{t("actions.backToInbox", { defaultValue: "Inbox" })}</span>
+						</Button>
+					</div>
+				) : null}
+				<div className="flex-1 min-h-0 grid place-items-center text-muted-foreground gap-2 text-[0.875rem]">
+					<div className="flex items-center gap-2">
+						<Spinner className="size-4" />
+						<span>Loading…</span>
+					</div>
 				</div>
 			</div>
 		);
@@ -114,6 +132,20 @@ export function ThreadView({ onRefresh }: ThreadViewProps) {
 
 	return (
 		<div className="flex-1 min-h-0 flex flex-col overflow-hidden">
+			{onBack ? (
+				<div className="flex-none lg:hidden px-4 py-2 border-b border-border">
+					<Button
+						type="button"
+						size="sm"
+						variant="ghost"
+						onClick={onBack}
+						className="gap-2 -ms-2"
+					>
+						<ArrowLeft className="size-4 rtl-flip" strokeWidth={1.6} />
+						<span>{t("actions.backToInbox", { defaultValue: "Inbox" })}</span>
+					</Button>
+				</div>
+			) : null}
 			{/* Header */}
 			<div className="flex-none px-5 py-4 border-b border-border flex items-start gap-3">
 				<div className="flex-1 min-w-0">

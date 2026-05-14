@@ -45,7 +45,7 @@ export function Testimonial() {
 		<section
 			ref={rootRef}
 			id="customers"
-			className="py-24 sm:py-32 lg:py-40"
+			className="py-20 sm:py-32 lg:py-40"
 		>
 			<div className="container mx-auto px-4 sm:px-6">
 				<div className="testimonial mx-auto max-w-[860px] flex flex-col items-center text-center gap-8">
@@ -57,7 +57,7 @@ export function Testimonial() {
 						aria-hidden="true"
 					/>
 
-					<blockquote className="font-semibold tracking-tight leading-[1.18] text-[1.5rem] sm:text-[2rem] lg:text-[2.5rem] text-foreground">
+					<blockquote className="font-semibold tracking-tight leading-[1.2] text-[1.25rem] xs:text-[1.5rem] sm:text-[2rem] lg:text-[2.5rem] text-foreground [text-wrap:balance]">
 						<span className="text-brand-gradient">"</span>
 						{t("testimonial.quote")}
 						<span className="text-brand-gradient">"</span>

@@ -11,6 +11,7 @@ import { useThreads } from "../hooks/useThreads";
 import { useGmailStore } from "../store/gmailStore";
 import { toggleStar } from "../mock/mockGmailService";
 import { FolderRail } from "../components/FolderRail";
+import { MobileFolderPills } from "../components/MobileFolderPills";
 import { InboxToolbar } from "../components/InboxToolbar";
 import { ThreadList } from "../components/ThreadList";
 import { ThreadView } from "../components/ThreadView";
@@ -20,6 +21,8 @@ export default function GmailPage() {
 	const { t } = useTranslation("gmail");
 	const { threads, counts, loading, refresh } = useThreads();
 	const openCompose = useGmailStore((s) => s.openCompose);
+	const selectedThreadId = useGmailStore((s) => s.selectedThreadId);
+	const selectThread = useGmailStore((s) => s.selectThread);
 	const listScope = useRef<HTMLDivElement>(null);
 	useListReveal(listScope, { deps: [threads.length, loading] });
 
@@ -27,6 +30,8 @@ export default function GmailPage() {
 		await toggleStar(id);
 		refresh();
 	};
+
+	const showThreadOnMobile = selectedThreadId !== null;
 
 	return (
 		<div className="w-full px-4 sm:px-6 lg:px-8 pb-10">
@@ -41,6 +46,8 @@ export default function GmailPage() {
 					</Button>
 				}
 			/>
+
+			<MobileFolderPills counts={counts} />
 
 			<div
 				ref={listScope}
@@ -57,8 +64,13 @@ export default function GmailPage() {
 					)}
 					style={{ height: "calc(100dvh - 12rem)", maxHeight: "780px" }}
 				>
-					{/* Thread list pane */}
-					<div className="flex flex-col min-h-0 border-b lg:border-b-0 lg:border-e border-border min-w-0 overflow-hidden">
+					{/* Thread list pane — hidden on mobile when a thread is open */}
+					<div
+						className={cn(
+							"flex flex-col min-h-0 border-b lg:border-b-0 lg:border-e border-border min-w-0 overflow-hidden",
+							showThreadOnMobile && "hidden lg:flex",
+						)}
+					>
 						<InboxToolbar />
 						<div className="flex-1 min-h-0 overflow-y-auto">
 							<ThreadList
@@ -69,9 +81,17 @@ export default function GmailPage() {
 						</div>
 					</div>
 
-					{/* Thread view pane */}
-					<div className="flex flex-col min-h-0 min-w-0 overflow-hidden">
-						<ThreadView onRefresh={refresh} />
+					{/* Thread view pane — hidden on mobile when no thread is selected */}
+					<div
+						className={cn(
+							"flex flex-col min-h-0 min-w-0 overflow-hidden",
+							!showThreadOnMobile && "hidden lg:flex",
+						)}
+					>
+						<ThreadView
+							onRefresh={refresh}
+							onBack={() => selectThread(null)}
+						/>
 					</div>
 				</div>
 			</div>

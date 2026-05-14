@@ -9,7 +9,7 @@ import { AuthProvider } from "@/features/auth/AuthProvider";
 
 createRoot(document.getElementById("root")!).render(
 	<StrictMode>
-		<ThemeProvider defaultTheme="system">
+		<ThemeProvider defaultTheme="dark">
 			<LanguageProvider>
 				<AuthProvider>
 					<App />

@@ -75,12 +75,12 @@ export function HowItWorks() {
 		<section
 			ref={rootRef}
 			id="how-it-works"
-			className="relative py-24 sm:py-32 lg:py-40 bg-surface-muted/30 border-y border-border"
+			className="relative py-20 sm:py-32 lg:py-40 bg-surface-muted/30 border-y border-border"
 		>
 			<div className="container mx-auto px-4 sm:px-6">
-				<header className="how-header flex flex-col items-center text-center gap-4 max-w-[720px] mx-auto mb-16 sm:mb-20">
+				<header className="how-header flex flex-col items-center text-center gap-4 max-w-[720px] mx-auto mb-12 sm:mb-20">
 					<EyebrowTag>{t("howItWorks.eyebrow")}</EyebrowTag>
-					<h2 className="font-semibold tracking-tight leading-[1.08] text-[2rem] sm:text-[2.5rem] lg:text-[3.25rem] text-foreground">
+					<h2 className="font-semibold tracking-tight leading-[1.1] text-[1.75rem] xs:text-[2rem] sm:text-[2.5rem] lg:text-[3.25rem] text-foreground [text-wrap:balance]">
 						{t("howItWorks.title")}
 					</h2>
 					<p className="text-[1rem] sm:text-[1.0625rem] leading-relaxed text-muted-foreground max-w-[55ch]">
@@ -89,10 +89,10 @@ export function HowItWorks() {
 				</header>
 
 				<div className="how-steps relative">
-					{/* Connector line (desktop only) */}
+					{/* Connector line — only when steps are side-by-side */}
 					<div
 						aria-hidden="true"
-						className="hidden lg:block absolute top-[2.75rem] start-[10%] end-[10%] h-px bg-border"
+						className="hidden sm:block absolute top-[2.75rem] start-[12%] end-[12%] h-px bg-border"
 					>
 						<div
 							className="how-connector-fill h-full"
@@ -103,7 +103,7 @@ export function HowItWorks() {
 						/>
 					</div>
 
-					<div className="grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-10">
+					<div className="grid grid-cols-1 sm:grid-cols-3 gap-10 sm:gap-6 lg:gap-10">
 						{STEPS.map((key, i) => (
 							<StepCard key={key} stepKey={key} index={i} />
 						))}
@@ -128,7 +128,7 @@ function StepCard({
 			{/* Step badge */}
 			<div
 				className={cn(
-					"relative z-10 grid place-items-center size-22 size-[5.5rem] rounded-full",
+					"relative z-10 grid place-items-center size-[4.5rem] sm:size-[5.5rem] rounded-full",
 					"bg-card border border-border",
 					"shadow-[0_1px_2px_oklch(0_0_0/0.04),0_12px_24px_-12px_oklch(0_0_0/0.16)]",
 				)}

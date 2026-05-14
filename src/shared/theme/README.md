@@ -10,9 +10,10 @@ All design tokens live in `src/index.css`. The system uses OKLCH-based semantic 
 const { theme, resolvedTheme, setTheme } = useTheme();
 ```
 
-- `theme`: `"light" | "dark" | "system"` — user's stored choice
-- `resolvedTheme`: `"light" | "dark"` — actual applied theme
+- `theme`: `"light" | "dark"` — user's stored choice (defaults to `"dark"`)
+- `resolvedTheme`: `"light" | "dark"` — same as `theme`; kept for API stability
 - Persisted to `localStorage` under `sprintifai.theme`
+- Legacy `"system"` values migrate silently to `"dark"`
 - FOUC prevented via inline script in `index.html`
 
 ## Token reference
@@ -71,7 +72,7 @@ Used only in: logo, hero h1 second line, auth brand panel, final CTA panel. Neve
 ### Typography
 | Token | Value |
 |---|---|
-| `--font-sans` | Geist |
+| `--font-sans` | Geist (Latin) + IBM Plex Sans Arabic (Arabic glyphs) |
 | `--font-mono` | Geist Mono |
 | `--font-display` | Geist (same family) |
 

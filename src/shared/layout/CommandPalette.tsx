@@ -9,7 +9,6 @@ import {
 	Inbox,
 	Languages,
 	Moon,
-	Search,
 	Sparkles,
 	Sun,
 	Video,
@@ -57,7 +56,7 @@ export function CommandPalette() {
 		navigate(to);
 	};
 
-	const themeAction = (mode: "light" | "dark" | "system") => () => {
+	const themeAction = (mode: "light" | "dark") => () => {
 		setTheme(mode);
 		close();
 	};
@@ -119,10 +118,6 @@ export function CommandPalette() {
 					<CommandItem onSelect={themeAction("dark")}>
 						<Moon className="size-3.5" strokeWidth={1.6} />
 						<span>{t("theme.dark")}</span>
-					</CommandItem>
-					<CommandItem onSelect={themeAction("system")}>
-						<Search className="size-3.5" strokeWidth={1.6} />
-						<span>{t("theme.system")}</span>
 					</CommandItem>
 				</CommandGroup>
 

@@ -25,7 +25,8 @@
 		"markUnread": "تعليم كغير مقروء",
 		"summarize": "تلخيص المحادثة",
 		"send": "إرسال",
-		"discard": "تجاهل"
+		"discard": "تجاهل",
+		"backToInbox": "البريد"
 	},
 	"search": {
 		"placeholder": "ابحث في البريد والأشخاص والتصنيفات…"

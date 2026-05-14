@@ -25,7 +25,8 @@
 		"markUnread": "Mark unread",
 		"summarize": "Summarize thread",
 		"send": "Send",
-		"discard": "Discard"
+		"discard": "Discard",
+		"backToInbox": "Inbox"
 	},
 	"search": {
 		"placeholder": "Search mail, people, labels…"

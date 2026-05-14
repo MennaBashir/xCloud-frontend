@@ -115,12 +115,12 @@ export function Features() {
 		<section
 			ref={rootRef}
 			id="features"
-			className="relative py-24 sm:py-32 lg:py-40"
+			className="relative py-20 sm:py-32 lg:py-40"
 		>
 			<div className="container mx-auto px-4 sm:px-6">
-				<header className="features-header flex flex-col items-center text-center gap-4 max-w-[760px] mx-auto mb-16 sm:mb-24">
+				<header className="features-header flex flex-col items-center text-center gap-4 max-w-[760px] mx-auto mb-12 sm:mb-24">
 					<EyebrowTag>{t("features.eyebrow")}</EyebrowTag>
-					<h2 className="font-semibold tracking-tight leading-[1.08] text-[2rem] sm:text-[2.5rem] lg:text-[3.25rem] text-foreground">
+					<h2 className="font-semibold tracking-tight leading-[1.1] text-[1.75rem] xs:text-[2rem] sm:text-[2.5rem] lg:text-[3.25rem] text-foreground [text-wrap:balance]">
 						{t("features.sectionTitle")}
 					</h2>
 					<p className="text-[1rem] sm:text-[1.0625rem] leading-relaxed text-muted-foreground max-w-[60ch]">
@@ -128,7 +128,7 @@ export function Features() {
 					</p>
 				</header>
 
-				<div className="flex flex-col gap-20 sm:gap-32 lg:gap-40">
+				<div className="flex flex-col gap-14 xs:gap-20 sm:gap-32 lg:gap-40">
 					{FEATURES.map((feature, i) => {
 						const reverse = i % 2 === 1;
 						const Icon = feature.icon;
@@ -143,7 +143,7 @@ export function Features() {
 							<article
 								key={feature.key}
 								className={cn(
-									"feature-row grid grid-cols-1 lg:grid-cols-2 items-center gap-10 sm:gap-14",
+									"feature-row grid grid-cols-1 lg:grid-cols-2 items-center gap-8 sm:gap-14",
 									reverse && "lg:[&>div:first-child]:order-2",
 								)}
 							>
@@ -172,7 +172,7 @@ export function Features() {
 										</span>
 									</div>
 
-									<h3 className="font-semibold tracking-tight leading-[1.08] text-[1.75rem] sm:text-[2rem] lg:text-[2.5rem] text-foreground">
+									<h3 className="font-semibold tracking-tight leading-[1.1] text-[1.5rem] xs:text-[1.75rem] sm:text-[2rem] lg:text-[2.5rem] text-foreground [text-wrap:balance]">
 										{t(`features.${feature.key}.title`)}
 									</h3>
 
@@ -258,7 +258,7 @@ function FeatureBezel({
 					"rounded-[calc(var(--radius-3xl)-0.625rem)]",
 					"bg-card border border-border overflow-hidden",
 					"shadow-[inset_0_1px_0_oklch(1_0_0/0.06)]",
-					"min-h-[340px] sm:min-h-[400px]",
+					"min-h-[280px] xs:min-h-[320px] sm:min-h-[400px]",
 				)}
 			>
 				{children}
@@ -271,7 +271,7 @@ function FeatureBezel({
 
 function MeetingVisual() {
 	return (
-		<div className="p-5 h-full flex flex-col gap-4">
+		<div className="p-4 sm:p-5 h-full flex flex-col gap-4">
 			<div className="grid grid-cols-2 gap-2.5">
 				{[0, 1, 2, 3].map((i) => (
 					<div
@@ -303,7 +303,7 @@ function MeetingVisual() {
 
 function ChatVisual() {
 	return (
-		<div className="p-5 h-full flex flex-col gap-3">
+		<div className="p-4 sm:p-5 h-full flex flex-col gap-3">
 			<div className="flex items-start gap-3">
 				<div className="size-7 rounded-full bg-surface-muted shrink-0" />
 				<div className="rounded-2xl bg-surface-muted/60 px-3.5 py-2.5 text-[0.875rem]">
@@ -328,31 +328,31 @@ function ChatVisual() {
 function CalendarVisual() {
 	const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
 	return (
-		<div className="p-5 h-full">
-			<div className="grid grid-cols-5 gap-2 h-full">
+		<div className="p-4 sm:p-5 h-full">
+			<div className="grid grid-cols-5 gap-1.5 sm:gap-2 h-full">
 				{days.map((day, i) => (
-					<div key={day} className="flex flex-col gap-2">
-						<div className="text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground text-center">
+					<div key={day} className="flex flex-col gap-2 min-w-0">
+						<div className="text-[0.625rem] sm:text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground text-center">
 							{day}
 						</div>
-						<div className="flex-1 rounded-[var(--radius-sm)] border border-border bg-surface-muted/40 p-1.5 flex flex-col gap-1">
+						<div className="flex-1 rounded-[var(--radius-sm)] border border-border bg-surface-muted/40 p-1 sm:p-1.5 flex flex-col gap-1 min-w-0">
 							{i === 1 ? (
-								<div className="rounded-[var(--radius-xs)] bg-success/15 border border-success/30 px-1.5 py-1 text-[0.6875rem] text-success font-medium">
+								<div className="rounded-[var(--radius-xs)] bg-success/15 border border-success/30 px-1 sm:px-1.5 py-1 text-[0.625rem] sm:text-[0.6875rem] text-success font-medium truncate">
 									Standup
 								</div>
 							) : null}
 							{i === 2 ? (
 								<>
-									<div className="rounded-[var(--radius-xs)] bg-ai-tint border border-ai/25 px-1.5 py-1 text-[0.6875rem] text-ai font-medium">
+									<div className="rounded-[var(--radius-xs)] bg-ai-tint border border-ai/25 px-1 sm:px-1.5 py-1 text-[0.625rem] sm:text-[0.6875rem] text-ai font-medium truncate">
 										Sprint planning
 									</div>
-									<div className="rounded-[var(--radius-xs)] bg-success/15 border border-success/30 px-1.5 py-1 text-[0.6875rem] text-success font-medium">
+									<div className="rounded-[var(--radius-xs)] bg-success/15 border border-success/30 px-1 sm:px-1.5 py-1 text-[0.625rem] sm:text-[0.6875rem] text-success font-medium truncate">
 										Standup
 									</div>
 								</>
 							) : null}
 							{i === 4 ? (
-								<div className="rounded-[var(--radius-xs)] bg-[oklch(0.82_0.15_75/0.18)] border border-warning/30 px-1.5 py-1 text-[0.6875rem] text-warning font-medium">
+								<div className="rounded-[var(--radius-xs)] bg-[oklch(0.82_0.15_75/0.18)] border border-warning/30 px-1 sm:px-1.5 py-1 text-[0.625rem] sm:text-[0.6875rem] text-warning font-medium truncate">
 									Launch scope
 								</div>
 							) : null}
@@ -373,8 +373,8 @@ function FilesVisual() {
 		{ name: "Customer interviews recap", size: "1.8 MB", type: "PDF" },
 	];
 	return (
-		<div className="p-5 h-full flex flex-col gap-2">
-			<div className="grid grid-cols-[1fr_auto_auto] gap-3 px-3 py-2 text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground">
+		<div className="p-4 sm:p-5 h-full flex flex-col gap-2">
+			<div className="hidden xs:grid grid-cols-[1fr_auto_auto] gap-3 px-3 py-2 text-[0.6875rem] uppercase tracking-[0.14em] text-muted-foreground">
 				<span>Name</span>
 				<span>Size</span>
 				<span>Type</span>
@@ -382,13 +382,13 @@ function FilesVisual() {
 			{rows.map((r) => (
 				<div
 					key={r.name}
-					className="grid grid-cols-[1fr_auto_auto] gap-3 items-center px-3 py-2.5 rounded-[var(--radius-md)] border border-border bg-surface-muted/40 text-[0.875rem]"
+					className="grid grid-cols-[1fr_auto] xs:grid-cols-[1fr_auto_auto] gap-2 xs:gap-3 items-center px-3 py-2 sm:py-2.5 rounded-[var(--radius-md)] border border-border bg-surface-muted/40 text-[0.8125rem] sm:text-[0.875rem] min-w-0"
 				>
-					<span className="truncate text-foreground">{r.name}</span>
-					<span className="font-mono text-[0.75rem] text-muted-foreground">
+					<span className="truncate text-foreground min-w-0">{r.name}</span>
+					<span className="hidden xs:inline font-mono text-[0.75rem] text-muted-foreground">
 						{r.size}
 					</span>
-					<span className="inline-flex items-center justify-center w-10 rounded-[var(--radius-xs)] bg-card border border-border text-[0.6875rem] font-medium text-muted-foreground">
+					<span className="inline-flex items-center justify-center w-9 sm:w-10 shrink-0 rounded-[var(--radius-xs)] bg-card border border-border text-[0.6875rem] font-medium text-muted-foreground">
 						{r.type}
 					</span>
 				</div>
@@ -422,7 +422,7 @@ function GmailVisual() {
 		},
 	];
 	return (
-		<div className="p-5 h-full flex flex-col gap-2">
+		<div className="p-4 sm:p-5 h-full flex flex-col gap-2">
 			{threads.map((tr) => (
 				<div
 					key={tr.subject}

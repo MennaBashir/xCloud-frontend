@@ -61,8 +61,13 @@ export function ChatInput({
 	};
 
 	return (
-		<div className="px-4 sm:px-6 pb-4 sm:pb-6">
-			<div className="mx-auto w-full max-w-[760px]">
+		<div
+			className="px-4 sm:px-6"
+			style={{
+				paddingBottom: "max(1rem, env(safe-area-inset-bottom))",
+			}}
+		>
+			<div className="mx-auto w-full max-w-[760px] sm:pb-2">
 				<div
 					className={cn(
 						"relative rounded-[var(--radius-2xl)] border border-border bg-card",

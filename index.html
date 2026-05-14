@@ -1,100 +1,110 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="alternate icon" type="image/png" href="/logo.png" />
-		<link rel="apple-touch-icon" href="/logo.png" />
-		<link rel="manifest" href="/manifest.webmanifest" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-		<meta
-			name="description"
-			content="SprintifAI — Turn every meeting into measurable outcomes. AI-powered meetings, files, chat, calendar, and email in one enterprise workspace."
-		/>
-		<meta
-			name="theme-color"
-			media="(prefers-color-scheme: light)"
-			content="#fafafa"
-		/>
-		<meta
-			name="theme-color"
-			media="(prefers-color-scheme: dark)"
-			content="#0a0a0a"
-		/>
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-title" content="SprintifAI" />
-		<meta name="format-detection" content="telephone=no" />
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="alternate icon" type="image/png" href="/logo.png" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="description"
+      content="SprintifAI — Turn every meeting into measurable outcomes. AI-powered meetings, files, chat, calendar, and email in one enterprise workspace."
+    />
 
-		<!-- Open Graph -->
-		<meta property="og:type" content="website" />
-		<meta property="og:site_name" content="SprintifAI" />
-		<meta property="og:title" content="SprintifAI — Meetings that ship outcomes" />
-		<meta
-			property="og:description"
-			content="Turn every meeting into a clear summary, named decisions, and assigned tasks — synced straight to your team's calendar."
-		/>
-		<meta property="og:image" content="/logo.png" />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: light)"
+      content="#fafafa"
+    />
+    <meta
+      name="theme-color"
+      media="(prefers-color-scheme: dark)"
+      content="#0a0a0a"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="SprintifAI" />
+    <meta name="format-detection" content="telephone=no" />
 
-		<!-- Twitter -->
-		<meta name="twitter:card" content="summary_large_image" />
-		<meta name="twitter:title" content="SprintifAI — Meetings that ship outcomes" />
-		<meta
-			name="twitter:description"
-			content="Turn every meeting into a clear summary, named decisions, and assigned tasks — synced straight to your team's calendar."
-		/>
+    <!-- Open Graph -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="SprintifAI" />
+    <meta
+      property="og:title"
+      content="SprintifAI — Meetings that ship outcomes"
+    />
+    <meta
+      property="og:description"
+      content="Turn every meeting into a clear summary, named decisions, and assigned tasks — synced straight to your team's calendar."
+    />
+    <meta property="og:image" content="/logo.png" />
 
-		<title>SprintifAI — Meetings that ship outcomes</title>
-		<link
-			rel="preload"
-			href="/fonts/Geist-Variable.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin
-		/>
-		<link
-			rel="preload"
-			href="/fonts/GeistMono-Variable.woff2"
-			as="font"
-			type="font/woff2"
-			crossorigin
-		/>
-		<script>
-			// Prevent FOUC on theme + language apply
-			(function () {
-				try {
-					var stored = localStorage.getItem("sprintifai.theme");
-					var prefersDark = window.matchMedia(
-						"(prefers-color-scheme: dark)",
-					).matches;
-					var resolved =
-						stored === "dark" || stored === "light"
-							? stored
-							: prefersDark
-								? "dark"
-								: "light";
-					if (resolved === "dark") {
-						document.documentElement.classList.add("dark");
-					}
-					document.documentElement.style.colorScheme = resolved;
-				} catch (e) {}
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="SprintifAI — Meetings that ship outcomes"
+    />
+    <meta
+      name="twitter:description"
+      content="Turn every meeting into a clear summary, named decisions, and assigned tasks — synced straight to your team's calendar."
+    />
 
-				try {
-					var lang = localStorage.getItem("sprintifai.lang");
-					var supported = ["en", "ar"];
-					var rtl = ["ar"];
-					if (!lang || supported.indexOf(lang) === -1) {
-						var navLang = (navigator.language || "en").slice(0, 2);
-						lang = supported.indexOf(navLang) !== -1 ? navLang : "en";
-					}
-					document.documentElement.lang = lang;
-					document.documentElement.dir = rtl.indexOf(lang) !== -1 ? "rtl" : "ltr";
-				} catch (e) {}
-			})();
-		</script>
-	</head>
-	<body>
-		<div id="root"></div>
-		<script type="module" src="/src/main.tsx"></script>
-	</body>
+    <title>SprintifAI — Meetings that ship outcomes</title>
+    <link
+      rel="preload"
+      href="/fonts/Geist-Variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <link
+      rel="preload"
+      href="/fonts/GeistMono-Variable.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    />
+    <script>
+      // Prevent FOUC on theme + language apply
+      (function () {
+        try {
+          var stored = localStorage.getItem("sprintifai.theme");
+          // Dark is the default. Only an explicit "light" opts out.
+          // Any legacy "system" (or anything else) silently migrates to dark.
+          var resolved = stored === "light" ? "light" : "dark";
+          if (stored && stored !== "light" && stored !== "dark") {
+            try {
+              localStorage.setItem("sprintifai.theme", "dark");
+            } catch (e) {}
+          }
+          if (resolved === "dark") {
+            document.documentElement.classList.add("dark");
+          }
+          document.documentElement.style.colorScheme = resolved;
+        } catch (e) {}
+
+        try {
+          var lang = localStorage.getItem("sprintifai.lang");
+          var supported = ["en", "ar"];
+          var rtl = ["ar"];
+          if (!lang || supported.indexOf(lang) === -1) {
+            var navLang = (navigator.language || "en").slice(0, 2);
+            lang = supported.indexOf(navLang) !== -1 ? navLang : "en";
+          }
+          document.documentElement.lang = lang;
+          document.documentElement.dir =
+            rtl.indexOf(lang) !== -1 ? "rtl" : "ltr";
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>

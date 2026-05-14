@@ -47,8 +47,8 @@ export function FileRow({ file, onOpen, onDelete }: FileRowProps) {
 			data-list-item
 			onClick={() => onOpen(file)}
 			className={cn(
-				"group/row grid grid-cols-[1fr_auto_auto_auto_auto] sm:grid-cols-[1fr_140px_120px_90px_40px] items-center gap-3 sm:gap-4",
-				"px-3 sm:px-4 py-3 rounded-[var(--radius-md)]",
+				"group/row grid grid-cols-[1fr_auto_auto] sm:grid-cols-[1fr_140px_120px_90px_40px] items-center gap-3 sm:gap-4",
+				"px-3 sm:px-4 py-2.5 sm:py-3 min-h-[52px] sm:min-h-[60px] rounded-[var(--radius-md)]",
 				"border border-transparent hover:border-border hover:bg-accent/40",
 				"transition-[background-color,border-color] duration-[var(--duration-fast)] ease-[cubic-bezier(0.32,0.72,0,1)]",
 				"cursor-pointer",
@@ -108,13 +108,9 @@ export function FileRow({ file, onOpen, onDelete }: FileRowProps) {
 				{size.value} {size.unit}
 			</span>
 
-			{/* Mobile-only: meta condensed */}
-			<div className="sm:hidden flex items-center gap-2 text-[0.75rem] text-muted-foreground">
+			{/* Mobile-only: meta condensed (size omitted to keep rows tight) */}
+			<div className="sm:hidden flex items-center gap-2 text-[0.75rem] text-muted-foreground whitespace-nowrap">
 				<span>{updated}</span>
-				<span className="text-border">·</span>
-				<span className="font-mono tabular-nums">
-					{size.value} {size.unit}
-				</span>
 			</div>
 
 			{/* Row menu */}

@@ -63,9 +63,9 @@ export function LogosStrip() {
 	);
 
 	return (
-		<section ref={rootRef} className="py-16 sm:py-20 border-y border-border bg-surface-muted/40">
+		<section ref={rootRef} className="py-12 sm:py-20 border-y border-border bg-surface-muted/40">
 			<div className="container mx-auto px-4 sm:px-6">
-				<p className="text-center text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-muted-foreground mb-8">
+				<p className="text-center text-[0.6875rem] font-medium uppercase tracking-[0.18em] text-muted-foreground mb-6 sm:mb-8">
 					{t("logos.label")}
 				</p>
 

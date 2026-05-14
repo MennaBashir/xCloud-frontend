@@ -169,53 +169,55 @@ export function PreJoinScreen({ onJoin }: PreJoinScreenProps) {
 						/>
 
 						{/* Quick toggles */}
-						<div className="flex items-center gap-2 flex-wrap">
-							<button
-								type="button"
-								onClick={() => setMicOn(!micOn)}
-								aria-label={micOn ? t("controls.micOn") : t("controls.micOff")}
-								className={cn(
-									"inline-flex items-center gap-2 h-10 px-4 rounded-full",
-									"text-[0.8125rem] font-medium",
-									"transition-[background-color,border-color] duration-[var(--duration-fast)] ease-[cubic-bezier(0.32,0.72,0,1)]",
-									"active:scale-[0.97]",
-									micOn
-										? "bg-white/8 border border-white/12 text-white hover:bg-white/14"
-										: "bg-destructive/15 border border-destructive/30 text-destructive",
-								)}
-							>
-								{micOn ? (
-									<Mic className="size-3.5" strokeWidth={1.6} />
-								) : (
-									<MicOff className="size-3.5" strokeWidth={1.6} />
-								)}
-								<span>{micOn ? t("controls.mic") : t("controls.micOff")}</span>
-							</button>
-							<button
-								type="button"
-								onClick={() => setWebcamOn(!webcamOn)}
-								aria-label={webcamOn ? t("controls.camOn") : t("controls.camOff")}
-								className={cn(
-									"inline-flex items-center gap-2 h-10 px-4 rounded-full",
-									"text-[0.8125rem] font-medium",
-									"transition-[background-color,border-color] duration-[var(--duration-fast)] ease-[cubic-bezier(0.32,0.72,0,1)]",
-									"active:scale-[0.97]",
-									webcamOn
-										? "bg-white/8 border border-white/12 text-white hover:bg-white/14"
-										: "bg-destructive/15 border border-destructive/30 text-destructive",
-								)}
-							>
-								{webcamOn ? (
-									<Video className="size-3.5" strokeWidth={1.6} />
-								) : (
-									<VideoOff className="size-3.5" strokeWidth={1.6} />
-								)}
-								<span>
-									{webcamOn ? t("controls.camera") : t("controls.camOff")}
-								</span>
-							</button>
+						<div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-2">
+							<div className="flex items-center gap-2 flex-wrap">
+								<button
+									type="button"
+									onClick={() => setMicOn(!micOn)}
+									aria-label={micOn ? t("controls.micOn") : t("controls.micOff")}
+									className={cn(
+										"inline-flex items-center gap-2 h-10 px-4 rounded-full",
+										"text-[0.8125rem] font-medium",
+										"transition-[background-color,border-color] duration-[var(--duration-fast)] ease-[cubic-bezier(0.32,0.72,0,1)]",
+										"active:scale-[0.97]",
+										micOn
+											? "bg-white/8 border border-white/12 text-white hover:bg-white/14"
+											: "bg-destructive/15 border border-destructive/30 text-destructive",
+									)}
+								>
+									{micOn ? (
+										<Mic className="size-3.5" strokeWidth={1.6} />
+									) : (
+										<MicOff className="size-3.5" strokeWidth={1.6} />
+									)}
+									<span>{micOn ? t("controls.mic") : t("controls.micOff")}</span>
+								</button>
+								<button
+									type="button"
+									onClick={() => setWebcamOn(!webcamOn)}
+									aria-label={webcamOn ? t("controls.camOn") : t("controls.camOff")}
+									className={cn(
+										"inline-flex items-center gap-2 h-10 px-4 rounded-full",
+										"text-[0.8125rem] font-medium",
+										"transition-[background-color,border-color] duration-[var(--duration-fast)] ease-[cubic-bezier(0.32,0.72,0,1)]",
+										"active:scale-[0.97]",
+										webcamOn
+											? "bg-white/8 border border-white/12 text-white hover:bg-white/14"
+											: "bg-destructive/15 border border-destructive/30 text-destructive",
+									)}
+								>
+									{webcamOn ? (
+										<Video className="size-3.5" strokeWidth={1.6} />
+									) : (
+										<VideoOff className="size-3.5" strokeWidth={1.6} />
+									)}
+									<span>
+										{webcamOn ? t("controls.camera") : t("controls.camOff")}
+									</span>
+								</button>
+							</div>
 
-							<div className="ms-auto flex items-center gap-2 flex-wrap">
+							<div className="flex sm:ms-auto items-center gap-2 flex-wrap w-full sm:w-auto">
 								<DevicePicker
 									label={t("prejoin.deviceCamera")}
 									icon={Camera}
@@ -248,7 +250,7 @@ export function PreJoinScreen({ onJoin }: PreJoinScreenProps) {
 						className={cn(
 							"flex flex-col gap-5 self-start",
 							"rounded-[var(--radius-2xl)] border border-white/8 bg-white/4 backdrop-blur-md",
-							"p-6",
+							"p-5 sm:p-6",
 						)}
 					>
 						<div className="flex flex-col gap-1.5">

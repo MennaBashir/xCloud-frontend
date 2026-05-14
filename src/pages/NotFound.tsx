@@ -12,7 +12,7 @@ export default function NotFoundPage() {
 
 	return (
 		<div className="min-h-[100dvh] bg-background text-foreground flex flex-col">
-			<header className="flex items-center justify-between px-6 sm:px-10 pt-6">
+			<header className="flex items-center justify-between px-4 sm:px-10 pt-6">
 				<Link to="/" aria-label={t("brand.name")}>
 					<Logo variant="full" />
 				</Link>
@@ -22,7 +22,7 @@ export default function NotFoundPage() {
 				</div>
 			</header>
 
-			<main className="flex-1 grid place-items-center px-6 py-16">
+			<main className="flex-1 grid place-items-center px-4 sm:px-6 py-16">
 				<div className="max-w-[480px] flex flex-col items-center gap-6 text-center">
 					<div className="grid size-14 place-items-center rounded-2xl bg-surface-muted ring-1 ring-inset ring-border text-muted-foreground">
 						<Compass className="size-6" strokeWidth={1.5} />

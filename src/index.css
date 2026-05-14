@@ -27,6 +27,75 @@
 	src: url("/fonts/GeistMono-Variable.woff2") format("woff2-variations");
 }
 
+/* ============================================================
+ *  IBM Plex Sans Arabic — scoped to Arabic Unicode ranges so
+ *  English-only sessions don't download these files.
+ *  Self-hosted in /public/fonts/.
+ * ========================================================== */
+@font-face {
+	font-family: "IBM Plex Sans Arabic";
+	font-style: normal;
+	font-weight: 100;
+	font-display: swap;
+	src: url("/fonts/IBMPlexSansArabic-Thin.ttf") format("truetype");
+	unicode-range:
+		U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+	font-family: "IBM Plex Sans Arabic";
+	font-style: normal;
+	font-weight: 200;
+	font-display: swap;
+	src: url("/fonts/IBMPlexSansArabic-ExtraLight.ttf") format("truetype");
+	unicode-range:
+		U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+	font-family: "IBM Plex Sans Arabic";
+	font-style: normal;
+	font-weight: 300;
+	font-display: swap;
+	src: url("/fonts/IBMPlexSansArabic-Light.ttf") format("truetype");
+	unicode-range:
+		U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+	font-family: "IBM Plex Sans Arabic";
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url("/fonts/IBMPlexSansArabic-Regular.ttf") format("truetype");
+	unicode-range:
+		U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+	font-family: "IBM Plex Sans Arabic";
+	font-style: normal;
+	font-weight: 500;
+	font-display: swap;
+	src: url("/fonts/IBMPlexSansArabic-Medium.ttf") format("truetype");
+	unicode-range:
+		U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+	font-family: "IBM Plex Sans Arabic";
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url("/fonts/IBMPlexSansArabic-SemiBold.ttf") format("truetype");
+	unicode-range:
+		U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+@font-face {
+	font-family: "IBM Plex Sans Arabic";
+	font-style: normal;
+	font-weight: 700;
+	font-display: swap;
+	src: url("/fonts/IBMPlexSansArabic-Bold.ttf") format("truetype");
+	unicode-range:
+		U+0600-06FF, U+0750-077F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF;
+}
+
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================================
@@ -47,10 +116,13 @@
 	--breakpoint-xs: 420px;
 
 	/* -------------------------------------------------------- *
-	 *  Typography — Geist Sans (display + UI), Geist Mono
+	 *  Typography — Geist (Latin) + IBM Plex Sans Arabic
+	 *  The Arabic family is scoped via unicode-range so it only
+	 *  loads when Arabic glyphs are rendered.
 	 * -------------------------------------------------------- */
 	--font-sans:
-		"Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+		"Geist", "IBM Plex Sans Arabic", ui-sans-serif, system-ui, -apple-system,
+		"Segoe UI", sans-serif;
 	--font-mono:
 		"Geist Mono", ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
 	--font-display: var(--font-sans);
@@ -415,6 +487,20 @@
 	/* RTL flips — minimal */
 	[dir="rtl"] .rtl-flip {
 		transform: scaleX(-1);
+	}
+
+	/* RTL typography — Arabic glyphs read better with extra
+	 * line-height and without negative letter-spacing on headings. */
+	[dir="rtl"] body {
+		line-height: 1.65;
+	}
+	[dir="rtl"] h1,
+	[dir="rtl"] h2,
+	[dir="rtl"] h3,
+	[dir="rtl"] h4,
+	[dir="rtl"] h5,
+	[dir="rtl"] h6 {
+		letter-spacing: 0;
 	}
 }
 

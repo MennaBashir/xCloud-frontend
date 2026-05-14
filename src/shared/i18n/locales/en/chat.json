@@ -63,7 +63,9 @@
 	},
 	"sidebar": {
 		"collapse": "Collapse history",
-		"expand": "Show history"
+		"expand": "Show history",
+		"open": "Open conversation history",
+		"title": "Conversations"
 	},
 	"scroll": {
 		"latest": "Scroll to latest",

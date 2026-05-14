@@ -113,7 +113,7 @@ export function Hero() {
 	return (
 		<section
 			ref={rootRef}
-			className="relative isolate overflow-hidden pt-32 pb-20 sm:pt-40 sm:pb-28 lg:pt-44 lg:pb-32"
+			className="relative isolate overflow-hidden pt-28 pb-16 xs:pt-32 xs:pb-20 sm:pt-40 sm:pb-28 lg:pt-44 lg:pb-32"
 		>
 			{/* Background mesh */}
 			<div
@@ -148,7 +148,7 @@ export function Hero() {
 						</EyebrowTag>
 					</div>
 
-					<h1 className="font-semibold tracking-tight leading-[1.04] text-[2.5rem] xs:text-[3rem] sm:text-[3.75rem] lg:text-[4.5rem] text-foreground">
+					<h1 className="font-semibold tracking-tight leading-[1.05] text-[2.125rem] xs:text-[2.75rem] sm:text-[3.5rem] lg:text-[4.5rem] text-foreground [text-wrap:balance]">
 						<span className="hero-title-line block">
 							{t("hero.title.part1")}
 						</span>
@@ -163,12 +163,12 @@ export function Hero() {
 						{t("hero.subtitle")}
 					</p>
 
-					<div className="flex flex-col xs:flex-row items-center gap-3 mt-2">
+					<div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-3 mt-2 w-full xs:w-auto max-w-[420px] xs:max-w-none">
 						<Button
 							asChild
 							size="pill"
 							variant="brand"
-							className="hero-cta group/btn"
+							className="hero-cta group/btn w-full xs:w-auto justify-center"
 						>
 							<Link to="/signup">
 								<span>{t("hero.primaryCta")}</span>
@@ -181,7 +181,7 @@ export function Hero() {
 							asChild
 							size="pill"
 							variant="outline"
-							className="hero-cta group/btn"
+							className="hero-cta group/btn w-full xs:w-auto justify-center"
 						>
 							<a href="#how-it-works">
 								<PlayCircle
@@ -199,7 +199,7 @@ export function Hero() {
 				</div>
 
 				{/* Product mockup */}
-				<div className="hero-mockup hero-mockup-floater mt-16 sm:mt-20 mx-auto max-w-[1080px]">
+				<div className="hero-mockup hero-mockup-floater mt-12 sm:mt-20 mx-auto max-w-[1080px]">
 					<div
 						className={cn(
 							"relative rounded-[var(--radius-3xl)]",
@@ -258,19 +258,19 @@ function MockupCore() {
 			)}
 		>
 			{/* Browser chrome */}
-			<div className="flex items-center gap-1.5 px-4 h-9 border-b border-border bg-surface-muted/60">
-				<span className="size-2.5 rounded-full bg-[oklch(0.78_0.18_25)]/40" />
-				<span className="size-2.5 rounded-full bg-[oklch(0.85_0.16_85)]/40" />
-				<span className="size-2.5 rounded-full bg-[oklch(0.75_0.16_160)]/40" />
-				<span className="ms-3 text-[0.6875rem] text-muted-foreground font-mono">
+			<div className="flex items-center gap-1.5 px-3 sm:px-4 h-9 border-b border-border bg-surface-muted/60">
+				<span className="size-2.5 rounded-full bg-[oklch(0.78_0.18_25)]/40 shrink-0" />
+				<span className="size-2.5 rounded-full bg-[oklch(0.85_0.16_85)]/40 shrink-0" />
+				<span className="size-2.5 rounded-full bg-[oklch(0.75_0.16_160)]/40 shrink-0" />
+				<span className="ms-2 sm:ms-3 text-[0.6875rem] text-muted-foreground font-mono truncate">
 					sprintifai.com/app/meeting
 				</span>
 			</div>
 
 			{/* Body grid */}
-			<div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] min-h-[440px]">
+			<div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] lg:min-h-[440px]">
 				{/* Left: meeting tile */}
-				<div className="relative p-4 sm:p-5 border-b lg:border-b-0 lg:border-e border-border">
+				<div className="relative p-3 sm:p-5 border-b lg:border-b-0 lg:border-e border-border">
 					<div className="flex items-center gap-2 mb-3 text-[0.6875rem] uppercase tracking-[0.16em] text-muted-foreground">
 						<span className="relative grid size-1.5 place-items-center">
 							<span className="absolute inset-0 rounded-full bg-destructive/60 animate-ping" />
@@ -315,7 +315,7 @@ function MockupCore() {
 				</div>
 
 				{/* Right: AI summary panel */}
-				<div className="p-4 sm:p-5 flex flex-col gap-4 bg-surface-muted/30">
+				<div className="p-3 sm:p-5 flex flex-col gap-4 bg-surface-muted/30">
 					<div className="hero-mockup-card flex items-center justify-between">
 						<span className="inline-flex items-center gap-2 text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-ai">
 							<Sparkles className="size-3" strokeWidth={1.8} />
