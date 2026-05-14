@@ -4,6 +4,9 @@
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
+
+  --breakpoint-xs: 420px;
+
   /* Gray palette */
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
@@ -23,7 +26,7 @@
   --color-teal: #14b8a6;
   --color-black: #000000;
   --color-orange: #fb923c;
-
+ 
   /* skyBlue palette */
   --color-skyblue-50: #eef5ff;
   --color-skyblue-100: #dce8fe;
@@ -165,7 +168,8 @@
   --primary-heading-text-color: #162e54;
   --secondary-heading-text-color: #1e1e1e;
   --primary-text-color: #64748b;
-  --secondary-text-color: #f6f7f9;}
+  --secondary-text-color: #f6f7f9;
+}
 
 @layer base {
   * {

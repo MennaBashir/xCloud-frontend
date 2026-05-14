@@ -1,9 +1,9 @@
-import { Navbar01 } from "@/components/ui/shadcn-io/navbar-01";
+import { Navbar } from "@/components/ui/shadcn-io/navbar-01";
 
 function MainNavbar() {
   return (
-    <div className="relative w-full">
-      <Navbar01 />
+    <div className="relative w-full h-20">
+      <Navbar />
     </div>
   );
 }
