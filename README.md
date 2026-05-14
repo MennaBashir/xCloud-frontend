@@ -1,79 +1,158 @@
-# 🌩️ XCloud — The Self-Hosted Intelligent Collaboration Platform (Frontend)
+# SprintifAI — Frontend
 
-XCloud is a **self-hosted, AI-powered collaboration platform** that unifies cloud storage, real-time meetings, chat, and intelligent assistance into a single private ecosystem.  
-This repository contains the **frontend application** for the XCloud project, built to deliver a seamless and intelligent user experience across all collaboration features.
+SprintifAI is an enterprise productivity platform that turns every meeting into measurable business outcomes. It captures discussions, extracts decisions, assigns tasks with deadlines, and syncs everything to your team's calendar — so meetings end with execution, not just conversation.
 
----
-
-##  Overview
-
-In a world full of fragmented digital tools — Zoom for meetings, Google Drive for files, Slack for chat — **XCloud** provides an all-in-one solution designed for **privacy, productivity, and intelligence**.
-
-The frontend allows users to:
-- Host and organize files securely on their own infrastructure.
-- Join real-time meetings and chat with team members.
-- Interact with a local AI assistant for summarization, voice commands, and task automation.
-- Enjoy full control over data without relying on third-party services.
+This repository contains the frontend application.
 
 ---
 
-##  Key Features
+## Overview
 
-###  Collaboration & Productivity
-- **Secure File Management** – Browse, upload, and share files stored locally.  
-- **Video Meetings & Chat** – Integrated communication tools without external dependencies.  
-- **Smart Calendar** – Context-aware reminders connected to your meetings and tasks.
+Organizations spend countless hours in meetings, yet most discussions end without clear decisions, ownership, or follow-through. SprintifAI fixes this by providing a single, AI-powered workspace where teams schedule, host, and manage meetings — then automatically convert them into structured summaries, decisions, and actionable tasks.
 
-###  AI Integration
-- **Voice Assistant** – Perform actions through natural language commands.  
-- **Automatic Transcription & Summarization** – Process meeting recordings locally with AI.  
-- **Context-Aware Q&A** – Ask questions like “What did we decide about Project Phoenix last week?” and get instant, relevant answers.  
-- **Automated Task Extraction** – Detects and adds tasks from meetings or chat discussions.
+The frontend delivers:
 
-###  Privacy & Control
-- 100% **self-hosted** and **offline-first** — no external cloud providers.  
-- All data is processed using **local AI models** (e.g., Whisper.cpp, Phi-3-mini).  
-- **End-to-end encryption** and secure authentication.  
-- Modular architecture to easily swap or upgrade AI components.
+- A unified workspace combining meetings, files, AI chat, calendar, and email
+- AI-generated meeting summaries, decisions, and task extraction
+- Calendar-synced execution so action items don't get lost
+- A modern, accessible, localized (EN + AR/RTL) UI
+- Light + dark themes with system detection
 
 ---
 
-## Tech Stack (Frontend)
+## Core features
+
+| Feature | Route | Status |
+|---|---|---|
+| **Landing** | `/` | Full marketing page, GSAP-driven |
+| **Auth** | `/login`, `/signup`, `/forgot-password` | Mock — demo account below |
+| **Files** | `/app` | List/grid views, search, filters, upload, preview drawer |
+| **Meeting** | `/app/meeting` | VideoSDK integration; reads token from auth store |
+| **Calendar** | `/app/calendar` | FullCalendar + custom event form with preset color swatches |
+| **Chat AI** | `/app/chat` | Streaming mock responses with citations & conversation history |
+| **Inbox** | `/app/gmail` | Three-pane inbox with AI thread summaries, compose, labels |
+
+---
+
+## Tech stack
 
 | Technology | Purpose |
-|-------------|----------|
-| **React (TypeScript)** | Component-based UI framework |
-| **Vite** | Fast development and build tool |
-| **Shadcn/UI** | UI component library |
-| **Framer Motion** | Animations and transitions |
-| **React Query (TanStack Query)** | Server-state management |
-| **React Router** | Client-side routing |
-| **Zustand** | State management |
-| **Axios** | API communication |
-| **WebRTC** | Real-time meetings and video streaming |
-| **Socket.io** | Chat and real-time updates |
+|---|---|
+| **React 19 + TypeScript** | UI framework |
+| **Vite 7** | Dev & build tooling |
+| **Tailwind CSS v4** | Styling (token-driven via `@theme inline`) |
+| **shadcn/ui** | Component primitives (re-skinned, zinc base) |
+| **GSAP + ScrollTrigger** | Animations |
+| **react-router-dom v7** | Routing |
+| **Zustand v5** | State management (per feature) |
+| **react-hook-form + Zod** | Forms & validation |
+| **i18next** | Internationalization (EN + AR/RTL) |
+| **FullCalendar v6** | Calendar feature |
+| **VideoSDK** | Meeting feature |
+| **sonner** | Toasts |
+| **lucide-react** | Icons |
+| **Geist + Geist Mono** | Typography (self-hosted) |
 
 ---
-## Project Setup (Using pnpm)
 
-### 1. Clone the Repository
+## Project setup
 
-```bash
-git clone git@github.com:XCloud69/xCloud-frontend.git
-cd xCloud-frontend
-```
-
-### 2. Install Dependencies
+### 1. Install dependencies
 
 ```bash
 pnpm install
 ```
-### 3. Configure Environment Variables
-Create a `.env` file in the root directory and add necessary environment variables. Refer to `.env.example` for guidance.
 
-### 4. Run the Development Server
+### 2. Environment variables
+
+Copy `.env.example` to `.env` and fill in the values:
+
+```bash
+VITE_VIDEOSDK_TOKEN=<your_videosdk_token>   # optional for dev; production reads from auth backend
+```
+
+### 3. Run the dev server
 
 ```bash
 pnpm dev
 ```
 
+### 4. Demo account
+
+The app runs against mocked services. Use these credentials on the login page:
+
+```
+Email:    demo@sprintifai.com
+Password: Sprintif@2026
+```
+
+The login screen has a **"Use demo account"** button that auto-fills these.
+
+---
+
+## Scripts
+
+| Command | Purpose |
+|---|---|
+| `pnpm dev` | Start the dev server |
+| `pnpm build` | Type-check + build for production |
+| `pnpm preview` | Preview the production build |
+| `pnpm lint` | Run ESLint |
+
+---
+
+## Keyboard shortcuts
+
+| Shortcut | Action |
+|---|---|
+| `⌘K` / `Ctrl+K` | Command palette |
+| `?` | Shortcuts help |
+| `G` then `F` | Files |
+| `G` then `C` | Calendar |
+| `G` then `M` | Meeting |
+| `G` then `A` | Chat AI |
+| `G` then `I` | Inbox |
+| `G` then `H` | Landing |
+
+---
+
+## Documentation
+
+- **`AGENTS.md`** — conventions, naming, styling rules, anti-patterns
+- **`src/shared/theme/README.md`** — design tokens & theme system
+- **`src/shared/i18n/README.md`** — adding strings, languages, RTL
+
+---
+
+## Project structure
+
+```
+src/
+├── App.tsx                — RouterProvider + Toaster
+├── main.tsx               — Providers (Theme → Language → Auth → App)
+├── index.css              — Tailwind + design tokens
+├── components/ui/         — shadcn primitives (re-skinned, zinc base)
+├── features/              — auth, files, chat, calendar, meeting, gmail, landing
+├── pages/                 — thin route wrappers
+├── shared/
+│   ├── components/        — PageHeader, EmptyState, SectionCard, Logo, etc.
+│   ├── i18n/              — i18next + EN/AR locales
+│   ├── layout/            — AppLayout, PublicLayout, CommandPalette, etc.
+│   ├── router/            — Router + ProtectedRoute + RedirectIfAuthenticated
+│   └── theme/             — ThemeProvider
+└── lib/utils.ts           — cn() helper
+```
+
+See `AGENTS.md` for the full layout and conventions.
+
+---
+
+## Switching from mock to real backend
+
+Every feature isolates its data layer in a `mock/` folder. When the real API ships:
+
+1. Replace the relevant `mock/<feature>Service.ts` file with real API calls.
+2. Optionally swap the hook (e.g., `useMockChat` → `useChat` from `@ai-sdk/react`).
+3. Nothing else changes — the type contracts stay identical.
+
+`authStore.user.videoSdkToken` is already wired through to the meeting feature, so the real backend just needs to return a token in the login response.

@@ -1,183 +1,562 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* ============================================================
+ *  Self-hosted Geist — files copied into /public/fonts/ from
+ *  node_modules/geist at install time.
+ * ========================================================== */
+@font-face {
+	font-family: "Geist";
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url("/fonts/Geist-Variable.woff2") format("woff2-variations");
+}
+@font-face {
+	font-family: "Geist";
+	font-style: italic;
+	font-weight: 400;
+	font-display: swap;
+	src: url("/fonts/Geist-Italic.woff2") format("woff2");
+}
+@font-face {
+	font-family: "Geist Mono";
+	font-style: normal;
+	font-weight: 100 900;
+	font-display: swap;
+	src: url("/fonts/GeistMono-Variable.woff2") format("woff2-variations");
+}
+
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================================
+ * SprintifAI Design Tokens
+ * High-end enterprise SaaS — Linear / Notion / Vercel direction.
+ *
+ * Palette philosophy:
+ *   - Neutral Zinc base (warmer than pure slate, not pure black)
+ *   - Single high-contrast accent: Electric Blue (no AI-purple cliche)
+ *   - Brand badge moments use the indigo→violet gradient
+ *     (logo, AI surfaces only — never as a global UI color)
+ * ========================================================== */
+
 @theme inline {
+	/* -------------------------------------------------------- *
+	 *  Breakpoints
+	 * -------------------------------------------------------- */
+	--breakpoint-xs: 420px;
 
-  --breakpoint-xs: 420px;
+	/* -------------------------------------------------------- *
+	 *  Typography — Geist Sans (display + UI), Geist Mono
+	 * -------------------------------------------------------- */
+	--font-sans:
+		"Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+	--font-mono:
+		"Geist Mono", ui-monospace, "SF Mono", Menlo, Monaco, Consolas, monospace;
+	--font-display: var(--font-sans);
 
-  /* Gray palette */
-  --color-gray-50: #f9fafb;
-  --color-gray-100: #f3f4f6;
-  --color-gray-200: #e5e7eb;
-  --color-gray-300: #d1d5db;
-  --color-gray-400: #9ca3af;
-  --color-gray-500: #6b7280;
-  --color-gray-600: #4b5563;
-  --color-gray-700: #374151;
-  --color-gray-800: #1f2937;
-  --color-gray-900: #111827;
-  --color-gray-950: #030712;
+	/* Type scale (rem) — display tight, body comfortable */
+	--text-display-2xl: 4.5rem; /* 72px */
+	--text-display-xl: 3.75rem; /* 60px */
+	--text-display-lg: 3rem; /* 48px */
+	--text-display-md: 2.25rem; /* 36px */
+	--text-display-sm: 1.875rem; /* 30px */
+	--text-heading-lg: 1.5rem; /* 24px */
+	--text-heading-md: 1.25rem; /* 20px */
+	--text-heading-sm: 1.125rem; /* 18px */
+	--text-body-lg: 1.0625rem; /* 17px */
+	--text-body-md: 1rem; /* 16px */
+	--text-body-sm: 0.875rem; /* 14px */
+	--text-body-xs: 0.8125rem; /* 13px */
+	--text-caption: 0.75rem; /* 12px */
+	--text-micro: 0.6875rem; /* 11px */
 
-  /* Accent/Core colors */
-  --color-green: #10b981;
-  --color-purple: #a855f7;
-  --color-teal: #14b8a6;
-  --color-black: #000000;
-  --color-orange: #fb923c;
- 
-  /* skyBlue palette */
-  --color-skyblue-50: #eef5ff;
-  --color-skyblue-100: #dce8fe;
-  --color-skyblue-200: #bfd6ff;
-  --color-skyblue-300: #94bbfe;
-  --color-skyblue-400: #609afb;
-  --color-skyblue-500: #3b82f6;
-  --color-skyblue-600: #2571eb;
-  --color-skyblue-700: #1d64d8;
-  --color-skyblue-900: #1e4789;
-  --color-skyblue-950: #162e54;
+	/* -------------------------------------------------------- *
+	 *  Radius
+	 * -------------------------------------------------------- */
+	--radius: 0.75rem;
+	--radius-xs: 0.375rem;
+	--radius-sm: calc(var(--radius) - 4px);
+	--radius-md: calc(var(--radius) - 2px);
+	--radius-lg: var(--radius);
+	--radius-xl: calc(var(--radius) + 4px);
+	--radius-2xl: 1.25rem;
+	--radius-3xl: 2rem;
+	--radius-full: 9999px;
 
-  /* Button/Token colors */
-  --color-button-secondary: #bfdbfe;
-  --color-button-accent: #a855f7;
-  --color-button-success: #14b8a6;
+	/* -------------------------------------------------------- *
+	 *  Motion — custom easings (no linear, no ease-in-out)
+	 * -------------------------------------------------------- */
+	--ease-out-soft: cubic-bezier(0.32, 0.72, 0, 1);
+	--ease-out-quart: cubic-bezier(0.16, 1, 0.3, 1);
+	--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--duration-fast: 180ms;
+	--duration-base: 280ms;
+	--duration-slow: 480ms;
+	--duration-cinematic: 800ms;
 
-  /* Heading/Text colors */
-  --color-heading-primary: #1e3a8a;
-  --color-heading-secondary: #1f2937;
-  --color-text-primary: #64748b;
-  /* main file */
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-muted: var(--muted);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
+	/* -------------------------------------------------------- *
+	 *  Semantic colors (mapped to CSS vars below)
+	 * -------------------------------------------------------- */
+	--color-background: var(--background);
+	--color-foreground: var(--foreground);
+	--color-surface: var(--surface);
+	--color-surface-elevated: var(--surface-elevated);
+	--color-surface-muted: var(--surface-muted);
+	--color-card: var(--card);
+	--color-card-foreground: var(--card-foreground);
+	--color-popover: var(--popover);
+	--color-popover-foreground: var(--popover-foreground);
+	--color-primary: var(--primary);
+	--color-primary-foreground: var(--primary-foreground);
+	--color-secondary: var(--secondary);
+	--color-secondary-foreground: var(--secondary-foreground);
+	--color-muted: var(--muted);
+	--color-muted-foreground: var(--muted-foreground);
+	--color-accent: var(--accent);
+	--color-accent-foreground: var(--accent-foreground);
+	--color-destructive: var(--destructive);
+	--color-destructive-foreground: var(--destructive-foreground);
+	--color-success: var(--success);
+	--color-success-foreground: var(--success-foreground);
+	--color-warning: var(--warning);
+	--color-warning-foreground: var(--warning-foreground);
+	--color-border: var(--border);
+	--color-border-strong: var(--border-strong);
+	--color-input: var(--input);
+	--color-ring: var(--ring);
 
-  /* custom colors */
-  --color-primary-heading-text-color: var(--primary-heading-text-color);
-  --color-secondary-heading-text-color: var(--secondary-heading-text-color);
-  --color-primary-text-color: var(--primary-text-color);
-  --color-secondary-text-color: var(--secondary-text-color);
+	/* AI-surface accent (subtle, used sparingly) */
+	--color-ai: var(--ai);
+	--color-ai-foreground: var(--ai-foreground);
+	--color-ai-tint: var(--ai-tint);
+
+	/* Brand gradient stops (use only in logo & AI hero moments) */
+	--color-brand-from: var(--brand-from);
+	--color-brand-to: var(--brand-to);
+
+	/* Sidebar tokens */
+	--color-sidebar: var(--sidebar);
+	--color-sidebar-foreground: var(--sidebar-foreground);
+	--color-sidebar-primary: var(--sidebar-primary);
+	--color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+	--color-sidebar-accent: var(--sidebar-accent);
+	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+	--color-sidebar-border: var(--sidebar-border);
+	--color-sidebar-ring: var(--sidebar-ring);
+
+	/* Chart palette */
+	--color-chart-1: var(--chart-1);
+	--color-chart-2: var(--chart-2);
+	--color-chart-3: var(--chart-3);
+	--color-chart-4: var(--chart-4);
+	--color-chart-5: var(--chart-5);
+
+	/* -------------------------------------------------------- *
+	 *  Legacy aliases — keep until Phase 5 redesigns each page.
+	 *  These map old hex tokens to the new semantic ones so
+	 *  existing components don't break during the transition.
+	 * -------------------------------------------------------- */
+	--color-skyblue-50: oklch(0.97 0.012 245);
+	--color-skyblue-100: oklch(0.94 0.025 245);
+	--color-skyblue-200: oklch(0.88 0.05 245);
+	--color-skyblue-300: oklch(0.78 0.09 245);
+	--color-skyblue-400: oklch(0.68 0.14 245);
+	--color-skyblue-500: oklch(0.62 0.19 245);
+	--color-skyblue-600: oklch(0.55 0.2 245);
+	--color-skyblue-700: oklch(0.46 0.18 245);
+	--color-skyblue-900: oklch(0.32 0.12 245);
+	--color-skyblue-950: oklch(0.22 0.08 245);
+
+	--color-button-secondary: oklch(0.88 0.05 245);
+	--color-button-accent: oklch(0.55 0.2 290);
+	--color-button-success: oklch(0.7 0.16 165);
+
+	--color-heading-primary: var(--foreground);
+	--color-heading-secondary: var(--foreground);
+	--color-text-primary: var(--muted-foreground);
+
+	--color-primary-heading-text-color: var(--foreground);
+	--color-secondary-heading-text-color: var(--foreground);
+	--color-primary-text-color: var(--muted-foreground);
+	--color-secondary-text-color: var(--background);
 }
 
+/* ============================================================
+ *  LIGHT THEME (default) — warm neutral, refined accents
+ *  Surfaces lean very slightly warm (80° hue) so the page reads as
+ *  paper-white rather than blue-white. Tonal accents (AI, success,
+ *  warning, destructive) are dialed back in chroma so they whisper
+ *  instead of shout. Dark mode is untouched.
+ * ========================================================== */
 :root {
-  --radius: 0.625rem;
-  --background: #f9fafb;
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
-  /* custom colors */
-  --primary-heading-text-color: #162e54;
-  --secondary-heading-text-color: #1e1e1e;
-  --primary-text-color: #64748b;
-  --secondary-text-color: #f6f7f9;
+	color-scheme: light;
+
+	/* Neutrals — warm off-white surfaces */
+	--background: oklch(0.985 0.004 80);
+	--foreground: oklch(0.2 0.005 255);
+	--surface: oklch(0.98 0.005 80);
+	--surface-elevated: oklch(1 0 0);
+	--surface-muted: oklch(0.965 0.006 80);
+
+	--card: oklch(1 0 0);
+	--card-foreground: oklch(0.2 0.005 255);
+
+	--popover: oklch(1 0 0);
+	--popover-foreground: oklch(0.2 0.005 255);
+
+	/* Primary — high-contrast near-black */
+	--primary: oklch(0.22 0.005 255);
+	--primary-foreground: oklch(0.985 0.004 80);
+
+	--secondary: oklch(0.965 0.006 80);
+	--secondary-foreground: oklch(0.22 0.005 255);
+
+	--muted: oklch(0.965 0.006 80);
+	--muted-foreground: oklch(0.52 0.01 255);
+
+	--accent: oklch(0.95 0.008 80);
+	--accent-foreground: oklch(0.22 0.005 255);
+
+	--destructive: oklch(0.6 0.18 27);
+	--destructive-foreground: oklch(0.99 0 0);
+	--success: oklch(0.62 0.13 162);
+	--success-foreground: oklch(0.99 0 0);
+	--warning: oklch(0.76 0.13 75);
+	--warning-foreground: oklch(0.22 0.005 255);
+
+	--border: oklch(0.92 0.005 80);
+	--border-strong: oklch(0.86 0.006 80);
+	--input: oklch(0.92 0.005 80);
+	--ring: oklch(0.48 0.08 250);
+
+	/* AI surface — calm slate-blue in light mode (whisper, not shout) */
+	--ai: oklch(0.48 0.08 250);
+	--ai-foreground: oklch(0.99 0 0);
+	--ai-tint: oklch(0.96 0.012 250);
+
+	/* Brand gradient — reserved for logo + hero accent moments only */
+	--brand-from: oklch(0.55 0.2 285);
+	--brand-to: oklch(0.62 0.19 245);
+
+	/* Sidebar */
+	--sidebar: oklch(0.98 0.005 80);
+	--sidebar-foreground: oklch(0.2 0.005 255);
+	--sidebar-primary: oklch(0.22 0.005 255);
+	--sidebar-primary-foreground: oklch(0.99 0 0);
+	--sidebar-accent: oklch(0.95 0.008 80);
+	--sidebar-accent-foreground: oklch(0.22 0.005 255);
+	--sidebar-border: oklch(0.92 0.005 80);
+	--sidebar-ring: oklch(0.48 0.08 250);
+
+	/* Charts — keep colorful for data viz */
+	--chart-1: oklch(0.55 0.16 245);
+	--chart-2: oklch(0.62 0.13 162);
+	--chart-3: oklch(0.76 0.13 75);
+	--chart-4: oklch(0.55 0.16 285);
+	--chart-5: oklch(0.6 0.18 27);
+
+	/* Legacy shim — old code references */
+	--radius: 0.75rem;
+	--primary-heading-text-color: oklch(0.2 0.005 255);
+	--secondary-heading-text-color: oklch(0.2 0.005 255);
+	--primary-text-color: oklch(0.52 0.01 255);
+	--secondary-text-color: oklch(0.985 0.004 80);
 }
 
+/* ============================================================
+ *  DARK THEME
+ * ========================================================== */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
-  /* custom colors */
-  --primary-heading-text-color: #162e54;
-  --secondary-heading-text-color: #1e1e1e;
-  --primary-text-color: #64748b;
-  --secondary-text-color: #f6f7f9;
+	color-scheme: dark;
+
+	--background: oklch(0.14 0.005 255);
+	--foreground: oklch(0.98 0.002 255);
+	--surface: oklch(0.16 0.005 255);
+	--surface-elevated: oklch(0.19 0.006 255);
+	--surface-muted: oklch(0.18 0.006 255);
+
+	--card: oklch(0.17 0.006 255);
+	--card-foreground: oklch(0.98 0.002 255);
+
+	--popover: oklch(0.19 0.006 255);
+	--popover-foreground: oklch(0.98 0.002 255);
+
+	--primary: oklch(0.98 0.002 255);
+	--primary-foreground: oklch(0.18 0.005 255);
+
+	--secondary: oklch(0.24 0.008 255);
+	--secondary-foreground: oklch(0.98 0.002 255);
+
+	--muted: oklch(0.24 0.008 255);
+	--muted-foreground: oklch(0.66 0.01 255);
+
+	--accent: oklch(0.26 0.01 255);
+	--accent-foreground: oklch(0.98 0.002 255);
+
+	--destructive: oklch(0.68 0.2 27);
+	--destructive-foreground: oklch(0.14 0.005 255);
+	--success: oklch(0.7 0.16 162);
+	--success-foreground: oklch(0.14 0.005 255);
+	--warning: oklch(0.82 0.15 75);
+	--warning-foreground: oklch(0.14 0.005 255);
+
+	--border: oklch(1 0 0 / 8%);
+	--border-strong: oklch(1 0 0 / 16%);
+	--input: oklch(1 0 0 / 12%);
+	--ring: oklch(0.7 0.18 245);
+
+	--ai: oklch(0.7 0.18 245);
+	--ai-foreground: oklch(0.14 0.005 255);
+	--ai-tint: oklch(0.22 0.05 245);
+
+	--brand-from: oklch(0.65 0.2 285);
+	--brand-to: oklch(0.7 0.18 245);
+
+	--sidebar: oklch(0.15 0.005 255);
+	--sidebar-foreground: oklch(0.98 0.002 255);
+	--sidebar-primary: oklch(0.7 0.18 245);
+	--sidebar-primary-foreground: oklch(0.98 0.002 255);
+	--sidebar-accent: oklch(0.24 0.008 255);
+	--sidebar-accent-foreground: oklch(0.98 0.002 255);
+	--sidebar-border: oklch(1 0 0 / 8%);
+	--sidebar-ring: oklch(0.7 0.18 245);
+
+	--chart-1: oklch(0.7 0.18 245);
+	--chart-2: oklch(0.7 0.16 162);
+	--chart-3: oklch(0.82 0.15 75);
+	--chart-4: oklch(0.65 0.2 285);
+	--chart-5: oklch(0.68 0.2 27);
+
+	--primary-heading-text-color: oklch(0.98 0.002 255);
+	--secondary-heading-text-color: oklch(0.98 0.002 255);
+	--primary-text-color: oklch(0.66 0.01 255);
+	--secondary-text-color: oklch(0.14 0.005 255);
 }
 
+/* ============================================================
+ *  Base layer
+ * ========================================================== */
 @layer base {
-  * {
-    @apply border-border outline-ring/50;
-    font-family: "Inter", sans-serif;
-  }
+	* {
+		@apply border-border outline-ring/50;
+	}
 
-  body {
-    @apply bg-background text-foreground;
-  }
+	html {
+		font-family: var(--font-sans);
+		-webkit-font-smoothing: antialiased;
+		-moz-osx-font-smoothing: grayscale;
+		text-rendering: optimizeLegibility;
+		font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
+	}
+
+	body {
+		@apply bg-background text-foreground;
+		font-family: var(--font-sans);
+		font-feature-settings: "cv02", "cv03", "cv04", "cv11", "ss01";
+	}
+
+	code,
+	kbd,
+	pre,
+	samp {
+		font-family: var(--font-mono);
+	}
+
+	/* Heading rhythm */
+	h1, h2, h3, h4, h5, h6 {
+		font-family: var(--font-display);
+		letter-spacing: -0.02em;
+		font-feature-settings: "ss01", "cv11";
+	}
+
+	/* Selection */
+	::selection {
+		background: oklch(0.62 0.19 245 / 0.18);
+		color: var(--foreground);
+	}
+
+	/* Focus-visible ring — refined */
+	:focus-visible {
+		outline: 2px solid var(--ring);
+		outline-offset: 2px;
+		border-radius: var(--radius-sm);
+	}
+
+	/* Scrollbar — minimal, premium */
+	::-webkit-scrollbar {
+		width: 10px;
+		height: 10px;
+	}
+	::-webkit-scrollbar-track {
+		background: transparent;
+	}
+	::-webkit-scrollbar-thumb {
+		background: var(--border-strong);
+		border-radius: 9999px;
+		border: 2px solid var(--background);
+	}
+	::-webkit-scrollbar-thumb:hover {
+		background: var(--muted-foreground);
+	}
+
+	/* Reduced motion */
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		*::before,
+		*::after {
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+			transition-duration: 0.01ms !important;
+			scroll-behavior: auto !important;
+		}
+	}
+
+	/* RTL flips — minimal */
+	[dir="rtl"] .rtl-flip {
+		transform: scaleX(-1);
+	}
+}
+
+/* ============================================================
+ *  Utility layer — premium primitives
+ * ========================================================== */
+@layer utilities {
+	/* Brand gradient text (use sparingly — hero accent moments only) */
+	.text-brand-gradient {
+		background-image: linear-gradient(
+			135deg,
+			var(--brand-from) 0%,
+			var(--brand-to) 100%
+		);
+		background-clip: text;
+		-webkit-background-clip: text;
+		color: transparent;
+	}
+
+	/* Mesh gradient background — for hero / auth panels */
+	.bg-brand-mesh {
+		background-color: var(--surface);
+		background-image:
+			radial-gradient(
+				at 18% 22%,
+				oklch(0.62 0.19 245 / 0.18) 0px,
+				transparent 50%
+			),
+			radial-gradient(
+				at 82% 18%,
+				oklch(0.55 0.2 285 / 0.14) 0px,
+				transparent 50%
+			),
+			radial-gradient(
+				at 50% 92%,
+				oklch(0.65 0.16 162 / 0.1) 0px,
+				transparent 50%
+			);
+	}
+
+	/* Hairline border with subtle inner highlight (doppelrand inner) */
+	.ring-hairline {
+		box-shadow:
+			inset 0 1px 0 0 oklch(1 0 0 / 0.06),
+			0 0 0 1px var(--border);
+	}
+
+	/* Diffusion shadow — wide, soft, near-zero alpha */
+	.shadow-diffusion {
+		box-shadow:
+			0 1px 2px oklch(0.18 0.005 255 / 0.04),
+			0 20px 40px -15px oklch(0.18 0.005 255 / 0.06);
+	}
+
+	.shadow-diffusion-lg {
+		box-shadow:
+			0 1px 2px oklch(0.18 0.005 255 / 0.04),
+			0 32px 64px -20px oklch(0.18 0.005 255 / 0.1);
+	}
+
+	/* Glass surface — refraction-grade */
+	.surface-glass {
+		background: oklch(1 0 0 / 0.7);
+		backdrop-filter: saturate(180%) blur(14px);
+		-webkit-backdrop-filter: saturate(180%) blur(14px);
+		border: 1px solid oklch(1 0 0 / 0.5);
+		box-shadow:
+			inset 0 1px 0 0 oklch(1 0 0 / 0.4),
+			0 1px 2px oklch(0.18 0.005 255 / 0.04);
+	}
+	.dark .surface-glass {
+		background: oklch(0.19 0.006 255 / 0.65);
+		border-color: oklch(1 0 0 / 0.08);
+		box-shadow:
+			inset 0 1px 0 0 oklch(1 0 0 / 0.06),
+			0 1px 2px oklch(0 0 0 / 0.3);
+	}
+
+	/* Grain overlay — fixed, GPU-safe, pointer-events-none */
+	.bg-grain::before {
+		content: "";
+		position: fixed;
+		inset: 0;
+		pointer-events: none;
+		z-index: 1;
+		opacity: 0.025;
+		mix-blend-mode: overlay;
+		background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+	}
+
+	/* ============================================================
+	 *  Ambient AI pulse — applied to AI-related glyphs (sparkles,
+	 *  summary chips). Subtle brightness + glow breath every 3.2s.
+	 *  GPU-only (filter + opacity), no JS frame cost.
+	 * ========================================================== */
+	@keyframes ambient-pulse {
+		0%,
+		100% {
+			filter: brightness(1) drop-shadow(0 0 0 transparent);
+			opacity: 0.92;
+		}
+		50% {
+			filter: brightness(1.18) drop-shadow(0 0 6px var(--ai));
+			opacity: 1;
+		}
+	}
+	.ambient-pulse {
+		animation: ambient-pulse 3.2s ease-in-out infinite;
+		will-change: filter, opacity;
+	}
+
+	/* Skeleton shimmer — replaces the flat-gray placeholder. A travelling
+	 * highlight runs across the surface every 1.6s. The host element
+	 * must have `position: relative` and `overflow: hidden`. */
+	@keyframes skeleton-shimmer {
+		0% {
+			transform: translateX(-100%);
+		}
+		100% {
+			transform: translateX(200%);
+		}
+	}
+	.skeleton-shimmer::after {
+		content: "";
+		position: absolute;
+		inset: 0;
+		background-image: linear-gradient(
+			90deg,
+			transparent 0%,
+			color-mix(in oklch, var(--border-strong) 60%, transparent) 50%,
+			transparent 100%
+		);
+		animation: skeleton-shimmer 1.6s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+		pointer-events: none;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		.ambient-pulse {
+			animation: none;
+		}
+		.skeleton-shimmer::after {
+			animation: none;
+		}
+	}
 }

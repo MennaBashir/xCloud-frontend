@@ -1,0 +1,108 @@
+{
+	"title": "Files",
+	"subtitle": "Recordings, decks, and meeting artifacts in one library.",
+	"actions": {
+		"upload": "Upload",
+		"newFolder": "New folder",
+		"viewList": "List",
+		"viewGrid": "Grid",
+		"openPreview": "Open preview",
+		"download": "Download",
+		"rename": "Rename",
+		"delete": "Delete",
+		"share": "Share",
+		"copyLink": "Copy link",
+		"openMeeting": "Open meeting",
+		"clearFilters": "Clear filters"
+	},
+	"categories": {
+		"recent": "Recent",
+		"all": "All files",
+		"recordings": "Recordings",
+		"tasks": "Saved tasks",
+		"notes": "Saved notes"
+	},
+	"kinds": {
+		"pdf": "PDF",
+		"doc": "Document",
+		"image": "Image",
+		"video": "Video",
+		"audio": "Audio",
+		"recording": "Recording",
+		"transcript": "Transcript",
+		"deck": "Deck",
+		"note": "Note",
+		"task": "Task",
+		"other": "Other"
+	},
+	"sort": {
+		"label": "Sort",
+		"updatedAt": "Last updated",
+		"name": "Name",
+		"size": "Size",
+		"asc": "Ascending",
+		"desc": "Descending"
+	},
+	"filters": {
+		"label": "Filter",
+		"kind": "Type",
+		"applied_one": "{{count}} filter applied",
+		"applied_other": "{{count}} filters applied"
+	},
+	"search": {
+		"placeholder": "Search files, owners, tags…"
+	},
+	"table": {
+		"name": "Name",
+		"owner": "Owner",
+		"updated": "Updated",
+		"size": "Size",
+		"type": "Type"
+	},
+	"meta": {
+		"sharedBy": "Shared by {{name}}",
+		"fromMeeting": "From meeting: {{title}}",
+		"sizeMb": "{{value}} MB",
+		"sizeKb": "{{value}} KB",
+		"sizeBytes": "{{value}} B"
+	},
+	"empty": {
+		"title": "Your library is empty",
+		"description": "Upload your first file or run a meeting to start collecting artifacts.",
+		"action": "Upload a file",
+		"noResultsTitle": "No matches found",
+		"noResultsDescription": "Try a different search, clear filters, or change the category."
+	},
+	"upload": {
+		"title": "Upload files",
+		"description": "Drag files here or click to choose. Mock-mode — files are kept in memory until reload.",
+		"dropHere": "Drop files to upload",
+		"chooseFiles": "Choose files",
+		"uploading": "Uploading {{name}}…",
+		"success": "Uploaded {{count}} file",
+		"success_other": "Uploaded {{count}} files",
+		"close": "Close"
+	},
+	"preview": {
+		"about": "About",
+		"activity": "Activity",
+		"details": {
+			"type": "Type",
+			"size": "Size",
+			"owner": "Owner",
+			"created": "Created",
+			"updated": "Updated",
+			"tags": "Tags",
+			"meeting": "Meeting"
+		}
+	},
+	"time": {
+		"justNow": "Just now",
+		"minutesAgo_one": "{{count}} min ago",
+		"minutesAgo_other": "{{count}} mins ago",
+		"hoursAgo_one": "{{count}} hour ago",
+		"hoursAgo_other": "{{count}} hours ago",
+		"daysAgo_one": "{{count}} day ago",
+		"daysAgo_other": "{{count}} days ago"
+	}
+}

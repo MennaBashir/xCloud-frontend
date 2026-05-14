@@ -1,0 +1,96 @@
+{
+	"brand": {
+		"name": "SprintifAI",
+		"tagline": "اجتماعات تنتهي بنتائج"
+	},
+	"nav": {
+		"files": "الملفات",
+		"meeting": "الاجتماع",
+		"calendar": "التقويم",
+		"chat": "المساعد الذكي",
+		"gmail": "البريد",
+		"home": "الرئيسية",
+		"settings": "الإعدادات"
+	},
+	"actions": {
+		"signIn": "تسجيل الدخول",
+		"signUp": "إنشاء حساب",
+		"signOut": "تسجيل الخروج",
+		"continue": "متابعة",
+		"cancel": "إلغاء",
+		"save": "حفظ",
+		"delete": "حذف",
+		"edit": "تعديل",
+		"close": "إغلاق",
+		"back": "رجوع",
+		"next": "التالي",
+		"submit": "إرسال",
+		"upload": "رفع",
+		"download": "تنزيل",
+		"search": "بحث",
+		"filter": "تصفية",
+		"add": "إضافة",
+		"create": "إنشاء",
+		"learnMore": "اعرف المزيد",
+		"getStarted": "ابدأ الآن",
+		"goToWorkspace": "اذهب إلى مساحة العمل",
+		"goToLanding": "العودة للصفحة الرئيسية",
+		"backToHome": "العودة للرئيسية",
+		"watchDemo": "شاهد العرض",
+		"viewAll": "عرض الكل",
+		"retry": "إعادة المحاولة"
+	},
+	"theme": {
+		"label": "المظهر",
+		"light": "فاتح",
+		"system": "النظام",
+		"dark": "داكن"
+	},
+	"language": {
+		"label": "اللغة",
+		"english": "English",
+		"arabic": "العربية"
+	},
+	"states": {
+		"loading": "جارٍ التحميل…",
+		"empty": "لا يوجد شيء هنا بعد",
+		"error": "حدث خطأ ما"
+	},
+	"time": {
+		"now": "الآن",
+		"minutesAgo_one": "منذ دقيقة",
+		"minutesAgo_two": "منذ دقيقتين",
+		"minutesAgo_few": "منذ {{count}} دقائق",
+		"minutesAgo_many": "منذ {{count}} دقيقة",
+		"minutesAgo_other": "منذ {{count}} دقيقة",
+		"hoursAgo_one": "منذ ساعة",
+		"hoursAgo_two": "منذ ساعتين",
+		"hoursAgo_few": "منذ {{count}} ساعات",
+		"hoursAgo_many": "منذ {{count}} ساعة",
+		"hoursAgo_other": "منذ {{count}} ساعة",
+		"daysAgo_one": "منذ يوم",
+		"daysAgo_two": "منذ يومين",
+		"daysAgo_few": "منذ {{count}} أيام",
+		"daysAgo_many": "منذ {{count}} يومًا",
+		"daysAgo_other": "منذ {{count}} يومًا"
+	},
+	"a11y": {
+		"skipToMain": "تخطَّ إلى المحتوى الرئيسي"
+	},
+	"shortcuts": {
+		"title": "اختصارات لوحة المفاتيح",
+		"description": "تحرّك أسرع في SprintifAI دون استخدام الفأرة.",
+		"openCommand": "فتح لوحة الأوامر",
+		"openHelp": "فتح هذه النافذة",
+		"goFiles": "اذهب إلى الملفات",
+		"goCalendar": "اذهب إلى التقويم",
+		"goMeeting": "اذهب إلى الاجتماع",
+		"goChat": "اذهب إلى المساعد الذكي",
+		"goInbox": "اذهب إلى البريد",
+		"goHome": "اذهب إلى الصفحة الرئيسية",
+		"groups": {
+			"general": "عام",
+			"navigate": "التنقّل"
+		}
+	}
+}

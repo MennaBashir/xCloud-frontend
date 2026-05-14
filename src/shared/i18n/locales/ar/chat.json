@@ -1,0 +1,72 @@
+{
+	"title": "المساعد الذكي",
+	"hero": {
+		"eyebrow": "مساعد SprintifAI",
+		"title": "بماذا أساعدك اليوم؟",
+		"subtitle": "اسأل عن أي شيء عبر اجتماعاتك وملفّاتك وقراراتك — وسأريك مكان الإجابة بالضبط."
+	},
+	"input": {
+		"placeholder": "اسأل SprintifAI…",
+		"placeholderShort": "ردّ على SprintifAI…",
+		"send": "إرسال",
+		"stop": "إيقاف",
+		"hint": "Enter للإرسال · Shift + Enter لسطر جديد"
+	},
+	"suggestions": {
+		"label": "جرّب أن تسأل",
+		"summarize": {
+			"title": "لخّص اجتماعي الأخير",
+			"subtitle": "القرارات والمسؤولون والخطوات التالية",
+			"prompt": "لخّص اجتماعي الأخير واذكر كل قرار مع المسؤول عنه."
+		},
+		"extractTasks": {
+			"title": "استخرج المهام",
+			"subtitle": "من اجتماع الأمس",
+			"prompt": "استخرج كل مهمة من اجتماع الأمس مع المواعيد والمسؤولين."
+		},
+		"findDecisions": {
+			"title": "ابحث عن قرار سابق",
+			"subtitle": "ماذا قررنا؟",
+			"prompt": "ماذا قررنا بشأن التسعير في تخطيط الأسبوع الماضي؟"
+		},
+		"draftEmail": {
+			"title": "اكتب رسالة متابعة",
+			"subtitle": "بريد لفريق التصميم",
+			"prompt": "اكتب رسالة متابعة لفريق التصميم بمهام اليوم من جلسة المراجعة."
+		}
+	},
+	"conversation": {
+		"new": "محادثة جديدة",
+		"empty": "لا توجد محادثات بعد",
+		"emptyDescription": "ابدأ محادثة. ستظهر هنا محادثاتك السابقة.",
+		"history": "السجلّ",
+		"loading": "أفكّر…",
+		"streaming": "أكتب…",
+		"errorMessage": "حدث خطأ أثناء توليد هذا الردّ.",
+		"deleted": "حُذفت المحادثة",
+		"clearAll": "مسح الكل",
+		"clearAllConfirm": "حذف كل المحادثات؟ لا يمكن التراجع."
+	},
+	"message": {
+		"you": "أنت",
+		"assistant": "SprintifAI",
+		"copy": "نسخ",
+		"copied": "تم النسخ",
+		"regenerate": "إعادة التوليد",
+		"sources": "المصادر",
+		"openMeeting": "فتح الاجتماع",
+		"openFile": "فتح الملف"
+	},
+	"model": {
+		"label": "النموذج",
+		"changeModel": "تغيير النموذج"
+	},
+	"sidebar": {
+		"collapse": "إخفاء السجل",
+		"expand": "إظهار السجل"
+	},
+	"scroll": {
+		"latest": "اذهب إلى الأحدث",
+		"newMessages": "رسائل جديدة"
+	}
+}

@@ -1,0 +1,72 @@
+{
+	"title": "البريد",
+	"subtitle": "افرز الرسائل أسرع بفضل ملخّصات الذكاء الاصطناعي.",
+	"folders": {
+		"inbox": "صندوق الوارد",
+		"starred": "المميّزة بنجمة",
+		"sent": "المرسلة",
+		"drafts": "المسوّدات",
+		"archive": "الأرشيف",
+		"trash": "المهملات"
+	},
+	"labels": {
+		"title": "التصنيفات"
+	},
+	"actions": {
+		"compose": "إنشاء رسالة",
+		"reply": "رد",
+		"replyAll": "رد على الجميع",
+		"forward": "إعادة توجيه",
+		"archive": "أرشفة",
+		"delete": "حذف",
+		"star": "إضافة نجمة",
+		"unstar": "إزالة النجمة",
+		"markRead": "تعليم كمقروء",
+		"markUnread": "تعليم كغير مقروء",
+		"summarize": "تلخيص المحادثة",
+		"send": "إرسال",
+		"discard": "تجاهل"
+	},
+	"search": {
+		"placeholder": "ابحث في البريد والأشخاص والتصنيفات…"
+	},
+	"empty": {
+		"inboxTitle": "لا رسائل لتفرزها",
+		"inboxDescription": "صندوقك فارغ. خذ نَفَسًا عميقًا.",
+		"folderTitle": "لا شيء هنا",
+		"folderDescription": "هذا المجلد فارغ.",
+		"selectionTitle": "اختر محادثة",
+		"selectionDescription": "اختر محادثة من القائمة للقراءة والرد."
+	},
+	"thread": {
+		"toLabel": "إلى",
+		"unread": "غير مقروءة",
+		"messages_one": "رسالة واحدة",
+		"messages_two": "رسالتان",
+		"messages_few": "{{count}} رسائل",
+		"messages_many": "{{count}} رسالة",
+		"messages_other": "{{count}} رسالة",
+		"summary": {
+			"label": "ملخّص ذكي",
+			"generate": "لخّص",
+			"generating": "جارٍ التلخيص…"
+		},
+		"deleted": "نُقلت إلى المهملات",
+		"archived": "تمت الأرشفة",
+		"sent": "تم إرسال الرسالة"
+	},
+	"compose": {
+		"title": "رسالة جديدة",
+		"to": "إلى",
+		"toPlaceholder": "email@company.com",
+		"subject": "الموضوع",
+		"subjectPlaceholder": "ما الموضوع؟",
+		"body": "الرسالة",
+		"bodyPlaceholder": "اكتب شيئًا…",
+		"sending": "جارٍ الإرسال…"
+	},
+	"validation": {
+		"recipientRequired": "أضف متلقّيًا واحدًا على الأقل.",
+		"subjectRequired": "أضف موضوعًا."
+	}
+}

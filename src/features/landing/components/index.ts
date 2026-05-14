@@ -1,9 +1,8 @@
-export { default as LandingFooter } from "./layout/Footer";
-export { default as LandingNavbar } from "./layout/Navbar";
-
-export { default as FeaturesCarousel } from "./ui/FeaturesCarousel";
-export { default as HeroHeading } from "./ui/HeroHeading";
-export { default as FeatureCard } from "./ui/FeatureCard";
-
-export { default as HeroSection } from "./sections/HeroSection";
-export { default as FeaturesSection } from "./sections/FeaturesSection";
+export { LandingNavbar } from "./layout/LandingNavbar";
+export { LandingFooter } from "./layout/LandingFooter";
+export { Hero } from "./sections/Hero";
+export { LogosStrip } from "./sections/LogosStrip";
+export { Features } from "./sections/Features";
+export { HowItWorks } from "./sections/HowItWorks";
+export { Testimonial } from "./sections/Testimonial";
+export { FinalCta } from "./sections/FinalCta";

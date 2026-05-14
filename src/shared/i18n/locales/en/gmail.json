@@ -1,0 +1,69 @@
+{
+	"title": "Inbox",
+	"subtitle": "Triage faster with AI summaries on every thread.",
+	"folders": {
+		"inbox": "Inbox",
+		"starred": "Starred",
+		"sent": "Sent",
+		"drafts": "Drafts",
+		"archive": "Archive",
+		"trash": "Trash"
+	},
+	"labels": {
+		"title": "Labels"
+	},
+	"actions": {
+		"compose": "Compose",
+		"reply": "Reply",
+		"replyAll": "Reply all",
+		"forward": "Forward",
+		"archive": "Archive",
+		"delete": "Delete",
+		"star": "Star",
+		"unstar": "Unstar",
+		"markRead": "Mark read",
+		"markUnread": "Mark unread",
+		"summarize": "Summarize thread",
+		"send": "Send",
+		"discard": "Discard"
+	},
+	"search": {
+		"placeholder": "Search mail, people, labels…"
+	},
+	"empty": {
+		"inboxTitle": "Inbox zero",
+		"inboxDescription": "Nothing to triage. Take a breath.",
+		"folderTitle": "Nothing here",
+		"folderDescription": "This folder is empty.",
+		"selectionTitle": "Select a thread",
+		"selectionDescription": "Pick a conversation from the list to read and reply."
+	},
+	"thread": {
+		"toLabel": "To",
+		"unread": "Unread",
+		"messages_one": "{{count}} message",
+		"messages_other": "{{count}} messages",
+		"summary": {
+			"label": "AI summary",
+			"generate": "Summarize",
+			"generating": "Summarizing…"
+		},
+		"deleted": "Moved to trash",
+		"archived": "Archived",
+		"sent": "Message sent"
+	},
+	"compose": {
+		"title": "New message",
+		"to": "To",
+		"toPlaceholder": "email@company.com",
+		"subject": "Subject",
+		"subjectPlaceholder": "What's it about?",
+		"body": "Message",
+		"bodyPlaceholder": "Write something…",
+		"sending": "Sending…"
+	},
+	"validation": {
+		"recipientRequired": "Add at least one recipient.",
+		"subjectRequired": "Add a subject."
+	}
+}
