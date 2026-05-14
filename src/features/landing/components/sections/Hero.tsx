@@ -1,10 +1,8 @@
 import { useRef } from "react";
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
 import {
-	ArrowRight,
 	CalendarDays,
 	CircleCheck,
 	FolderClosed,
@@ -15,8 +13,12 @@ import {
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
-import { Button, ButtonTrailingIcon } from "@/components/ui/button";
+import { Button } from "@/components/ui/button";
 import { EyebrowTag } from "@/shared/components/EyebrowTag";
+
+import { HeroMagneticCta } from "../hero/HeroMagneticCta";
+import { HeroTrustAvatars } from "../hero/HeroTrustAvatars";
+import { HeroTiltMockup } from "../hero/HeroTiltMockup";
 
 gsap.registerPlugin(useGSAP);
 
@@ -46,17 +48,18 @@ export function Hero() {
 						.from(
 							".hero-title-line",
 							{
-								y: 24,
+								y: 28,
 								autoAlpha: 0,
-								duration: 0.7,
-								stagger: 0.08,
+								filter: "blur(8px)",
+								duration: 0.85,
+								stagger: 0.1,
 							},
 							"-=0.25",
 						)
 						.from(
 							".hero-subtitle",
 							{ y: 14, autoAlpha: 0, duration: 0.55 },
-							"-=0.4",
+							"-=0.45",
 						)
 						.from(
 							".hero-cta",
@@ -70,34 +73,37 @@ export function Hero() {
 						)
 						.from(
 							".hero-trust",
-							{ autoAlpha: 0, duration: 0.5 },
+							{ autoAlpha: 0, duration: 0.6 },
 							"-=0.3",
 						)
 						.from(
 							".hero-mockup",
 							{
-								y: 32,
+								y: 36,
 								autoAlpha: 0,
-								duration: 0.9,
+								filter: "blur(10px)",
+								duration: 1,
 								ease: "power4.out",
 							},
-							"-=0.55",
-						)
-						.from(
-							".hero-mockup-card",
-							{
-								y: 16,
-								autoAlpha: 0,
-								duration: 0.6,
-								stagger: 0.08,
-							},
-							"-=0.55",
+							"-=0.7",
 						);
 
-					// Continuous gentle float on the mockup
+					// SVG underline draw-in after the headline lands
+					gsap.fromTo(
+						".hero-accent-stroke",
+						{ strokeDashoffset: 220 },
+						{
+							strokeDashoffset: 0,
+							duration: 1.1,
+							ease: "power2.out",
+							delay: 0.85,
+						},
+					);
+
+					// Mockup gentle float
 					gsap.to(".hero-mockup-floater", {
-						y: -10,
-						duration: 4,
+						y: -8,
+						duration: 4.2,
 						ease: "sine.inOut",
 						yoyo: true,
 						repeat: -1,
@@ -113,77 +119,71 @@ export function Hero() {
 	return (
 		<section
 			ref={rootRef}
-			className="relative isolate overflow-hidden pt-28 pb-16 xs:pt-32 xs:pb-20 sm:pt-40 sm:pb-28 lg:pt-44 lg:pb-32"
+			id="hero"
+			className="relative isolate overflow-hidden pt-28 pb-16 xs:pt-32 xs:pb-20 sm:pt-40 sm:pb-28 lg:pt-44 lg:pb-32 scroll-mt-24"
 		>
-			{/* Background mesh */}
+			{/* Soft mesh backdrop */}
 			<div
 				aria-hidden="true"
 				className="absolute inset-0 -z-10"
 				style={{
-					background: `
-						radial-gradient(at 18% 12%, oklch(0.62 0.19 245 / 0.18) 0px, transparent 50%),
-						radial-gradient(at 82% 8%, oklch(0.55 0.2 285 / 0.14) 0px, transparent 50%),
-						radial-gradient(at 50% 100%, oklch(0.65 0.16 162 / 0.08) 0px, transparent 60%)
-					`,
+					background:
+						"radial-gradient(at 18% 12%, oklch(0.62 0.19 245 / 0.18) 0px, transparent 50%)," +
+						"radial-gradient(at 82% 8%, oklch(0.55 0.2 285 / 0.14) 0px, transparent 50%)," +
+						"radial-gradient(at 50% 100%, oklch(0.65 0.16 162 / 0.08) 0px, transparent 60%)",
 				}}
 			/>
 			{/* Hairline grid overlay */}
 			<div
 				aria-hidden="true"
-				className="absolute inset-0 -z-10 opacity-[0.04]"
+				className="absolute inset-0 -z-10 opacity-[0.045]"
 				style={{
 					backgroundImage:
 						"linear-gradient(to right, var(--foreground) 1px, transparent 1px), linear-gradient(to bottom, var(--foreground) 1px, transparent 1px)",
-					backgroundSize: "60px 60px",
+					backgroundSize: "64px 64px",
 					maskImage:
 						"radial-gradient(ellipse at top, black 30%, transparent 75%)",
 				}}
 			/>
 
 			<div className="container mx-auto px-4 sm:px-6">
-				<div className="max-w-[820px] mx-auto text-center flex flex-col items-center gap-6">
+				{/* Centered copy column */}
+				<div className="max-w-[860px] mx-auto text-center flex flex-col items-center gap-6">
+					{/* Live pill — breathing dot + realistic count */}
 					<div className="hero-eyebrow">
 						<EyebrowTag withDot tone="ai">
-							{t("hero.eyebrow")}
+							{t("hero.livePill", { count: "1,247" })}
 						</EyebrowTag>
 					</div>
 
-					<h1 className="font-semibold tracking-tight leading-[1.05] text-[2.125rem] xs:text-[2.75rem] sm:text-[3.5rem] lg:text-[4.5rem] text-foreground [text-wrap:balance]">
+					<h1 className="font-semibold tracking-tight leading-[1.04] text-[2.25rem] xs:text-[2.875rem] sm:text-[3.75rem] lg:text-[4.75rem] text-foreground [text-wrap:balance]">
 						<span className="hero-title-line block">
 							{t("hero.title.part1")}
 						</span>
-						<span className="hero-title-line block">
-							<span className="text-brand-gradient">
-								{t("hero.title.part2")}
-							</span>
-						</span>
+						<HeroTitleSecondLine
+							raw={t("hero.title.part2")}
+							underlineWord={t("hero.underlineWord")}
+						/>
 					</h1>
 
 					<p className="hero-subtitle max-w-[60ch] text-[1rem] sm:text-[1.0625rem] leading-relaxed text-muted-foreground">
 						{t("hero.subtitle")}
 					</p>
 
+					{/* CTAs — primary is magnetic */}
 					<div className="flex flex-col xs:flex-row items-stretch xs:items-center gap-3 mt-2 w-full xs:w-auto max-w-[420px] xs:max-w-none">
-						<Button
-							asChild
-							size="pill"
-							variant="brand"
-							className="hero-cta group/btn w-full xs:w-auto justify-center"
-						>
-							<Link to="/signup">
-								<span>{t("hero.primaryCta")}</span>
-								<ButtonTrailingIcon>
-									<ArrowRight className="rtl-flip" strokeWidth={1.8} />
-								</ButtonTrailingIcon>
-							</Link>
-						</Button>
+						<HeroMagneticCta
+							className="hero-cta w-full xs:w-auto"
+							label={t("hero.primaryCta")}
+							href="/signup"
+						/>
 						<Button
 							asChild
 							size="pill"
 							variant="outline"
 							className="hero-cta group/btn w-full xs:w-auto justify-center"
 						>
-							<a href="#how-it-works">
+							<a href="#features">
 								<PlayCircle
 									className="size-4 text-ai"
 									strokeWidth={1.6}
@@ -193,39 +193,89 @@ export function Hero() {
 						</Button>
 					</div>
 
-					<p className="hero-trust mt-2 text-[0.8125rem] text-muted-foreground">
-						{t("hero.trust")}
-					</p>
+					{/* Trust — 5 squircle avatars + line */}
+					<div className="hero-trust mt-3 flex flex-col xs:flex-row items-center gap-3 xs:gap-4">
+						<HeroTrustAvatars />
+						<span className="text-[0.8125rem] text-muted-foreground text-center xs:text-start max-w-[40ch]">
+							{t("hero.trust")}
+						</span>
+					</div>
 				</div>
 
-				{/* Product mockup */}
+				{/* Mockup — Double-Bezel + parallax tilt */}
 				<div className="hero-mockup hero-mockup-floater mt-12 sm:mt-20 mx-auto max-w-[1080px]">
-					<div
-						className={cn(
-							"relative rounded-[var(--radius-3xl)]",
-							"bg-surface-muted/60 ring-1 ring-inset ring-border",
-							"p-2 sm:p-2.5",
-							"shadow-[0_1px_2px_oklch(0_0_0/0.04),0_40px_80px_-30px_oklch(0_0_0/0.18)]",
-						)}
-					>
-						{/* Glow under the mockup */}
-						<div
-							aria-hidden="true"
-							className="absolute -inset-x-20 -bottom-20 -z-10 h-40 opacity-50 blur-3xl"
-							style={{
-								background:
-									"radial-gradient(ellipse at center, oklch(0.62 0.19 245 / 0.35), transparent 70%)",
-							}}
-						/>
-
+					<HeroTiltMockup>
 						<MockupCore />
-					</div>
+					</HeroTiltMockup>
 				</div>
 			</div>
 		</section>
 	);
 }
 
+/* ──────────────────────────────────────────────────────────────────────────
+ * Headline second line — splits on the underline word and renders an SVG
+ * draw-in underline beneath it. No text-fill gradient.
+ * ──────────────────────────────────────────────────────────────────────── */
+function HeroTitleSecondLine({
+	raw,
+	underlineWord,
+}: {
+	raw: string;
+	underlineWord: string;
+}) {
+	// Try to find the word. If not found, just render the raw string.
+	const idx = raw.toLowerCase().indexOf(underlineWord.toLowerCase());
+	if (idx === -1 || !underlineWord) {
+		return <span className="hero-title-line block">{raw}</span>;
+	}
+	const before = raw.slice(0, idx);
+	const word = raw.slice(idx, idx + underlineWord.length);
+	const after = raw.slice(idx + underlineWord.length);
+
+	return (
+		<span className="hero-title-line block">
+			{before}
+			<span className="relative inline-block whitespace-nowrap">
+				{word}
+				<svg
+					aria-hidden="true"
+					viewBox="0 0 220 16"
+					preserveAspectRatio="none"
+					className="absolute -bottom-1 sm:-bottom-2 inset-x-0 w-full h-[6px] sm:h-[10px] overflow-visible"
+				>
+					<defs>
+						<linearGradient
+							id="hero-accent-grad"
+							x1="0"
+							y1="0"
+							x2="1"
+							y2="0"
+						>
+							<stop offset="0%" stopColor="oklch(0.62 0.19 245)" />
+							<stop offset="100%" stopColor="oklch(0.55 0.2 285)" />
+						</linearGradient>
+					</defs>
+					<path
+						className="hero-accent-stroke"
+						d="M2 10 C 40 2, 90 14, 150 6 S 210 10, 218 8"
+						fill="none"
+						stroke="url(#hero-accent-grad)"
+						strokeWidth="4"
+						strokeLinecap="round"
+						strokeDasharray="220"
+						strokeDashoffset="0"
+					/>
+				</svg>
+			</span>
+			{after}
+		</span>
+	);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * MockupCore — same content as before, padding tuned for centered layout.
+ * ──────────────────────────────────────────────────────────────────────── */
 function MockupCore() {
 	const tasks = [
 		{
@@ -253,7 +303,7 @@ function MockupCore() {
 	return (
 		<div
 			className={cn(
-				"rounded-[calc(var(--radius-3xl)-0.625rem)] bg-card border border-border overflow-hidden",
+				"rounded-[calc(2rem-0.5rem)] bg-card border border-border overflow-hidden",
 				"shadow-[inset_0_1px_0_oklch(1_0_0/0.06)]",
 			)}
 		>
@@ -265,9 +315,20 @@ function MockupCore() {
 				<span className="ms-2 sm:ms-3 text-[0.6875rem] text-muted-foreground font-mono truncate">
 					sprintifai.com/app/meeting
 				</span>
+				<span className="ms-auto inline-flex items-center gap-1.5 text-[0.625rem] text-muted-foreground font-mono">
+					<span className="relative grid size-1.5 place-items-center">
+						<span
+							aria-hidden="true"
+							className="absolute inset-0 rounded-full bg-destructive/55 animate-ping"
+							style={{ animationDuration: "2s" }}
+						/>
+						<span className="relative size-1.5 rounded-full bg-destructive" />
+					</span>
+					<span className="hidden sm:inline">Rec · 12:47</span>
+				</span>
 			</div>
 
-			{/* Body grid */}
+			{/* Body */}
 			<div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] lg:min-h-[440px]">
 				{/* Left: meeting tile */}
 				<div className="relative p-3 sm:p-5 border-b lg:border-b-0 lg:border-e border-border">
@@ -279,18 +340,21 @@ function MockupCore() {
 						<span>Live · Sprint planning</span>
 					</div>
 
-					{/* Video tiles grid */}
+					{/* Video tiles */}
 					<div className="grid grid-cols-2 gap-2.5">
 						{[0, 1, 2, 3].map((i) => (
 							<div
 								key={i}
-								className="hero-mockup-card aspect-[4/3] rounded-[var(--radius-lg)] bg-surface-muted ring-1 ring-inset ring-border relative overflow-hidden"
+								className="aspect-[4/3] rounded-[var(--radius-lg)] bg-surface-muted ring-1 ring-inset ring-border relative overflow-hidden"
 								style={{
-									backgroundImage: `radial-gradient(at ${
-										[30, 70, 40, 60][i]
-									}% ${[30, 60, 70, 40][i]}%, oklch(0.55 0.2 ${
-										[285, 245, 162, 25][i]
-									} / 0.4) 0px, transparent 60%)`,
+									backgroundImage:
+										"radial-gradient(at " +
+										[30, 70, 40, 60][i] +
+										"% " +
+										[30, 60, 70, 40][i] +
+										"%, oklch(0.55 0.2 " +
+										[285, 245, 162, 25][i] +
+										" / 0.4) 0px, transparent 60%)",
 								}}
 							>
 								<span className="absolute bottom-2 start-2 inline-flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-sm text-white px-2 py-0.5 text-[0.6875rem] font-medium">
@@ -300,23 +364,23 @@ function MockupCore() {
 						))}
 					</div>
 
-					{/* Caption bar */}
-					<div className="hero-mockup-card mt-4 rounded-[var(--radius-md)] border border-border bg-surface-muted/60 px-3 py-2.5 flex items-start gap-2">
+					{/* Caption */}
+					<div className="mt-4 rounded-[var(--radius-md)] border border-border bg-surface-muted/60 px-3 py-2.5 flex items-start gap-2">
 						<Sparkles
 							className="size-3.5 mt-0.5 text-ai shrink-0"
 							strokeWidth={1.6}
 						/>
 						<p className="text-[0.8125rem] leading-relaxed text-foreground">
 							<span className="text-muted-foreground">Priya:</span>{" "}
-							Let's lock the launch scope before Friday and assign
+							Let&apos;s lock the launch scope before Friday and assign
 							the design review to Aisha.
 						</p>
 					</div>
 				</div>
 
-				{/* Right: AI summary panel */}
+				{/* Right: AI summary */}
 				<div className="p-3 sm:p-5 flex flex-col gap-4 bg-surface-muted/30">
-					<div className="hero-mockup-card flex items-center justify-between">
+					<div className="flex items-center justify-between">
 						<span className="inline-flex items-center gap-2 text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-ai">
 							<Sparkles className="size-3" strokeWidth={1.8} />
 							AI Summary
@@ -326,12 +390,12 @@ function MockupCore() {
 						</span>
 					</div>
 
-					<div className="hero-mockup-card text-[0.875rem] leading-relaxed text-foreground">
+					<div className="text-[0.875rem] leading-relaxed text-foreground">
 						Team agreed to lock Q3 launch scope by Friday. Design
 						review for onboarding moved to next week.
 					</div>
 
-					<div className="hero-mockup-card flex flex-col gap-1.5">
+					<div className="flex flex-col gap-1.5">
 						<span className="text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-muted-foreground">
 							Action items
 						</span>
@@ -365,7 +429,7 @@ function MockupCore() {
 						</ul>
 					</div>
 
-					<div className="hero-mockup-card mt-auto grid grid-cols-2 gap-2">
+					<div className="mt-auto grid grid-cols-2 gap-2">
 						{[
 							{ icon: CalendarDays, label: "4 tasks" },
 							{ icon: FolderClosed, label: "Saved" },
@@ -389,5 +453,4 @@ function MockupCore() {
 		</div>
 	);
 }
-
 

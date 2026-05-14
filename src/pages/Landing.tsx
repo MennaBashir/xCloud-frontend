@@ -2,11 +2,9 @@ import {
 	Features,
 	FinalCta,
 	Hero,
-	HowItWorks,
 	LandingFooter,
 	LandingNavbar,
-	LogosStrip,
-	Testimonial,
+	MotionBento,
 } from "@/features/landing/components";
 
 const LandingPage = () => {
@@ -15,10 +13,8 @@ const LandingPage = () => {
 			<LandingNavbar />
 			<main>
 				<Hero />
-				<LogosStrip />
+				<MotionBento />
 				<Features />
-				<HowItWorks />
-				<Testimonial />
 				<FinalCta />
 			</main>
 			<LandingFooter />

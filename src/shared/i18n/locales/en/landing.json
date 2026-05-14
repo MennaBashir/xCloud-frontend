@@ -1,24 +1,42 @@
 {
 	"nav": {
-		"product": "Product",
-		"howItWorks": "How it works",
-		"customers": "Customers",
-		"pricing": "Pricing"
+		"features": "Features",
+		"live": "Live",
+		"start": "Start"
 	},
 	"hero": {
 		"eyebrow": "Meetings, decisions, execution — in one workspace",
+		"livePill": "Live · {{count}} meetings recapped today",
 		"title": {
 			"part1": "End the meeting.",
 			"part2": "Ship the outcome."
 		},
+		"underlineWord": "outcome",
 		"subtitle": "SprintifAI turns every meeting into a clear summary, named decisions, and assigned tasks — synced straight to your team's calendar. No more lost action items.",
 		"primaryCta": "Start free",
 		"secondaryCta": "Watch a 2-min demo",
 		"welcomeBack": "Welcome back",
-		"trust": "Trusted by product, design, and engineering teams"
+		"trust": "Trusted by 80+ product, design, and engineering teams"
 	},
-	"logos": {
-		"label": "Teams shipping faster with SprintifAI"
+	"motionBento": {
+		"eyebrow": "Built for the way work actually moves",
+		"title": "Static dashboards don't reflect a live team.",
+		"subtitle": "SprintifAI re-sorts your priorities, drafts your follow-ups, and surfaces what's happening right now — without you refreshing anything.",
+		"list": {
+			"label": "Intelligent list",
+			"title": "Priorities sort themselves.",
+			"description": "Tasks re-rank as decisions land. The most urgent rises without you dragging it."
+		},
+		"command": {
+			"label": "Cited answers",
+			"title": "Ask. Get a quote, not a guess.",
+			"description": "Every answer links back to the meeting, file, or message it came from."
+		},
+		"live": {
+			"label": "Live status",
+			"title": "Recaps land the moment a call ends.",
+			"description": "Summaries, action items, and follow-ups appear on the calendar in seconds."
+		}
 	},
 	"features": {
 		"eyebrow": "What you get",
@@ -75,34 +93,6 @@
 			}
 		}
 	},
-	"howItWorks": {
-		"eyebrow": "How it works",
-		"title": "From meeting to shipped — in three steps.",
-		"subtitle": "No new habits to learn. Just hit join.",
-		"steps": {
-			"capture": {
-				"step": "01",
-				"title": "Capture",
-				"description": "Host or join inside SprintifAI. Transcripts, recordings, and screen shares are saved the moment the meeting starts."
-			},
-			"decide": {
-				"step": "02",
-				"title": "Decide",
-				"description": "When the call ends, AI pulls out the decisions, the action items, the owners, and the deadlines — automatically."
-			},
-			"execute": {
-				"step": "03",
-				"title": "Execute",
-				"description": "Tasks land in the right calendars. Follow-ups are drafted. Nothing falls through the cracks between meetings."
-			}
-		}
-	},
-	"testimonial": {
-		"eyebrow": "What teams are saying",
-		"quote": "We used to spend the first ten minutes of every meeting summarizing the last one. SprintifAI gave us those hours back — and our decisions actually get executed now.",
-		"author": "Priya Raman",
-		"role": "Head of Product, Northwave"
-	},
 	"finalCta": {
 		"eyebrow": "Ready when you are",
 		"title": "Get the next meeting to ship itself.",
@@ -111,28 +101,6 @@
 		"secondaryCta": "Talk to sales"
 	},
 	"footer": {
-		"tagline": "Meetings that ship outcomes.",
-		"rights": "© {{year}} SprintifAI. All rights reserved.",
-		"product": "Product",
-		"productLinks": {
-			"features": "Features",
-			"pricing": "Pricing",
-			"changelog": "Changelog",
-			"roadmap": "Roadmap"
-		},
-		"company": "Company",
-		"companyLinks": {
-			"about": "About",
-			"customers": "Customers",
-			"careers": "Careers",
-			"contact": "Contact"
-		},
-		"resources": "Resources",
-		"resourceLinks": {
-			"docs": "Documentation",
-			"blog": "Blog",
-			"security": "Security",
-			"status": "Status"
-		}
+		"tagline": "Meetings that ship outcomes"
 	}
 }
