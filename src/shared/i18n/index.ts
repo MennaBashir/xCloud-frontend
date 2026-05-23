@@ -26,7 +26,7 @@ void i18n
 			escapeValue: false,
 		},
 		detection: {
-			order: ["localStorage", "navigator", "htmlTag"],
+			order: ["localStorage"],
 			lookupLocalStorage: LANGUAGE_STORAGE_KEY,
 			caches: ["localStorage"],
 		},

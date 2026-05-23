@@ -709,6 +709,27 @@
 		pointer-events: none;
 	}
 
+	/* Diagram token travel — used by the Features section's connector lines.
+	 * A small dot rides along an SVG path (`offset-path`) from start to end,
+	 * fades in on entry, fades out on exit. Per-instance `animation-delay`
+	 * staggers the four tokens around the orbital. */
+	@keyframes diagram-token-travel {
+		0% {
+			offset-distance: 0%;
+			opacity: 0;
+		}
+		12% {
+			opacity: 1;
+		}
+		88% {
+			opacity: 1;
+		}
+		100% {
+			offset-distance: 100%;
+			opacity: 0;
+		}
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.ambient-pulse {
 			animation: none;

@@ -91,6 +91,35 @@
 				"b": "One-click drafts in your tone",
 				"c": "Triage 10× faster"
 			}
+		},
+		"diagram": {
+			"label": "One workspace, five connected surfaces",
+			"sourceMeeting": "Sprint planning",
+			"sourceTime": "12:47",
+			"tokenLabel": "Lock Q3 launch scope",
+			"tokenOwner": "Priya",
+			"tokenDue": "Friday",
+			"satellites": {
+				"chat": "Locked scope. Owner: Priya.",
+				"calendar": "Fri · Sprint review",
+				"files": "transcript.txt",
+				"gmail": "Re: Q3 launch — final scope"
+			},
+			"sourceNote": "from this meeting"
+		},
+		"chatHero": {
+			"sourcesLabel": "Sources",
+			"sources": {
+				"meeting": "Sprint planning · 12:47",
+				"calendar": "Fri · Sprint review",
+				"files": "transcript.txt",
+				"gmail": "Re: Q3 launch"
+			},
+			"bullets": {
+				"a": "Quotes the meeting moment, cites the file",
+				"b": "Drafts a reply in your tone for any inbox thread",
+				"c": "Reads your calendar, never your private DMs"
+			}
 		}
 	},
 	"finalCta": {
