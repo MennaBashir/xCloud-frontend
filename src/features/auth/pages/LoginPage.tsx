@@ -11,7 +11,6 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 import { AuthLayout } from "../components/AuthLayout";
-import { DemoAccountHint } from "../components/DemoAccountHint";
 import { SsoButtonRow } from "../components/SsoButtonRow";
 import {
 	loginSchema,
@@ -29,7 +28,7 @@ export default function LoginPage() {
 	const form = useForm<LoginFormValues>({
 		resolver: zodResolver(loginSchema),
 		mode: "onTouched",
-		defaultValues: { email: "", password: "" },
+		defaultValues: { username: "", password: "" },
 	});
 
 	useEffect(() => {
@@ -70,22 +69,13 @@ export default function LoginPage() {
 			}
 		>
 			<div className="flex flex-col gap-5">
-				<DemoAccountHint
-					onFill={({ email, password }) => {
-						form.setValue("email", email, { shouldValidate: true });
-						form.setValue("password", password, {
-							shouldValidate: true,
-						});
-					}}
-				/>
-
 				{error ? (
 					<div
 						role="alert"
 						className="flex items-start gap-2.5 rounded-[var(--radius-md)] border border-destructive/30 bg-destructive/10 px-3.5 py-3 text-[0.875rem] text-destructive"
 					>
 						<AlertCircle className="size-4 shrink-0 mt-0.5" strokeWidth={1.6} />
-						<span>{t("auth:errors.invalidCredentials")}</span>
+						<span>{error.message}</span>
 					</div>
 				) : null}
 
@@ -95,13 +85,13 @@ export default function LoginPage() {
 					noValidate
 				>
 					<Field
-						id="email"
-						label={t("auth:login.emailLabel")}
-						placeholder={t("auth:login.emailPlaceholder")}
-						type="email"
+						id="username"
+						label={t("auth:login.usernameLabel")}
+						placeholder={t("auth:login.usernamePlaceholder")}
+						type="text"
 						autoComplete="username"
-						error={form.formState.errors.email?.message}
-						register={form.register("email")}
+						error={form.formState.errors.username?.message}
+						register={form.register("username")}
 					/>
 
 					<Field

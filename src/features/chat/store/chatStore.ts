@@ -5,8 +5,14 @@ import type {
 	Citation,
 	Conversation,
 } from "../types/chat";
-import { DEFAULT_MODEL_ID } from "../mock/models";
-import { inferConversationTitle } from "../mock/mockChatService";
+
+/** Derive a short conversation title from the first user message. */
+export function inferConversationTitle(firstMessage: string): string {
+	const trimmed = firstMessage.trim();
+	if (trimmed.length < 4) return "New chat";
+	if (trimmed.length <= 48) return trimmed;
+	return `${trimmed.slice(0, 48)}…`;
+}
 
 type ChatState = {
 	conversations: Conversation[];
@@ -22,7 +28,15 @@ type ChatActions = {
 	createConversation: () => string;
 	selectConversation: (id: string) => void;
 	deleteConversation: (id: string) => void;
+	renameConversation: (id: string, title: string) => void;
 	clearConversations: () => void;
+
+	/** Replace the full conversation list (from backend `GET /llm/chats`). */
+	hydrateConversations: (conversations: Conversation[]) => void;
+	/** Replace the message list of a conversation (from `GET /llm/chats/{id}`). */
+	hydrateMessages: (conversationId: string, messages: ChatMessage[]) => void;
+	/** Swap a local conversation id for the backend-assigned chat id. */
+	reconcileConversationId: (localId: string, backendId: string) => void;
 
 	appendMessage: (message: ChatMessage) => void;
 	updateMessage: (
@@ -48,7 +62,7 @@ export const useChatStore = create<ChatStore>((set) => ({
 	messages: {},
 	activeConversationId: null,
 	streamingMessageId: null,
-	modelId: DEFAULT_MODEL_ID,
+	modelId: "",
 	abortController: null,
 
 	createConversation: () => {
@@ -70,6 +84,46 @@ export const useChatStore = create<ChatStore>((set) => ({
 	},
 
 	selectConversation: (id) => set({ activeConversationId: id }),
+
+	renameConversation: (id, title) =>
+		set((s) => ({
+			conversations: s.conversations.map((c) =>
+				c.id === id ? { ...c, title } : c,
+			),
+		})),
+
+	hydrateConversations: (conversations) =>
+		set((s) => ({
+			conversations,
+			// Keep any locally-cached messages we already loaded.
+			messages: s.messages,
+		})),
+
+	hydrateMessages: (conversationId, messages) =>
+		set((s) => ({
+			messages: { ...s.messages, [conversationId]: messages },
+		})),
+
+	reconcileConversationId: (localId, backendId) =>
+		set((s) => {
+			if (localId === backendId) return s;
+			const { [localId]: localMsgs, ...restMsgs } = s.messages;
+			const remapped = (localMsgs ?? []).map((m) => ({
+				...m,
+				conversationId: backendId,
+			}));
+			return {
+				conversations: s.conversations.map((c) =>
+					c.id === localId ? { ...c, id: backendId } : c,
+				),
+				messages: { ...restMsgs, [backendId]: remapped },
+				activeConversationId:
+					s.activeConversationId === localId
+						? backendId
+						: s.activeConversationId,
+				streamingMessageId: s.streamingMessageId,
+			};
+		}),
 
 	deleteConversation: (id) =>
 		set((s) => {

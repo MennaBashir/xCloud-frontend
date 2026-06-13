@@ -15,6 +15,7 @@ import enCalendar from "./locales/en/calendar.json";
 import enMeeting from "./locales/en/meeting.json";
 import enGmail from "./locales/en/gmail.json";
 import enNotifications from "./locales/en/notifications.json";
+import enRag from "./locales/en/rag.json";
 import enErrors from "./locales/en/errors.json";
 
 import arCommon from "./locales/ar/common.json";
@@ -26,6 +27,7 @@ import arCalendar from "./locales/ar/calendar.json";
 import arMeeting from "./locales/ar/meeting.json";
 import arGmail from "./locales/ar/gmail.json";
 import arNotifications from "./locales/ar/notifications.json";
+import arRag from "./locales/ar/rag.json";
 import arErrors from "./locales/ar/errors.json";
 
 export const resources = {
@@ -39,6 +41,7 @@ export const resources = {
 		meeting: enMeeting,
 		gmail: enGmail,
 		notifications: enNotifications,
+		rag: enRag,
 		errors: enErrors,
 	},
 	ar: {
@@ -51,6 +54,7 @@ export const resources = {
 		meeting: arMeeting,
 		gmail: arGmail,
 		notifications: arNotifications,
+		rag: arRag,
 		errors: arErrors,
 	},
 } as const;
@@ -65,6 +69,7 @@ export const namespaces = [
 	"meeting",
 	"gmail",
 	"notifications",
+	"rag",
 	"errors",
 ] as const;
 

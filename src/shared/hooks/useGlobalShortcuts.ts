@@ -29,6 +29,7 @@ function isTypingInField(target: EventTarget | null): boolean {
  *  g then c      — go to Calendar
  *  g then m      — go to Meeting
  *  g then a      — go to Chat AI
+ *  g then r      — go to RAG (documents)
  *  g then i      — go to Inbox
  *  g then h      — go to Home (landing)
  *
@@ -82,6 +83,7 @@ export function useGlobalShortcuts() {
 					c: "/app/calendar",
 					m: "/app/meeting",
 					a: "/app/chat",
+					r: "/app/rag",
 					i: "/app/gmail",
 					n: "/app/notifications",
 					h: "/",

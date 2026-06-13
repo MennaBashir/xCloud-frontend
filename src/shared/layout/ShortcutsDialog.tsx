@@ -37,6 +37,7 @@ const GROUPS: ShortcutGroup[] = [
 			{ keys: ["G", "C"], labelKey: "shortcuts.goCalendar" },
 			{ keys: ["G", "M"], labelKey: "shortcuts.goMeeting" },
 			{ keys: ["G", "A"], labelKey: "shortcuts.goChat" },
+			{ keys: ["G", "R"], labelKey: "shortcuts.goRag" },
 			{ keys: ["G", "I"], labelKey: "shortcuts.goInbox" },
 			{ keys: ["G", "H"], labelKey: "shortcuts.goHome" },
 		],
@@ -141,6 +142,7 @@ function defaultLabel(key: string): string {
 		"shortcuts.goCalendar": "Go to Calendar",
 		"shortcuts.goMeeting": "Go to Meeting",
 		"shortcuts.goChat": "Go to Chat AI",
+		"shortcuts.goRag": "Go to RAG",
 		"shortcuts.goInbox": "Go to Inbox",
 		"shortcuts.goHome": "Go to landing page",
 	};

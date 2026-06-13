@@ -44,8 +44,18 @@
 		"streaming": "أكتب…",
 		"errorMessage": "حدث خطأ أثناء توليد هذا الردّ.",
 		"deleted": "حُذفت المحادثة",
+		"delete": "حذف المحادثة",
 		"clearAll": "مسح الكل",
-		"clearAllConfirm": "حذف كل المحادثات؟ لا يمكن التراجع."
+		"clearAllConfirm": "حذف كل المحادثات؟ لا يمكن التراجع.",
+		"search": "ابحث في المحادثات",
+		"searchPlaceholder": "ابحث في المحادثات…",
+		"searchResults": "نتائج البحث",
+		"searching": "جارٍ البحث…",
+		"noResults": "لا توجد محادثات مطابقة",
+		"clearSearch": "مسح البحث",
+		"groupToday": "اليوم",
+		"groupWeek": "هذا الأسبوع",
+		"groupEarlier": "أقدم"
 	},
 	"message": {
 		"you": "أنت",
@@ -59,7 +69,14 @@
 	},
 	"model": {
 		"label": "النموذج",
-		"changeModel": "تغيير النموذج"
+		"changeModel": "تغيير النموذج",
+		"loading": "جارٍ تحميل النماذج…",
+		"empty": "لا توجد نماذج متاحة"
+	},
+	"rag": {
+		"label": "المستندات",
+		"toggle": "استخدام سياق المستندات",
+		"tooltip": "الإجابة باستخدام مستنداتك المفهرسة (RAG)"
 	},
 	"sidebar": {
 		"collapse": "إخفاء السجل",

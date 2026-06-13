@@ -10,15 +10,18 @@ import {
 	DropdownMenuSeparator,
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useChatStore } from "../store/chatStore";
-import { CHAT_MODELS } from "../mock/models";
+import { useModels } from "../hooks/useModels";
 
 export function ModelPicker() {
 	const { t } = useTranslation("chat");
-	const modelId = useChatStore((s) => s.modelId);
-	const setModelId = useChatStore((s) => s.setModelId);
-	const current =
-		CHAT_MODELS.find((m) => m.id === modelId) ?? CHAT_MODELS[0];
+	const { models, modelId, setModelId, isLoading, error } = useModels();
+
+	const current = models.find((m) => m.id === modelId);
+	const triggerLabel = current?.label
+		? current.label
+		: isLoading
+			? t("model.loading")
+			: t("model.label");
 
 	return (
 		<DropdownMenu>
@@ -33,19 +36,32 @@ export function ModelPicker() {
 				aria-label={t("model.changeModel")}
 			>
 				<Sparkles className="size-3 text-ai" strokeWidth={1.8} />
-				<span>{current.label}</span>
+				<span className="max-w-[12rem] truncate">{triggerLabel}</span>
 				<ChevronsUpDown className="size-3 opacity-70" strokeWidth={1.6} />
 			</DropdownMenuTrigger>
 			<DropdownMenuContent
 				align="start"
 				side="top"
-				className="min-w-[15rem] rounded-[var(--radius-lg)]"
+				className="min-w-[15rem] max-w-[20rem] rounded-[var(--radius-lg)]"
 			>
 				<DropdownMenuLabel className="text-[0.6875rem] uppercase tracking-[0.16em] text-muted-foreground">
 					{t("model.label")}
 				</DropdownMenuLabel>
 				<DropdownMenuSeparator />
-				{CHAT_MODELS.map((m) => {
+
+				{error ? (
+					<div className="px-2 py-2 text-[0.75rem] text-destructive">
+						{error}
+					</div>
+				) : null}
+
+				{!error && models.length === 0 ? (
+					<div className="px-2 py-2 text-[0.75rem] text-muted-foreground">
+						{isLoading ? t("model.loading") : t("model.empty")}
+					</div>
+				) : null}
+
+				{models.map((m) => {
 					const active = m.id === modelId;
 					return (
 						<DropdownMenuItem
@@ -61,13 +77,15 @@ export function ModelPicker() {
 									/>
 								) : null}
 							</span>
-							<span className="flex flex-col">
-								<span className="text-[0.875rem] font-medium text-foreground">
+							<span className="flex flex-col min-w-0">
+								<span className="text-[0.875rem] font-medium text-foreground truncate">
 									{m.label}
 								</span>
-								<span className="text-[0.6875rem] text-muted-foreground">
-									{m.tagline}
-								</span>
+								{m.tagline ? (
+									<span className="text-[0.6875rem] text-muted-foreground truncate">
+										{m.tagline}
+									</span>
+								) : null}
 							</span>
 						</DropdownMenuItem>
 					);

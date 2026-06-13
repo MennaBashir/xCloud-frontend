@@ -14,6 +14,8 @@ type ChatInputProps = {
 	seedValue?: string;
 	/** Slot rendered to the left of the action button (e.g. model picker). */
 	leftSlot?: React.ReactNode;
+	/** Slot rendered just before the send button (e.g. RAG toggle). */
+	rightSlot?: React.ReactNode;
 };
 
 export function ChatInput({
@@ -23,6 +25,7 @@ export function ChatInput({
 	hasMessages,
 	seedValue,
 	leftSlot,
+	rightSlot,
 }: ChatInputProps) {
 	const { t } = useTranslation("chat");
 	const [value, setValue] = useState("");
@@ -101,6 +104,9 @@ export function ChatInput({
 					<div className="absolute inset-x-2 bottom-2 flex items-center justify-between gap-2">
 						<div className="flex items-center gap-1">{leftSlot}</div>
 
+						<div className="flex items-center gap-1.5">
+						{rightSlot}
+
 						{isStreaming ? (
 							<button
 								type="button"
@@ -136,6 +142,7 @@ export function ChatInput({
 								<ArrowUp className="size-4" strokeWidth={2} />
 							</button>
 						)}
+						</div>
 					</div>
 				</div>
 

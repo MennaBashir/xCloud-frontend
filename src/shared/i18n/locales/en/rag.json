@@ -1,0 +1,63 @@
+{
+	"eyebrow": "Documents",
+	"title": "Document knowledge (RAG)",
+	"subtitle": "Index folders of documents so the AI can answer from your own files, with citations.",
+	"status": {
+		"label": "Active collection",
+		"checking": "Checking status…",
+		"active": "{{collection}}",
+		"none": "No collection loaded",
+		"refresh": "Refresh"
+	},
+	"index": {
+		"title": "Index a folder",
+		"subtitle": "Build embeddings from .txt, .md, and .pdf files in a folder (searched recursively).",
+		"pathLabel": "Folder path",
+		"pathPlaceholder": "/home/user/documents",
+		"pathHelp": "This path must exist on the server running the backend, not on your computer.",
+		"collectionLabel": "Collection name",
+		"submit": "Index folder",
+		"indexing": "Indexing…",
+		"stop": "Stop",
+		"phaseReading": "Reading & splitting files…",
+		"progress": "Embedding {{done}} / {{total}} chunks ({{percent}}%)",
+		"indexingHint": "Building embeddings — this can take a moment.",
+		"reindexNote": "Indexing a name that already exists replaces it."
+	},
+	"collections": {
+		"title": "Collections",
+		"loading": "Loading collections…",
+		"empty": "No collections yet",
+		"emptyDescription": "Index a folder above to create your first collection.",
+		"docCount_one": "{{count}} document",
+		"docCount_other": "{{count}} documents",
+		"load": "Load",
+		"loaded": "Loaded",
+		"update": "Update",
+		"updateHint": "Re-index this collection's folder to pick up new or changed files",
+		"open": "Files",
+		"delete": "Delete collection",
+		"files": "Files in this collection",
+		"filesLoading": "Loading files…",
+		"filesEmpty": "No files found in this collection."
+	},
+	"toast": {
+		"indexed_one": "Indexed {{count}} document into \"{{collection}}\"",
+		"indexed_other": "Indexed {{count}} documents into \"{{collection}}\"",
+		"loaded": "Loaded collection \"{{collection}}\"",
+		"deleted": "Deleted collection \"{{collection}}\"",
+		"indexCancelled": "Indexing stopped"
+	},
+	"errors": {
+		"load": "Could not load RAG status.",
+		"index": "Indexing failed.",
+		"loadCollection": "Could not load the collection.",
+		"delete": "Could not delete the collection.",
+		"update": "Could not update the collection.",
+		"noSource": "Couldn't determine this collection's source folder.",
+		"files": "Could not load the file list.",
+		"pathRequired": "Enter a folder path.",
+		"collectionRequired": "Enter a collection name.",
+		"collectionInvalid": "Use only letters, numbers, hyphens, or underscores."
+	}
+}

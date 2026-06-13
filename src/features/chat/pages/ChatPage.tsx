@@ -16,23 +16,28 @@ import {
 	selectIsStreaming,
 	useChatStore,
 } from "../store/chatStore";
-import { useMockChat } from "../hooks/useMockChat";
+import { useChat } from "../hooks/useChat";
+import { useConversations } from "../hooks/useConversations";
+import { useRag } from "../hooks/useRag";
 
 import { ConversationSidebar } from "../components/ConversationSidebar";
 import { ChatWelcome } from "../components/ChatWelcome";
 import { MessageList } from "../components/MessageList";
 import { ChatInput } from "../components/ChatInput";
 import { ModelPicker } from "../components/ModelPicker";
+import { RagToggle } from "../components/RagToggle";
 
 export default function ChatPage() {
 	const { t } = useTranslation("chat");
 	const messages = useChatStore(selectActiveMessages);
 	const conversation = useChatStore(selectActiveConversation);
 	const isStreaming = useChatStore(selectIsStreaming);
-	const createConversation = useChatStore((s) => s.createConversation);
 	const activeConversationId = useChatStore((s) => s.activeConversationId);
-	const { sendMessage, stop } = useMockChat();
+	const { sendMessage, stop } = useChat();
+	const { startNew } = useConversations();
+	const { available: ragAvailable } = useRag();
 	const [seedValue] = useState<string>("");
+	const [useRagFlag, setUseRagFlag] = useState(false);
 	const [sidebarOpen, setSidebarOpen] = useState(true);
 	const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
 	const previousActiveIdRef = useRef(activeConversationId);
@@ -47,11 +52,11 @@ export default function ChatPage() {
 	}, [activeConversationId, mobileSheetOpen]);
 
 	const handleSend = (value: string) => {
-		void sendMessage(value);
+		void sendMessage(value, { useRag: ragAvailable && useRagFlag });
 	};
 
 	const handleSuggestion = (prompt: string) => {
-		void sendMessage(prompt);
+		void sendMessage(prompt, { useRag: ragAvailable && useRagFlag });
 	};
 
 	const hasMessages = messages.length > 0;
@@ -144,7 +149,7 @@ export default function ChatPage() {
 								<Button
 									size="sm"
 									variant="ghost"
-									onClick={() => createConversation()}
+									onClick={() => startNew()}
 									className="gap-1.5"
 								>
 									<span>{t("conversation.new")}</span>
@@ -169,6 +174,14 @@ export default function ChatPage() {
 							hasMessages={hasMessages}
 							seedValue={seedValue}
 							leftSlot={<ModelPicker />}
+							rightSlot={
+								ragAvailable ? (
+									<RagToggle
+										active={useRagFlag}
+										onToggle={setUseRagFlag}
+									/>
+								) : null
+							}
 						/>
 					</div>
 				</div>

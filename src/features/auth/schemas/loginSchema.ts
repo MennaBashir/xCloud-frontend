@@ -1,13 +1,13 @@
 import { z } from "zod";
 
 export const loginSchema = z.object({
-	email: z
+	username: z
 		.string()
 		.min(1, "auth:errors.required")
-		.email("auth:errors.invalidEmail"),
+		.min(3, "auth:errors.usernameTooShort"),
 	password: z
 		.string()
-		.min(8, "auth:errors.passwordTooShort"),
+		.min(4, "auth:errors.passwordTooShort"),
 });
 
 export type LoginFormValues = z.infer<typeof loginSchema>;

@@ -44,8 +44,18 @@
 		"streaming": "Generating…",
 		"errorMessage": "Something went wrong while generating that response.",
 		"deleted": "Conversation deleted",
+		"delete": "Delete conversation",
 		"clearAll": "Clear all",
-		"clearAllConfirm": "Delete all conversations? This can't be undone."
+		"clearAllConfirm": "Delete all conversations? This can't be undone.",
+		"search": "Search chats",
+		"searchPlaceholder": "Search chats…",
+		"searchResults": "Search results",
+		"searching": "Searching…",
+		"noResults": "No matching chats",
+		"clearSearch": "Clear search",
+		"groupToday": "Today",
+		"groupWeek": "This week",
+		"groupEarlier": "Earlier"
 	},
 	"message": {
 		"you": "You",
@@ -59,7 +69,14 @@
 	},
 	"model": {
 		"label": "Model",
-		"changeModel": "Change model"
+		"changeModel": "Change model",
+		"loading": "Loading models…",
+		"empty": "No models available"
+	},
+	"rag": {
+		"label": "Documents",
+		"toggle": "Use document context",
+		"tooltip": "Answer using your indexed documents (RAG)"
 	},
 	"sidebar": {
 		"collapse": "Collapse history",

@@ -7,7 +7,9 @@ import {
 import {
 	Check,
 	Copy,
+	FileText,
 	FolderClosed,
+	Globe,
 	RefreshCcw,
 	Sparkles,
 	Video,
@@ -121,29 +123,56 @@ export function MessageBubble({
 						</div>
 						<div className="flex items-center gap-1.5 flex-wrap">
 							{message.citations.map((c) => {
-								const Icon = c.kind === "meeting" ? Video : FolderClosed;
-								return (
-									<button
-										key={c.id}
-										type="button"
-										className={cn(
-											"inline-flex items-center gap-1.5",
-											"rounded-full border border-border bg-card",
-											"px-2.5 py-1 text-[0.75rem]",
-											"hover:border-border-strong hover:bg-accent/40 transition-colors",
-										)}
-										title={c.detail}
-									>
+								const Icon =
+									c.kind === "meeting"
+										? Video
+										: c.kind === "web"
+											? Globe
+											: c.kind === "rag"
+												? FileText
+												: FolderClosed;
+								const isLink = c.kind === "web" && c.url;
+								const content = (
+									<>
 										<Icon
 											className="size-3 text-muted-foreground"
 											strokeWidth={1.6}
 										/>
-										<span className="font-medium text-foreground">
+										<span className="font-medium text-foreground truncate max-w-[14rem]">
 											{c.title}
 										</span>
-										<span className="text-muted-foreground">
-											· {c.detail}
-										</span>
+										{c.kind === "web" && c.detail ? (
+											<span className="text-muted-foreground truncate max-w-[10rem]">
+												· {c.detail}
+											</span>
+										) : null}
+									</>
+								);
+								const className = cn(
+									"inline-flex items-center gap-1.5",
+									"rounded-full border border-border bg-card",
+									"px-2.5 py-1 text-[0.75rem]",
+									"hover:border-border-strong hover:bg-accent/40 transition-colors",
+								);
+								return isLink ? (
+									<a
+										key={c.id}
+										href={c.url}
+										target="_blank"
+										rel="noopener noreferrer"
+										className={className}
+										title={c.detail || c.url}
+									>
+										{content}
+									</a>
+								) : (
+									<button
+										key={c.id}
+										type="button"
+										className={className}
+										title={c.detail}
+									>
+										{content}
 									</button>
 								);
 							})}

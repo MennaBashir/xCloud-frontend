@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import {
 	CalendarDays,
+	Database,
 	FolderClosed,
 	Inbox,
 	Search,
@@ -49,6 +50,7 @@ export function MobileNavSheet({ open, onOpenChange }: MobileNavSheetProps) {
 			{ to: "/app/meeting", label: t("nav.meeting"), icon: Video },
 			{ to: "/app/calendar", label: t("nav.calendar"), icon: CalendarDays },
 			{ to: "/app/chat", label: t("nav.chat"), icon: Sparkles, accent: "ai" },
+			{ to: "/app/rag", label: t("nav.rag"), icon: Database },
 			{ to: "/app/gmail", label: t("nav.gmail"), icon: Inbox },
 		],
 		[t],

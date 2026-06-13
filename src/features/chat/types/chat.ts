@@ -1,9 +1,9 @@
 /**
  * Chat feature types.
  *
- * Designed to mirror the shape used by the Vercel AI SDK's `useChat`
- * so we can swap the mock backend for `@ai-sdk/react` without changing
- * any consuming components.
+ * These mirror the xcloud backend (`/llm/*`) contract, adapted into a
+ * UI-friendly shape. The data layer lives in `hooks/` (useChat,
+ * useConversations, useModels) which talks to `src/shared/api`.
  */
 
 export type MessageRole = "user" | "assistant" | "system";
@@ -23,9 +23,11 @@ export type ChatMessage = {
 
 export type Citation = {
 	id: string;
-	kind: "meeting" | "file";
+	kind: "meeting" | "file" | "rag" | "web";
 	title: string;
 	detail: string;
+	/** External link for web sources. */
+	url?: string;
 };
 
 export type Conversation = {
@@ -37,10 +39,14 @@ export type Conversation = {
 };
 
 export type ChatModel = {
+	/** Raw Ollama model id, e.g. `qwen3:1.7b`. */
 	id: string;
+	/** Human-friendly label derived from the id. */
 	label: string;
-	provider: "openai" | "anthropic" | "google";
-	tagline: string;
+	/** Optional descriptor (e.g. parameter size, or "embedding"). */
+	tagline?: string;
+	/** True for embedding models that cannot be used for chat. */
+	isEmbedding?: boolean;
 };
 
 export type SuggestionPrompt = {

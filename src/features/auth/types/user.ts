@@ -1,12 +1,15 @@
 /**
  * Authenticated user shape.
  *
- * IMPORTANT: This shape is forward-compatible with the real backend.
- * When the API ships, the only file that changes is `mock/mockAuth.ts` —
- * every consumer (UserMenu, meeting feature, etc.) reads from this shape.
+ * IMPORTANT: This shape is the app-wide contract for an authenticated user.
+ * The backend integration lives in `services/authApi.ts`, which adapts the
+ * raw API response into this shape — every consumer (UserMenu, meeting
+ * feature, etc.) reads from this shape.
  */
 export type User = {
 	id: string;
+	/** Account identifier used by the backend (`/auth` username). */
+	username: string;
 	name: string;
 	email: string;
 	role: string;
@@ -29,14 +32,12 @@ export type AuthStatus =
 	| "error";
 
 export type LoginInput = {
-	email: string;
+	username: string;
 	password: string;
 };
 
 export type SignupInput = {
-	name: string;
-	workspaceName: string;
-	email: string;
+	username: string;
 	password: string;
 };
 
@@ -45,7 +46,7 @@ export type AuthError = {
 		| "invalid_credentials"
 		| "network"
 		| "validation"
-		| "email_in_use"
+		| "username_in_use"
 		| "unknown";
 	message: string;
 };

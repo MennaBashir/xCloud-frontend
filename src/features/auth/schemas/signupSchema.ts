@@ -1,21 +1,14 @@
 import { z } from "zod";
 
 export const signupSchema = z.object({
-	name: z
-		.string()
-		.min(2, "auth:errors.required")
-		.max(80),
-	workspaceName: z
-		.string()
-		.min(2, "auth:errors.required")
-		.max(80),
-	email: z
+	username: z
 		.string()
 		.min(1, "auth:errors.required")
-		.email("auth:errors.invalidEmail"),
+		.min(3, "auth:errors.usernameTooShort")
+		.max(80),
 	password: z
 		.string()
-		.min(8, "auth:errors.passwordTooShort"),
+		.min(4, "auth:errors.passwordTooShort"),
 });
 
 export type SignupFormValues = z.infer<typeof signupSchema>;

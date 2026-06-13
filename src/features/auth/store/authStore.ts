@@ -1,11 +1,7 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
-import {
-	mockLogin,
-	mockRequestPasswordReset,
-	mockSignup,
-} from "../mock/mockAuth";
+import { login as apiLogin, signup as apiSignup } from "../services/authApi";
 import type {
 	AuthError,
 	AuthStatus,
@@ -66,7 +62,7 @@ export const useAuthStore = create<AuthStore>()(
 			login: async (input) => {
 				set({ status: "authenticating", error: null });
 				try {
-					const { user, token } = await mockLogin(input);
+					const { user, token } = await apiLogin(input);
 					set({
 						user,
 						token,
@@ -84,7 +80,7 @@ export const useAuthStore = create<AuthStore>()(
 			signup: async (input) => {
 				set({ status: "authenticating", error: null });
 				try {
-					const { user, token } = await mockSignup(input);
+					const { user, token } = await apiSignup(input);
 					set({
 						user,
 						token,
@@ -109,8 +105,11 @@ export const useAuthStore = create<AuthStore>()(
 			},
 
 			requestPasswordReset: async (email) => {
-				await mockRequestPasswordReset(email);
+				// No backend endpoint yet — resolve optimistically so the UI
+				// flow works. Wire to `/auth/forgot-password` when available.
+				void email;
 				void get();
+				await Promise.resolve();
 			},
 		}),
 		{

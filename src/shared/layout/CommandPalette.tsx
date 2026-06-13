@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import {
 	Bell,
 	CalendarDays,
+	Database,
 	FolderClosed,
 	Home,
 	Inbox,
@@ -97,6 +98,10 @@ export function CommandPalette() {
 					<CommandItem onSelect={go("/app/chat")}>
 						<Sparkles className="size-3.5 text-ai" strokeWidth={1.6} />
 						<span>{t("nav.chat")}</span>
+					</CommandItem>
+					<CommandItem onSelect={go("/app/rag")}>
+						<Database className="size-3.5" strokeWidth={1.6} />
+						<span>{t("nav.rag")}</span>
 					</CommandItem>
 					<CommandItem onSelect={go("/app/gmail")}>
 						<Inbox className="size-3.5" strokeWidth={1.6} />

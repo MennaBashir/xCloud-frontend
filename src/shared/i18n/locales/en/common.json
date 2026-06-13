@@ -8,6 +8,7 @@
 		"meeting": "Meeting",
 		"calendar": "Calendar",
 		"chat": "Chat AI",
+		"rag": "Documents",
 		"gmail": "Inbox",
 		"home": "Home",
 		"settings": "Settings"
@@ -76,6 +77,7 @@
 		"goCalendar": "Go to Calendar",
 		"goMeeting": "Go to Meeting",
 		"goChat": "Go to Chat AI",
+		"goRag": "Go to Documents",
 		"goInbox": "Go to Inbox",
 		"goHome": "Go to landing page",
 		"groups": {

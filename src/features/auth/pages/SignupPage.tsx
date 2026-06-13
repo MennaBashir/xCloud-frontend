@@ -28,9 +28,7 @@ export default function SignupPage() {
 		resolver: zodResolver(signupSchema),
 		mode: "onTouched",
 		defaultValues: {
-			name: "",
-			workspaceName: "",
-			email: "",
+			username: "",
 			password: "",
 		},
 	});
@@ -85,31 +83,12 @@ export default function SignupPage() {
 					noValidate
 				>
 					<Field
-						id="name"
-						label={t("auth:signup.nameLabel")}
-						placeholder={t("auth:signup.namePlaceholder")}
-						autoComplete="name"
-						error={form.formState.errors.name?.message}
-						register={form.register("name")}
-					/>
-
-					<Field
-						id="workspaceName"
-						label={t("auth:signup.workspaceLabel")}
-						placeholder={t("auth:signup.workspacePlaceholder")}
-						autoComplete="organization"
-						error={form.formState.errors.workspaceName?.message}
-						register={form.register("workspaceName")}
-					/>
-
-					<Field
-						id="email"
-						label={t("auth:signup.emailLabel")}
-						placeholder={t("auth:login.emailPlaceholder")}
-						type="email"
-						autoComplete="email"
-						error={form.formState.errors.email?.message}
-						register={form.register("email")}
+						id="username"
+						label={t("auth:signup.usernameLabel")}
+						placeholder={t("auth:signup.usernamePlaceholder")}
+						autoComplete="username"
+						error={form.formState.errors.username?.message}
+						register={form.register("username")}
 					/>
 
 					<Field

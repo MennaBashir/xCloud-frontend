@@ -11,6 +11,7 @@ import GmailPage from "@/features/gmail/pages/GmailPage";
 import MeetingPage from "@/features/meeting/pages/MeetingPage";
 import NotFoundPage from "@/pages/NotFound";
 import ChatPage from "@/features/chat/pages/ChatPage";
+import RagPage from "@/features/rag/pages/RagPage";
 
 import LoginPage from "@/features/auth/pages/LoginPage";
 import SignupPage from "@/features/auth/pages/SignupPage";
@@ -48,6 +49,7 @@ export const router = createBrowserRouter(
 					<Route path="gmail" element={<GmailPage />} />
 					<Route path="meeting" element={<MeetingPage />} />
 					<Route path="chat" element={<ChatPage />} />
+					<Route path="rag" element={<RagPage />} />
 					<Route path="notifications" element={<NotificationsPage />} />
 				</Route>
 			</Route>

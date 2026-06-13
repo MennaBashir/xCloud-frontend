@@ -1,0 +1,71 @@
+{
+	"eyebrow": "المستندات",
+	"title": "معرفة المستندات (RAG)",
+	"subtitle": "افهرس مجلدات المستندات ليجيب الذكاء الاصطناعي من ملفّاتك الخاصة مع ذكر المصادر.",
+	"status": {
+		"label": "المجموعة النشطة",
+		"checking": "جارٍ التحقق من الحالة…",
+		"active": "{{collection}}",
+		"none": "لا توجد مجموعة محمّلة",
+		"refresh": "تحديث"
+	},
+	"index": {
+		"title": "فهرسة مجلد",
+		"subtitle": "بناء التضمينات من ملفات .txt و .md و .pdf داخل مجلد (بحث متداخل).",
+		"pathLabel": "مسار المجلد",
+		"pathPlaceholder": "/home/user/documents",
+		"pathHelp": "يجب أن يوجد هذا المسار على الخادم الذي يشغّل الواجهة الخلفية، لا على جهازك.",
+		"collectionLabel": "اسم المجموعة",
+		"submit": "فهرسة المجلد",
+		"indexing": "جارٍ الفهرسة…",
+		"stop": "إيقاف",
+		"phaseReading": "جارٍ قراءة الملفات وتقسيمها…",
+		"progress": "تضمين {{done}} / {{total}} مقطعًا ({{percent}}%)",
+		"indexingHint": "يجري بناء التضمينات — قد يستغرق هذا لحظات.",
+		"reindexNote": "فهرسة اسم موجود مسبقًا تستبدله."
+	},
+	"collections": {
+		"title": "المجموعات",
+		"loading": "جارٍ تحميل المجموعات…",
+		"empty": "لا توجد مجموعات بعد",
+		"emptyDescription": "افهرس مجلدًا أعلاه لإنشاء أول مجموعة.",
+		"docCount_zero": "{{count}} مستند",
+		"docCount_one": "مستند واحد",
+		"docCount_two": "مستندان",
+		"docCount_few": "{{count}} مستندات",
+		"docCount_many": "{{count}} مستندًا",
+		"docCount_other": "{{count}} مستند",
+		"load": "تحميل",
+		"loaded": "محمّلة",
+		"update": "تحديث",
+		"updateHint": "إعادة فهرسة مجلد هذه المجموعة لالتقاط الملفات الجديدة أو المعدّلة",
+		"open": "الملفات",
+		"delete": "حذف المجموعة",
+		"files": "ملفات هذه المجموعة",
+		"filesLoading": "جارٍ تحميل الملفات…",
+		"filesEmpty": "لا توجد ملفات في هذه المجموعة."
+	},
+	"toast": {
+		"indexed_zero": "تمت فهرسة {{count}} مستند في \"{{collection}}\"",
+		"indexed_one": "تمت فهرسة مستند واحد في \"{{collection}}\"",
+		"indexed_two": "تمت فهرسة مستندين في \"{{collection}}\"",
+		"indexed_few": "تمت فهرسة {{count}} مستندات في \"{{collection}}\"",
+		"indexed_many": "تمت فهرسة {{count}} مستندًا في \"{{collection}}\"",
+		"indexed_other": "تمت فهرسة {{count}} مستند في \"{{collection}}\"",
+		"loaded": "تم تحميل المجموعة \"{{collection}}\"",
+		"deleted": "تم حذف المجموعة \"{{collection}}\"",
+		"indexCancelled": "تم إيقاف الفهرسة"
+	},
+	"errors": {
+		"load": "تعذّر تحميل حالة RAG.",
+		"index": "فشلت الفهرسة.",
+		"loadCollection": "تعذّر تحميل المجموعة.",
+		"delete": "تعذّر حذف المجموعة.",
+		"update": "تعذّر تحديث المجموعة.",
+		"noSource": "تعذّر تحديد مجلد مصدر هذه المجموعة.",
+		"files": "تعذّر تحميل قائمة الملفات.",
+		"pathRequired": "أدخل مسار مجلد.",
+		"collectionRequired": "أدخل اسم مجموعة.",
+		"collectionInvalid": "استخدم أحرفًا وأرقامًا وشرطات وشرطات سفلية فقط."
+	}
+}
