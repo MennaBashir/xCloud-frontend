@@ -2,24 +2,21 @@
  * VideoSDK token resolution + API helpers.
  *
  * Token source of truth:
- *   1. authStore.user.videoSdkToken  — populated by login response.
- *   2. VITE_VIDEOSDK_TOKEN           — dev fallback so the meeting works
- *      without a backend during local development.
- *
- * When the real backend ships, only `mockAuth.ts` changes — the rest of
- * the meeting feature reads from the auth store.
+ *   1. VITE_VIDEOSDK_TOKEN           — dev/static token. Preferred when set so
+ *      that updating `.env` (e.g. on token expiry) always takes effect without
+ *      having to log out/in to clear the value persisted in the auth store.
+ *   2. authStore.user.videoSdkToken  — populated by the login response.
  */
 import { useAuthStore } from "@/features/auth/store/authStore";
 
 const API_BASE_URL = "https://api.videosdk.live";
 
 export function resolveVideoSdkToken(): string {
-	const fromStore = useAuthStore.getState().user?.videoSdkToken ?? "";
-	if (fromStore) return fromStore;
 	const envToken = (import.meta.env.VITE_VIDEOSDK_TOKEN as
 		| string
 		| undefined) ?? "";
-	return envToken;
+	if (envToken) return envToken;
+	return useAuthStore.getState().user?.videoSdkToken ?? "";
 }
 
 export async function createRoom(): Promise<
