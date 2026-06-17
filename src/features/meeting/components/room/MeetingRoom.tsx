@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { cn } from "@/lib/utils";
 import { useMeetingStore } from "../../store/meetingStore";
+import { useMeetingChat } from "../../hooks/useMeetingChat";
 import { ConnectingScreen } from "../screens/ConnectingScreen";
 import { ParticipantGrid } from "./ParticipantGrid";
 import { PresenterView } from "./PresenterView";
@@ -130,6 +131,11 @@ export function MeetingRoom() {
 
 	const localId = localParticipant?.id ?? null;
 
+	// Chat subscription lives here (always mounted for the whole meeting) so
+	// messages arrive in real time regardless of whether the chat panel is
+	// open. Must be called before any early return to satisfy Rules of Hooks.
+	const chat = useMeetingChat();
+
 	if (!connected) {
 		return <ConnectingScreen />;
 	}
@@ -164,6 +170,8 @@ export function MeetingRoom() {
 						<ChatPanel
 							onClose={() => setSideBar(null)}
 							selfSenderId={localId ?? undefined}
+							messages={chat.messages}
+							onSend={chat.send}
 						/>
 					) : null}
 					{sideBar === "participants" ? (

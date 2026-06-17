@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { Circle, Download, Loader2, Square } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { audioRegistry } from "../../store/meetingStore";
 
 type RecState =
 	| "idle"
@@ -94,7 +95,8 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 
 		const recorderRef = useRef<MediaRecorder | null>(null);
 		const chunksRef = useRef<Blob[]>([]);
-		const streamRef = useRef<MediaStream | null>(null);
+		// Raw local mic stream (we own it, must stop its tracks).
+		const micStreamRef = useRef<MediaStream | null>(null);
 		const tickRef = useRef<number | null>(null);
 		const mimeRef = useRef<string>("audio/webm");
 		// When true the user explicitly asked to stop; track-`ended` events
@@ -103,23 +105,53 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 		// Guards against a double `onstop` / recovery race.
 		const recoveringRef = useRef(false);
 
+		// Web Audio mixing graph — combines the local mic with every remote
+		// participant's audio into a single recorded stream.
+		const audioCtxRef = useRef<AudioContext | null>(null);
+		const destRef = useRef<MediaStreamAudioDestinationNode | null>(null);
+		// Source nodes keyed by participant id so we can add late joiners and
+		// drop leavers without rebuilding the whole graph.
+		const sourceNodesRef = useRef<Map<string, MediaStreamAudioSourceNode>>(
+			new Map(),
+		);
+		const mixPollRef = useRef<number | null>(null);
+
 		const cleanupStream = useCallback(() => {
-			if (streamRef.current) {
-				streamRef.current.getTracks().forEach((track) => track.stop());
-				streamRef.current = null;
+			if (micStreamRef.current) {
+				micStreamRef.current
+					.getTracks()
+					.forEach((track) => track.stop());
+				micStreamRef.current = null;
 			}
 			if (tickRef.current !== null) {
 				window.clearInterval(tickRef.current);
 				tickRef.current = null;
 			}
+			if (mixPollRef.current !== null) {
+				window.clearInterval(mixPollRef.current);
+				mixPollRef.current = null;
+			}
+			sourceNodesRef.current.forEach((node) => {
+				try {
+					node.disconnect();
+				} catch {
+					/* noop */
+				}
+			});
+			sourceNodesRef.current.clear();
+			destRef.current = null;
+			if (audioCtxRef.current) {
+				const ctx = audioCtxRef.current;
+				audioCtxRef.current = null;
+				ctx.close().catch(() => {});
+			}
 		}, []);
 
-		// Attach a track-`ended` handler. A MediaRecorder is bound to the
-		// stream it was constructed with and cannot transparently swap tracks,
-		// so if the OS / another consumer drops the mic device mid-recording we
-		// gracefully FINALIZE whatever we've captured (flush + stop) into a
-		// downloadable file — never losing the recording or leaving it cut and
-		// unsaved. The user can then restart cleanly.
+		// Attach a track-`ended` handler to the LOCAL mic. If the OS / another
+		// consumer drops the mic device mid-recording we gracefully FINALIZE
+		// whatever we've captured (flush + stop) into a downloadable file —
+		// never losing the recording or leaving it cut. Remote participant
+		// tracks dropping is non-fatal (handled by the mix poller).
 		const attachTrackEndGuard = useCallback((stream: MediaStream) => {
 			stream.getAudioTracks().forEach((track) => {
 				track.addEventListener("ended", () => {
@@ -171,12 +203,69 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 			intentionalStopRef.current = false;
 			recoveringRef.current = false;
 			try {
-				// Audio-only. No display media, no video. Independent mic.
-				const audioStream =
+				// 1. Open the local mic (our own independent stream).
+				const micStream =
 					await navigator.mediaDevices.getUserMedia(MIC_CONSTRAINTS);
+				micStreamRef.current = micStream;
 
-				streamRef.current = audioStream;
-				const recorder = new MediaRecorder(audioStream, { mimeType: mime });
+				// 2. Build a Web Audio mixing graph: local mic + every remote
+				//    participant's audio → one mixed destination stream. This is
+				//    what makes the recording capture ALL voices, not just ours.
+				const AudioCtx =
+					window.AudioContext ||
+					(window as unknown as { webkitAudioContext: typeof AudioContext })
+						.webkitAudioContext;
+				const ctx = new AudioCtx();
+				audioCtxRef.current = ctx;
+				const dest = ctx.createMediaStreamDestination();
+				destRef.current = dest;
+
+				// Local mic → mix.
+				ctx.createMediaStreamSource(micStream).connect(dest);
+
+				// Helper to wire a remote track into the mix exactly once.
+				const addRemote = (id: string, track: MediaStreamTrack) => {
+					if (sourceNodesRef.current.has(id)) return;
+					if (track.readyState !== "live") return;
+					try {
+						const node = ctx.createMediaStreamSource(
+							new MediaStream([track]),
+						);
+						node.connect(dest);
+						sourceNodesRef.current.set(id, node);
+					} catch {
+						/* noop */
+					}
+				};
+
+				// Wire all participants currently in the meeting.
+				audioRegistry.getTracks().forEach((track) => {
+					addRemote(track.id, track);
+				});
+
+				// Poll for late joiners / leavers every second and keep the mix
+				// in sync without rebuilding the graph.
+				mixPollRef.current = window.setInterval(() => {
+					const live = audioRegistry.getTracks();
+					const liveIds = new Set(live.map((tr) => tr.id));
+					live.forEach((tr) => addRemote(tr.id, tr));
+					// Drop sources whose track is gone.
+					sourceNodesRef.current.forEach((node, id) => {
+						if (!liveIds.has(id)) {
+							try {
+								node.disconnect();
+							} catch {
+								/* noop */
+							}
+							sourceNodesRef.current.delete(id);
+						}
+					});
+				}, 1000);
+
+				// 3. Record the MIXED stream, not the raw mic.
+				const recorder = new MediaRecorder(dest.stream, {
+					mimeType: mime,
+				});
 				chunksRef.current = [];
 
 				recorder.ondataavailable = (e) => {
@@ -209,9 +298,9 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 					setState("error");
 				};
 
-				// Resilient: if the mic device drops mid-recording, finalize
-				// the file gracefully instead of cutting / losing it.
-				attachTrackEndGuard(audioStream);
+				// Resilient: if the LOCAL mic device drops mid-recording,
+				// finalize the file gracefully instead of cutting / losing it.
+				attachTrackEndGuard(micStream);
 
 				// 1-second timeslices so the chunk list grows incrementally.
 				recorder.start(1000);

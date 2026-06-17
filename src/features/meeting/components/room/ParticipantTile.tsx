@@ -3,6 +3,7 @@ import { useParticipant } from "@videosdk.live/react-sdk";
 import { MicOff, Pin } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { audioRegistry } from "../../store/meetingStore";
 
 type ParticipantTileProps = {
 	participantId: string;
@@ -53,7 +54,9 @@ export function ParticipantTile({
 		}
 	}, [webcamStream, webcamOn]);
 
-	// Mic stream → audio element (skip local — would echo)
+	// Mic stream → audio element (skip local — would echo).
+	// Also register the remote mic track in the shared audio registry so the
+	// recorder can mix every participant's voice into one file.
 	useEffect(() => {
 		const audio = audioRef.current;
 		if (!audio) return;
@@ -62,10 +65,15 @@ export function ParticipantTile({
 			ms.addTrack(micStream.track);
 			audio.srcObject = ms;
 			audio.play().catch(() => {});
+			audioRegistry.register(participantId, micStream.track);
 		} else {
 			audio.srcObject = null;
+			if (!isLocal) audioRegistry.unregister(participantId);
 		}
-	}, [micStream, micOn, isLocal]);
+		return () => {
+			if (!isLocal) audioRegistry.unregister(participantId);
+		};
+	}, [micStream, micOn, isLocal, participantId]);
 
 	const initialsLabel = useMemo(
 		() => initials(displayName || "?"),

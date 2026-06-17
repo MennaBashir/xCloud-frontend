@@ -9,11 +9,26 @@ import type {
 	ChatModel,
 	Citation,
 	Conversation,
+	ModelFamily,
 } from "../types/chat";
 
 /** Heuristic: embedding models can't be used for chat. */
 export function isEmbeddingModel(modelId: string): boolean {
 	return /embed/i.test(modelId);
+}
+
+/** Detect the model family from a raw Ollama model id (for its logo). */
+export function detectModelFamily(id: string): ModelFamily {
+	const s = id.toLowerCase();
+	if (/embed|nomic/.test(s)) return "nomic";
+	if (/qwen/.test(s)) return "qwen";
+	if (/llama|llava/.test(s)) return "llama";
+	if (/gemma/.test(s)) return "gemma";
+	if (/mistral|mixtral/.test(s)) return "mistral";
+	if (/phi/.test(s)) return "phi";
+	if (/deepseek/.test(s)) return "deepseek";
+	if (/command|cohere/.test(s)) return "command";
+	return "generic";
 }
 
 /** Turn a raw Ollama model id into a friendly label, e.g. `qwen3:1.7b` → `Qwen3 1.7b`. */
@@ -28,6 +43,7 @@ export function modelToChatModel(id: string): ChatModel {
 		label: tag ? `${pretty} ${tag}` : pretty,
 		tagline: embedding ? "Embedding model" : tag || undefined,
 		isEmbedding: embedding,
+		family: detectModelFamily(id),
 	};
 }
 

@@ -1,44 +1,47 @@
 import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { usePubSub } from "@videosdk.live/react-sdk";
 import { Send, X } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
+import type { ChatMessage } from "../../hooks/useMeetingChat";
 
 type ChatPanelProps = {
 	onClose: () => void;
 	selfSenderId?: string;
+	/**
+	 * Live message list + sender, owned by MeetingRoom's always-mounted chat
+	 * subscription. The panel is purely presentational so closing/reopening it
+	 * never tears down the subscription or drops live messages.
+	 */
+	messages: ChatMessage[];
+	onSend: (text: string) => Promise<void>;
 };
 
-type SdkMessage = {
-	id: string;
-	message: string;
-	senderId: string;
-	senderName: string;
-	timestamp: string;
-};
-
-export function ChatPanel({ onClose, selfSenderId }: ChatPanelProps) {
+export function ChatPanel({
+	onClose,
+	selfSenderId,
+	messages,
+	onSend,
+}: ChatPanelProps) {
 	const { t } = useTranslation("meeting");
 	const [draft, setDraft] = useState("");
 	const endRef = useRef<HTMLDivElement>(null);
 
-	const { publish, messages } = usePubSub("CHAT") as {
-		publish: (msg: string, opts: { persist: boolean }) => Promise<void>;
-		messages: SdkMessage[];
-	};
-
+	// Auto-scroll to the newest message whenever the list grows.
+	const lastId = messages.length
+		? messages[messages.length - 1]?.id
+		: null;
 	useEffect(() => {
 		endRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-	}, [messages.length]);
+	}, [messages.length, lastId]);
 
 	const handleSend = async () => {
 		const text = draft.trim();
 		if (!text) return;
 		setDraft("");
 		try {
-			await publish(text, { persist: true });
+			await onSend(text);
 		} catch {
 			/* noop */
 		}
@@ -78,7 +81,7 @@ export function ChatPanel({ onClose, selfSenderId }: ChatPanelProps) {
 								<div
 									key={m.id}
 									className={cn(
-										"flex flex-col gap-1",
+										"flex flex-col gap-1 w-full min-w-0",
 										isSelf ? "items-end" : "items-start",
 									)}
 								>
@@ -87,8 +90,9 @@ export function ChatPanel({ onClose, selfSenderId }: ChatPanelProps) {
 									</span>
 									<div
 										className={cn(
-											"max-w-[80%] rounded-2xl px-3 py-2",
+											"max-w-[80%] min-w-0 rounded-2xl px-3 py-2",
 											"text-[0.875rem] leading-relaxed",
+											"whitespace-pre-wrap break-words [overflow-wrap:anywhere]",
 											isSelf
 												? "bg-white text-zinc-950 rounded-tr-sm"
 												: "bg-white/8 text-white rounded-tl-sm",
