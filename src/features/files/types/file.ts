@@ -2,7 +2,8 @@
  * File feature types.
  *
  * `FileItem` is the canonical shape. The name avoids colliding with the
- * global `File` (Web File API) used during uploads.
+ * global `File` (Web File API). Items map 1:1 onto entries returned by the
+ * backend `/files/browse` endpoint.
  */
 
 export type FileKind =
@@ -18,12 +19,13 @@ export type FileKind =
 	| "task"
 	| "other";
 
-export type FileCategory =
-	| "recent"
-	| "all"
-	| "recordings"
-	| "tasks"
-	| "notes";
+/**
+ * Each category maps to one fixed backend directory:
+ *   all         → ~/Xcloud/transcriptions
+ *   summarized  → ~/Xcloud/summarization
+ *   recordings  → ~/Xcloud/recordings
+ */
+export type FileCategory = "all" | "summarized" | "recordings";
 
 export type ViewMode = "list" | "grid";
 
@@ -38,29 +40,17 @@ export type FilesFilter = {
 	sortDirection: SortDirection;
 };
 
-export type FileOwner = {
-	id: string;
-	name: string;
-	email: string;
-	avatarUrl?: string;
-};
-
 export type FileItem = {
+	/** Absolute server path — the key used by view/download endpoints. */
 	id: string;
+	path: string;
 	name: string;
 	kind: FileKind;
+	/** MIME type as reported by the backend (may be null/unknown). */
+	mimeType: string | null;
 	/** Size in bytes. UI formats this with `formatBytes()`. */
 	sizeBytes: number;
-	/** ISO 8601. */
+	/** ISO 8601 — derived from the file's modification time. */
 	createdAt: string;
 	updatedAt: string;
-	owner: FileOwner;
-	/** Tag chips shown on cards (project, meeting reference, etc.). */
-	tags: string[];
-	/** Optional preview / download URL. */
-	url?: string;
-	/** True if file came from a meeting (recording, transcript). */
-	fromMeeting?: boolean;
-	/** Optional source meeting title. */
-	meetingTitle?: string;
 };

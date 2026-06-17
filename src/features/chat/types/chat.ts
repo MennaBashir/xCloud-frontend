@@ -28,6 +28,8 @@ export type Citation = {
 	detail: string;
 	/** External link for web sources. */
 	url?: string;
+	/** Absolute server path for file/rag sources — enables in-app preview. */
+	filePath?: string;
 };
 
 export type Conversation = {

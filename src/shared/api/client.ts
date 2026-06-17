@@ -15,6 +15,29 @@ const BASE_URL = (
 	"http://localhost:8000"
 ).replace(/\/+$/, "");
 
+/** Base URL of the xcloud backend, normalised (no trailing slash). */
+export function getApiBaseUrl(): string {
+	return BASE_URL;
+}
+
+/**
+ * Pulls the persisted auth token directly from localStorage.
+ *
+ * Reading storage avoids importing the auth store here (keeps this module
+ * dependency-free and side-effect-free). Used as a fallback when a caller
+ * does not pass an explicit token, so authenticated endpoints "just work".
+ */
+export function getStoredToken(): string | null {
+	try {
+		const raw = localStorage.getItem("sprintifai.auth");
+		if (!raw) return null;
+		const parsed = JSON.parse(raw) as { state?: { token?: string | null } };
+		return parsed.state?.token ?? null;
+	} catch {
+		return null;
+	}
+}
+
 export type HttpMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
 
 export type RequestOptions = {
@@ -96,8 +119,9 @@ export async function request<TResponse>(
 	if (body !== undefined) {
 		finalHeaders["Content-Type"] = "application/json";
 	}
-	if (token) {
-		finalHeaders.Authorization = `Bearer ${token}`;
+	const authToken = token === undefined ? getStoredToken() : token;
+	if (authToken) {
+		finalHeaders.Authorization = `Bearer ${authToken}`;
 	}
 
 	let response: Response;

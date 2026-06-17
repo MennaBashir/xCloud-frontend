@@ -41,6 +41,7 @@
 		"emptyDescription": "ابدأ محادثة. ستظهر هنا محادثاتك السابقة.",
 		"history": "السجلّ",
 		"loading": "أفكّر…",
+		"thinking": "أفكّر…",
 		"streaming": "أكتب…",
 		"errorMessage": "حدث خطأ أثناء توليد هذا الردّ.",
 		"deleted": "حُذفت المحادثة",
@@ -65,7 +66,15 @@
 		"regenerate": "إعادة التوليد",
 		"sources": "المصادر",
 		"openMeeting": "فتح الاجتماع",
-		"openFile": "فتح الملف"
+		"openFile": "فتح الملف",
+		"previewFile": "اضغط لمعاينة الملف",
+		"openInNewTab": "فتح في تبويب جديد",
+		"filesFound_zero": "لا ملفات",
+		"filesFound_one": "ملف واحد",
+		"filesFound_two": "ملفان",
+		"filesFound_few": "{{count}} ملفات",
+		"filesFound_many": "{{count}} ملفًا",
+		"filesFound_other": "{{count}} ملف"
 	},
 	"model": {
 		"label": "النموذج",

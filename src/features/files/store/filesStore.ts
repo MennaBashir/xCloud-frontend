@@ -2,7 +2,6 @@ import { create } from "zustand";
 
 import type {
 	FileCategory,
-	FileItem,
 	FileKind,
 	SortDirection,
 	SortField,
@@ -16,8 +15,6 @@ type FilesState = {
 	sortField: SortField;
 	sortDirection: SortDirection;
 	viewMode: ViewMode;
-	previewFile: FileItem | null;
-	uploadDialogOpen: boolean;
 };
 
 type FilesActions = {
@@ -27,23 +24,19 @@ type FilesActions = {
 	clearKinds: () => void;
 	setSort: (field: SortField, direction?: SortDirection) => void;
 	setViewMode: (mode: ViewMode) => void;
-	openPreview: (file: FileItem) => void;
-	closePreview: () => void;
-	openUpload: () => void;
-	closeUpload: () => void;
 };
 
 export const useFilesStore = create<FilesState & FilesActions>((set) => ({
-	category: "recent",
+	category: "all",
 	query: "",
 	kinds: [],
 	sortField: "updatedAt",
 	sortDirection: "desc",
 	viewMode: "list",
-	previewFile: null,
-	uploadDialogOpen: false,
 
-	setCategory: (category) => set({ category }),
+	// Switching tabs clears stale kind filters so results never vanish
+	// because of a filter that doesn't apply to the new directory.
+	setCategory: (category) => set({ category, kinds: [] }),
 	setQuery: (query) => set({ query }),
 	toggleKind: (kind) =>
 		set((s) => ({
@@ -64,8 +57,4 @@ export const useFilesStore = create<FilesState & FilesActions>((set) => ({
 					: "desc"),
 		})),
 	setViewMode: (viewMode) => set({ viewMode }),
-	openPreview: (previewFile) => set({ previewFile }),
-	closePreview: () => set({ previewFile: null }),
-	openUpload: () => set({ uploadDialogOpen: true }),
-	closeUpload: () => set({ uploadDialogOpen: false }),
 }));

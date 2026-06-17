@@ -7,12 +7,13 @@ import {
 import {
 	Check,
 	Copy,
+	ExternalLink,
+	Eye,
 	FileText,
-	FolderClosed,
 	Globe,
+	Loader2,
 	RefreshCcw,
 	Sparkles,
-	Video,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -20,7 +21,8 @@ import {
 	selectUser,
 	useAuthStore,
 } from "@/features/auth/store/authStore";
-import type { ChatMessage } from "../types/chat";
+import { useFilePreview } from "@/features/files/components/FilePreview";
+import type { ChatMessage, Citation } from "../types/chat";
 
 type MessageBubbleProps = {
 	message: ChatMessage;
@@ -46,6 +48,15 @@ export function MessageBubble({
 	const user = useAuthStore(selectUser);
 	const [copied, setCopied] = useState(false);
 	const isAssistant = message.role === "assistant";
+	const filePreview = useFilePreview();
+
+	// AI is "thinking" once the stream has started but no content has arrived.
+	const isThinking = isStreaming && !message.content;
+
+	// Split citations: previewable files (the files the AI found) vs web links.
+	const citations = message.citations ?? [];
+	const fileResults = citations.filter((c) => Boolean(c.filePath));
+	const webSources = citations.filter((c) => c.kind === "web" && c.url);
 
 	const handleCopy = async () => {
 		try {
@@ -89,7 +100,7 @@ export function MessageBubble({
 					<span className="font-medium text-foreground">
 						{isAssistant ? t("message.assistant") : t("message.you")}
 					</span>
-					{isStreaming ? (
+					{isStreaming && !isThinking ? (
 						<span className="inline-flex items-center gap-1.5 text-muted-foreground">
 							<span className="relative grid size-1.5 place-items-center">
 								<span className="absolute inset-0 rounded-full bg-ai/60 animate-ping" />
@@ -105,77 +116,83 @@ export function MessageBubble({
 					) : null}
 				</div>
 
-				<div
-					className={cn(
-						"text-[0.9375rem] leading-relaxed text-foreground",
-						"whitespace-pre-wrap break-words",
-					)}
-				>
-					{message.content || (isStreaming ? <BlinkingCursor /> : null)}
-					{isStreaming && message.content ? <BlinkingCursor /> : null}
-				</div>
+				{isThinking ? (
+					<ThinkingIndicator label={t("conversation.thinking")} />
+				) : (
+					<div
+						className={cn(
+							"text-[0.9375rem] leading-relaxed text-foreground",
+							"whitespace-pre-wrap break-words",
+						)}
+					>
+						{message.content}
+						{isStreaming && message.content ? <BlinkingCursor /> : null}
+					</div>
+				)}
 
-				{/* Citations */}
-				{isAssistant && message.citations && message.citations.length > 0 ? (
+				{/* File results the AI found */}
+				{isAssistant && fileResults.length > 0 ? (
+					<div className="mt-3 flex flex-col gap-2">
+						<div className="text-[0.625rem] uppercase tracking-[0.16em] text-muted-foreground">
+							{t("message.filesFound", { count: fileResults.length })}
+						</div>
+						<div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+							{fileResults.map((c) => (
+								<FileResultCard
+									key={c.id}
+									citation={c}
+									loading={filePreview.loadingPath === c.filePath}
+									onPreview={() =>
+										void filePreview.open(c.filePath as string)
+									}
+									onOpenTab={() =>
+										void filePreview.openInNewTab(
+											c.filePath as string,
+										)
+									}
+									previewLabel={t("message.previewFile")}
+									openTabLabel={t("message.openInNewTab")}
+								/>
+							))}
+						</div>
+					</div>
+				) : null}
+
+				{/* Web / other sources */}
+				{isAssistant && webSources.length > 0 ? (
 					<div className="mt-2 flex flex-col gap-1.5">
 						<div className="text-[0.625rem] uppercase tracking-[0.16em] text-muted-foreground">
 							{t("message.sources")}
 						</div>
 						<div className="flex items-center gap-1.5 flex-wrap">
-							{message.citations.map((c) => {
-								const Icon =
-									c.kind === "meeting"
-										? Video
-										: c.kind === "web"
-											? Globe
-											: c.kind === "rag"
-												? FileText
-												: FolderClosed;
-								const isLink = c.kind === "web" && c.url;
-								const content = (
-									<>
-										<Icon
-											className="size-3 text-muted-foreground"
-											strokeWidth={1.6}
-										/>
-										<span className="font-medium text-foreground truncate max-w-[14rem]">
-											{c.title}
+							{webSources.map((c) => (
+								<a
+									key={c.id}
+									href={c.url}
+									target="_blank"
+									rel="noopener noreferrer"
+									title={c.detail || c.url}
+									className={cn(
+										"inline-flex items-center gap-1.5",
+										"rounded-full border border-border bg-card",
+										"px-2.5 py-1 text-[0.75rem] cursor-pointer",
+										"hover:border-border-strong hover:bg-accent/40 transition-colors",
+									)}
+								>
+									<Globe
+										className="size-3 text-muted-foreground"
+										strokeWidth={1.6}
+									/>
+									<span className="font-medium text-foreground truncate max-w-[14rem]">
+										{c.title}
+									</span>
+									{c.detail ? (
+										<span className="text-muted-foreground truncate max-w-[10rem]">
+											· {c.detail}
 										</span>
-										{c.kind === "web" && c.detail ? (
-											<span className="text-muted-foreground truncate max-w-[10rem]">
-												· {c.detail}
-											</span>
-										) : null}
-									</>
-								);
-								const className = cn(
-									"inline-flex items-center gap-1.5",
-									"rounded-full border border-border bg-card",
-									"px-2.5 py-1 text-[0.75rem]",
-									"hover:border-border-strong hover:bg-accent/40 transition-colors",
-								);
-								return isLink ? (
-									<a
-										key={c.id}
-										href={c.url}
-										target="_blank"
-										rel="noopener noreferrer"
-										className={className}
-										title={c.detail || c.url}
-									>
-										{content}
-									</a>
-								) : (
-									<button
-										key={c.id}
-										type="button"
-										className={className}
-										title={c.detail}
-									>
-										{content}
-									</button>
-								);
-							})}
+									) : null}
+								</a>
+							))}
 						</div>
 					</div>
 				) : null}
@@ -213,6 +230,27 @@ export function MessageBubble({
 					</div>
 				) : null}
 			</div>
+
+			{filePreview.dialog}
+		</div>
+	);
+}
+
+function ThinkingIndicator({ label }: { label: string }) {
+	return (
+		<div
+			className="inline-flex items-center gap-2.5 text-[0.9375rem] text-muted-foreground"
+			role="status"
+			aria-live="polite"
+		>
+			<span className="flex items-center gap-1" aria-hidden="true">
+				<span className="size-1.5 rounded-full bg-ai animate-bounce [animation-delay:-0.3s]" />
+				<span className="size-1.5 rounded-full bg-ai animate-bounce [animation-delay:-0.15s]" />
+				<span className="size-1.5 rounded-full bg-ai animate-bounce" />
+			</span>
+			<span className="bg-gradient-to-r from-muted-foreground via-foreground to-muted-foreground bg-[length:200%_100%] bg-clip-text text-transparent animate-shimmer">
+				{label}
+			</span>
 		</div>
 	);
 }
@@ -223,5 +261,83 @@ function BlinkingCursor() {
 			aria-hidden="true"
 			className="inline-block w-[2px] h-[1.1em] align-[-2px] bg-foreground/70 animate-pulse ms-0.5"
 		/>
+	);
+}
+
+type FileResultCardProps = {
+	citation: Citation;
+	loading: boolean;
+	onPreview: () => void;
+	onOpenTab: () => void;
+	previewLabel: string;
+	openTabLabel: string;
+};
+
+function FileResultCard({
+	citation,
+	loading,
+	onPreview,
+	onOpenTab,
+	previewLabel,
+	openTabLabel,
+}: FileResultCardProps) {
+	return (
+		<div
+			className={cn(
+				"group/file flex items-center gap-3 min-w-0",
+				"rounded-[var(--radius-md)] border border-border bg-card",
+				"ps-3 pe-2 py-2",
+				"hover:border-border-strong hover:bg-accent/30 transition-colors",
+			)}
+		>
+			<button
+				type="button"
+				onClick={onPreview}
+				disabled={loading}
+				title={previewLabel}
+				className="flex items-center gap-2.5 min-w-0 flex-1 text-start cursor-pointer disabled:cursor-wait"
+			>
+				<span className="grid size-8 place-items-center rounded-[var(--radius-sm)] bg-ai-tint text-ai ring-1 ring-inset ring-ai/20 shrink-0">
+					{loading ? (
+						<Loader2 className="size-4 animate-spin" strokeWidth={1.7} />
+					) : (
+						<FileText className="size-4" strokeWidth={1.7} />
+					)}
+				</span>
+				<span className="min-w-0 flex-1">
+					<span className="block truncate text-[0.8125rem] font-medium text-foreground">
+						{citation.title}
+					</span>
+					{citation.detail ? (
+						<span className="block truncate text-[0.6875rem] text-muted-foreground">
+							{citation.detail}
+						</span>
+					) : null}
+				</span>
+			</button>
+
+			<div className="flex items-center gap-0.5 shrink-0">
+				<button
+					type="button"
+					onClick={onPreview}
+					disabled={loading}
+					aria-label={previewLabel}
+					title={previewLabel}
+					className="grid size-7 place-items-center rounded-[var(--radius-sm)] text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+				>
+					<Eye className="size-3.5" strokeWidth={1.6} />
+				</button>
+				<button
+					type="button"
+					onClick={onOpenTab}
+					disabled={loading}
+					aria-label={openTabLabel}
+					title={openTabLabel}
+					className="grid size-7 place-items-center rounded-[var(--radius-sm)] text-muted-foreground hover:bg-accent hover:text-foreground transition-colors"
+				>
+					<ExternalLink className="size-3.5 rtl-flip" strokeWidth={1.6} />
+				</button>
+			</div>
+		</div>
 	);
 }

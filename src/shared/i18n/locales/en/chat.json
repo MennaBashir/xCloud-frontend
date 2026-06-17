@@ -41,6 +41,7 @@
 		"emptyDescription": "Start a conversation. Your past chats will appear here.",
 		"history": "History",
 		"loading": "Thinking…",
+		"thinking": "Thinking…",
 		"streaming": "Generating…",
 		"errorMessage": "Something went wrong while generating that response.",
 		"deleted": "Conversation deleted",
@@ -65,7 +66,11 @@
 		"regenerate": "Regenerate",
 		"sources": "Sources",
 		"openMeeting": "Open meeting",
-		"openFile": "Open file"
+		"openFile": "Open file",
+		"previewFile": "Click to preview file",
+		"openInNewTab": "Open in new tab",
+		"filesFound_one": "{{count}} file found",
+		"filesFound_other": "{{count}} files found"
 	},
 	"model": {
 		"label": "Model",

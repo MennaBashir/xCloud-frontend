@@ -99,6 +99,7 @@ export function apiSourcesToCitations(
 			// For RAG, show the matched snippet on hover; keep web text inline.
 			detail: s.text ?? "",
 			url: s.url,
+			filePath: !isWeb ? (s.file_path ?? undefined) : undefined,
 		};
 	});
 }

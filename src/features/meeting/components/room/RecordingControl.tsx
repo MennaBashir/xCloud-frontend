@@ -8,9 +8,10 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { Circle, Download, Loader2, Square } from "lucide-react";
+import { CheckCircle2, Circle, Loader2, Save, Square } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { filesPost } from "@/shared/api";
 import { audioRegistry } from "../../store/meetingStore";
 
 type RecState =
@@ -88,11 +89,15 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 		const { t } = useTranslation("meeting");
 		const [state, setState] = useState<RecState>("idle");
 		const [elapsed, setElapsed] = useState(0);
-		const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 		const [downloadName, setDownloadName] = useState<string>(
 			"recording.webm",
 		);
+		const [saving, setSaving] = useState(false);
+		const [saved, setSaved] = useState(false);
 
+		// Hold the finalized recording so we can upload it to the backend
+		// (~/Xcloud/recordings) instead of triggering a browser download.
+		const blobRef = useRef<Blob | null>(null);
 		const recorderRef = useRef<MediaRecorder | null>(null);
 		const chunksRef = useRef<Blob[]>([]);
 		// Raw local mic stream (we own it, must stop its tracks).
@@ -176,7 +181,7 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 		useEffect(() => {
 			return () => {
 				cleanupStream();
-				if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+				blobRef.current = null;
 			};
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
@@ -282,11 +287,11 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 						toast.error(t("recording.error.permission"));
 						return;
 					}
-					const url = URL.createObjectURL(blob);
 					const ts = new Date().toISOString().replace(/[:.]/g, "-");
 					const ext = extensionFor(mime);
-					setDownloadUrl(url);
+					blobRef.current = blob;
 					setDownloadName(`sprintifai-meeting-${ts}.${ext}`);
+					setSaved(false);
 					setState("ready");
 					cleanupStream();
 					toast.success(t("recording.saved"));
@@ -345,25 +350,33 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 			[start, stop, getState],
 		);
 
-		const handleDownload = useCallback(() => {
-			if (!downloadUrl) return;
-			// Create a fresh anchor each time so repeat clicks work reliably.
-			const a = document.createElement("a");
-			a.href = downloadUrl;
-			a.download = downloadName;
-			a.rel = "noopener";
-			document.body.appendChild(a);
-			a.click();
-			document.body.removeChild(a);
-		}, [downloadUrl, downloadName]);
+		const handleSave = useCallback(async () => {
+			const blob = blobRef.current;
+			if (!blob || saving) return;
+			setSaving(true);
+			try {
+				const result = await filesPost.saveRecording(blob, downloadName);
+				setSaved(true);
+				toast.success(t("recording.savedToLibrary", { name: result.name }));
+			} catch (err) {
+				toast.error(
+					err instanceof Error
+						? err.message
+						: t("recording.error.saveFailed"),
+				);
+			} finally {
+				setSaving(false);
+			}
+		}, [downloadName, saving, t]);
 
 		const handleDismiss = useCallback(() => {
-			if (downloadUrl) URL.revokeObjectURL(downloadUrl);
-			setDownloadUrl(null);
+			blobRef.current = null;
 			setDownloadName("recording.webm");
+			setSaving(false);
+			setSaved(false);
 			setElapsed(0);
 			setState("idle");
-		}, [downloadUrl]);
+		}, []);
 
 		const isLoading = state === "starting" || state === "stopping";
 		const isRecording = state === "recording";
@@ -374,17 +387,28 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 				<div className="inline-flex items-center gap-2">
 					<button
 						type="button"
-						onClick={handleDownload}
+						onClick={() => void handleSave()}
+						disabled={saving || saved}
 						className={cn(
 							"inline-flex items-center gap-2 h-9 px-3.5 rounded-full",
 							"bg-white text-zinc-950 hover:bg-white/95",
 							"text-[0.8125rem] font-medium",
 							"transition-[transform,opacity] duration-[var(--duration-fast)] ease-[cubic-bezier(0.32,0.72,0,1)]",
-							"active:scale-[0.96]",
+							"active:scale-[0.96] disabled:opacity-70 disabled:cursor-not-allowed",
 						)}
 					>
-						<Download className="size-3.5" strokeWidth={1.8} />
-						<span>{t("recording.download")}</span>
+						{saving ? (
+							<Loader2 className="size-3.5 animate-spin" strokeWidth={2} />
+						) : saved ? (
+							<CheckCircle2 className="size-3.5" strokeWidth={1.8} />
+						) : (
+							<Save className="size-3.5" strokeWidth={1.8} />
+						)}
+						<span>
+							{saved
+								? t("recording.savedDone")
+								: t("recording.saveToLibrary")}
+						</span>
 					</button>
 					<button
 						type="button"

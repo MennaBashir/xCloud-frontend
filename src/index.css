@@ -730,11 +730,29 @@
 		}
 	}
 
+	/* Text shimmer — a gradient highlight sweeps across text. Used by the
+	 * chat "thinking" indicator. The element must use a clipped gradient
+	 * background (`bg-clip-text text-transparent`). */
+	@keyframes text-shimmer {
+		0% {
+			background-position: 200% 0;
+		}
+		100% {
+			background-position: -200% 0;
+		}
+	}
+	.animate-shimmer {
+		animation: text-shimmer 2.2s linear infinite;
+	}
+
 	@media (prefers-reduced-motion: reduce) {
 		.ambient-pulse {
 			animation: none;
 		}
 		.skeleton-shimmer::after {
+			animation: none;
+		}
+		.animate-shimmer {
 			animation: none;
 		}
 	}

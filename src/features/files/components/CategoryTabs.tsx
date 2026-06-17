@@ -1,12 +1,5 @@
 import { useTranslation } from "react-i18next";
-import {
-	ClipboardCheck,
-	Clock3,
-	Folder,
-	Mic,
-	NotebookPen,
-	type LucideIcon,
-} from "lucide-react";
+import { Folder, Mic, Sparkles, type LucideIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { useFilesStore } from "../store/filesStore";
@@ -19,11 +12,9 @@ type TabDef = {
 };
 
 const TABS: TabDef[] = [
-	{ key: "recent", icon: Clock3, labelKey: "categories.recent" },
 	{ key: "all", icon: Folder, labelKey: "categories.all" },
+	{ key: "summarized", icon: Sparkles, labelKey: "categories.summarized" },
 	{ key: "recordings", icon: Mic, labelKey: "categories.recordings" },
-	{ key: "tasks", icon: ClipboardCheck, labelKey: "categories.tasks" },
-	{ key: "notes", icon: NotebookPen, labelKey: "categories.notes" },
 ];
 
 export function CategoryTabs() {
