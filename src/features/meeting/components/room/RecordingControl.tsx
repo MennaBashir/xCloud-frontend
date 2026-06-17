@@ -38,6 +38,18 @@ const MIME_CANDIDATES = [
 	"audio/mp4",
 ];
 
+// Dedicated mic constraints. The recorder always opens its OWN mic so it is
+// fully independent of the in-meeting mic (VideoSDK) — toggling the meeting
+// mic, camera, or screen share never touches this stream.
+const MIC_CONSTRAINTS: MediaStreamConstraints = {
+	audio: {
+		echoCancellation: true,
+		noiseSuppression: true,
+		autoGainControl: true,
+	},
+	video: false,
+};
+
 function pickSupportedMime(): string | null {
 	if (typeof MediaRecorder === "undefined") return null;
 	for (const m of MIME_CANDIDATES) {
@@ -85,6 +97,11 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 		const streamRef = useRef<MediaStream | null>(null);
 		const tickRef = useRef<number | null>(null);
 		const mimeRef = useRef<string>("audio/webm");
+		// When true the user explicitly asked to stop; track-`ended` events
+		// must NOT try to recover the mic in that case.
+		const intentionalStopRef = useRef(false);
+		// Guards against a double `onstop` / recovery race.
+		const recoveringRef = useRef(false);
 
 		const cleanupStream = useCallback(() => {
 			if (streamRef.current) {
@@ -96,6 +113,32 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 				tickRef.current = null;
 			}
 		}, []);
+
+		// Attach a track-`ended` handler. A MediaRecorder is bound to the
+		// stream it was constructed with and cannot transparently swap tracks,
+		// so if the OS / another consumer drops the mic device mid-recording we
+		// gracefully FINALIZE whatever we've captured (flush + stop) into a
+		// downloadable file — never losing the recording or leaving it cut and
+		// unsaved. The user can then restart cleanly.
+		const attachTrackEndGuard = useCallback((stream: MediaStream) => {
+			stream.getAudioTracks().forEach((track) => {
+				track.addEventListener("ended", () => {
+					// User-initiated stop already handles finalization.
+					if (intentionalStopRef.current) return;
+					if (recoveringRef.current) return;
+					const rec = recorderRef.current;
+					if (!rec || rec.state !== "recording") return;
+					recoveringRef.current = true;
+					try {
+						rec.requestData();
+						rec.stop();
+						toast.message(t("recording.saved"));
+					} catch {
+						/* noop */
+					}
+				});
+			});
+		}, [t]);
 
 		// Component-level unmount cleanup.
 		useEffect(() => {
@@ -125,16 +168,12 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 			mimeRef.current = mime;
 
 			setState("starting");
+			intentionalStopRef.current = false;
+			recoveringRef.current = false;
 			try {
-				// Audio-only. No display media, no video.
-				const audioStream = await navigator.mediaDevices.getUserMedia({
-					audio: {
-						echoCancellation: true,
-						noiseSuppression: true,
-						autoGainControl: true,
-					},
-					video: false,
-				});
+				// Audio-only. No display media, no video. Independent mic.
+				const audioStream =
+					await navigator.mediaDevices.getUserMedia(MIC_CONSTRAINTS);
 
 				streamRef.current = audioStream;
 				const recorder = new MediaRecorder(audioStream, { mimeType: mime });
@@ -145,6 +184,7 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 				};
 
 				recorder.onstop = () => {
+					recoveringRef.current = false;
 					const blob = new Blob(chunksRef.current, { type: mime });
 					if (blob.size === 0) {
 						// Nothing was recorded — bail without offering a broken download.
@@ -169,18 +209,9 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 					setState("error");
 				};
 
-				// Auto-stop if the user revokes mic access mid-recording.
-				audioStream.getAudioTracks().forEach((track) => {
-					track.addEventListener("ended", () => {
-						if (recorder.state === "recording") {
-							try {
-								recorder.stop();
-							} catch {
-								/* noop */
-							}
-						}
-					});
-				});
+				// Resilient: if the mic device drops mid-recording, finalize
+				// the file gracefully instead of cutting / losing it.
+				attachTrackEndGuard(audioStream);
 
 				// 1-second timeslices so the chunk list grows incrementally.
 				recorder.start(1000);
@@ -198,13 +229,18 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 				setState("idle");
 				return false;
 			}
-		}, [cleanupStream, state, t]);
+		}, [attachTrackEndGuard, cleanupStream, state, t]);
 
 		const stop = useCallback(() => {
 			const recorder = recorderRef.current;
 			if (!recorder || recorder.state !== "recording") return;
+			// Mark intentional so the track-`ended` recovery handler stands down.
+			intentionalStopRef.current = true;
 			setState("stopping");
 			try {
+				// Flush the trailing (<1s) buffer before stopping so the tail of
+				// the recording isn't lost.
+				recorder.requestData();
 				recorder.stop();
 			} catch {
 				/* noop */

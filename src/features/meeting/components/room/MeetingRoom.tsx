@@ -140,7 +140,11 @@ export function MeetingRoom() {
 			<div className="flex-1 min-h-0 flex">
 				<main className="flex-1 min-w-0 p-3 sm:p-5 flex flex-col">
 					{presenterId ? (
-						<PresenterView presenterId={presenterId} otherIds={others} />
+						<PresenterView
+							presenterId={presenterId}
+							otherIds={others}
+							localId={localId}
+						/>
 					) : (
 						<ParticipantGrid
 							participantIds={ids}
