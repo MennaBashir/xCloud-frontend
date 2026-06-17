@@ -16,8 +16,15 @@ type PresenterViewProps = {
  */
 export function PresenterView({ presenterId, otherIds }: PresenterViewProps) {
 	const videoRef = useRef<HTMLVideoElement>(null);
-	const { displayName, screenShareStream, screenShareOn } =
-		useParticipant(presenterId);
+	const audioRef = useRef<HTMLAudioElement>(null);
+	const {
+		displayName,
+		screenShareStream,
+		screenShareOn,
+		micStream,
+		micOn,
+		isLocal,
+	} = useParticipant(presenterId);
 
 	useEffect(() => {
 		const video = videoRef.current;
@@ -31,6 +38,22 @@ export function PresenterView({ presenterId, otherIds }: PresenterViewProps) {
 			video.srcObject = null;
 		}
 	}, [screenShareStream, screenShareOn]);
+
+	// Presenter's mic stream → audio element (skip local — would echo).
+	// Without this, the presenter's tile (which played their mic) is
+	// unmounted while presenting, so other members stop hearing them.
+	useEffect(() => {
+		const audio = audioRef.current;
+		if (!audio) return;
+		if (!isLocal && micOn && micStream) {
+			const ms = new MediaStream();
+			ms.addTrack(micStream.track);
+			audio.srcObject = ms;
+			audio.play().catch(() => {});
+		} else {
+			audio.srcObject = null;
+		}
+	}, [micStream, micOn, isLocal]);
 
 	return (
 		<div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-3 sm:gap-4">
@@ -47,6 +70,8 @@ export function PresenterView({ presenterId, otherIds }: PresenterViewProps) {
 					playsInline
 					className="absolute inset-0 w-full h-full object-contain bg-black"
 				/>
+				{/* Presenter audio (remote only) */}
+				{!isLocal ? <audio ref={audioRef} autoPlay /> : null}
 				<div className="absolute bottom-3 start-3">
 					<span className="inline-flex items-center gap-2 h-7 px-3 rounded-full bg-black/55 backdrop-blur-sm ring-1 ring-inset ring-white/10 text-[0.6875rem] font-medium text-white">
 						<span
