@@ -1,6 +1,7 @@
 import type { JSX } from "react";
 
 import { cn } from "@/lib/utils";
+import { brand } from "@/shared/assets/brand";
 import type { ModelFamily } from "../types/chat";
 
 type ModelLogoProps = {
@@ -18,12 +19,15 @@ type ModelLogoProps = {
  * are kept where they are part of the identity.
  */
 
-// Qwen (Alibaba) — stylised "q" lockup.
+// Qwen (Alibaba) — official brand image asset.
 function QwenMark() {
 	return (
-		<svg viewBox="0 0 24 24" className="size-full" fill="#615CED">
-			<path d="M12.6 2.4a1.2 1.2 0 0 1 1.04.6l2.5 4.33h4.92a1.2 1.2 0 0 1 1.04 1.8l-2.46 4.27 2.46 4.27a1.2 1.2 0 0 1-1.04 1.8h-4.99l-2.46 4.26a1.2 1.2 0 0 1-2.08 0l-2.5-4.33H4.12a1.2 1.2 0 0 1-1.04-1.8l2.46-4.27-2.42-4.2a1.2 1.2 0 0 1 1.04-1.8h4.99l2.46-4.27a1.2 1.2 0 0 1 1.03-.63Zm.02 3.6-1.46 2.53h2.92L12.62 6Zm-3.54 3.93H6.16l1.46 2.53 1.46-2.53Zm9 0h-2.92l1.46 2.53 1.46-2.53ZM9.7 13.07l1.46 2.53h1.69l1.46-2.53H9.7Zm-1.62.4-1.46 2.53h2.92L8.08 13.47Zm7.84 0-1.46 2.53h2.92l-1.46-2.53Zm-3.3 4.13L12.62 18l-.62 1.07h1.24Z" />
-		</svg>
+		<img
+			src={brand.qwen}
+			alt=""
+			className="size-full object-contain"
+			draggable={false}
+		/>
 	);
 }
 
