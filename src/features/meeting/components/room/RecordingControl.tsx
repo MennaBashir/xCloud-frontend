@@ -98,6 +98,8 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 		// Hold the finalized recording so we can upload it to the backend
 		// (~/Xcloud/recordings) instead of triggering a browser download.
 		const blobRef = useRef<Blob | null>(null);
+		const autoSavedRef = useRef(false);
+		const autoSaveTimerRef = useRef<number | null>(null);
 		const recorderRef = useRef<MediaRecorder | null>(null);
 		const chunksRef = useRef<Blob[]>([]);
 		// Raw local mic stream (we own it, must stop its tracks).
@@ -182,6 +184,9 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 			return () => {
 				cleanupStream();
 				blobRef.current = null;
+				if (autoSaveTimerRef.current !== null) {
+					window.clearTimeout(autoSaveTimerRef.current);
+				}
 			};
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
@@ -207,6 +212,7 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 			setState("starting");
 			intentionalStopRef.current = false;
 			recoveringRef.current = false;
+			autoSavedRef.current = false;
 			try {
 				// 1. Open the local mic (our own independent stream).
 				const micStream =
@@ -289,12 +295,41 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 					}
 					const ts = new Date().toISOString().replace(/[:.]/g, "-");
 					const ext = extensionFor(mime);
+					const filename = `sprintifai-meeting-${ts}.${ext}`;
 					blobRef.current = blob;
-					setDownloadName(`sprintifai-meeting-${ts}.${ext}`);
+					setDownloadName(filename);
 					setSaved(false);
 					setState("ready");
 					cleanupStream();
 					toast.success(t("recording.saved"));
+					// Auto-save directly (not via useEffect) so it reliably fires even
+					// when the component unmounts shortly after (e.g. user leaves).
+					if (!autoSavedRef.current) {
+						autoSavedRef.current = true;
+						setSaving(true);
+						filesPost
+							.saveRecording(blob, filename)
+							.then((result) => {
+								setSaved(true);
+								toast.success(
+									t("recording.savedToLibrary", { name: result.name }),
+								);
+								autoSaveTimerRef.current = window.setTimeout(() => {
+									handleDismiss();
+								}, 2000);
+							})
+							.catch((err) => {
+								autoSavedRef.current = false;
+								toast.error(
+									err instanceof Error
+										? err.message
+										: t("recording.error.saveFailed"),
+								);
+							})
+							.finally(() => {
+								setSaving(false);
+							});
+					}
 				};
 
 				recorder.onerror = () => {
@@ -323,6 +358,7 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 				setState("idle");
 				return false;
 			}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, [attachTrackEndGuard, cleanupStream, state, t]);
 
 		const stop = useCallback(() => {
@@ -350,6 +386,16 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 			[start, stop, getState],
 		);
 
+		const handleDismiss = useCallback(() => {
+			blobRef.current = null;
+			autoSavedRef.current = false;
+			setDownloadName("recording.webm");
+			setSaving(false);
+			setSaved(false);
+			setElapsed(0);
+			setState("idle");
+		}, []);
+
 		const handleSave = useCallback(async () => {
 			const blob = blobRef.current;
 			if (!blob || saving) return;
@@ -358,7 +404,12 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 				const result = await filesPost.saveRecording(blob, downloadName);
 				setSaved(true);
 				toast.success(t("recording.savedToLibrary", { name: result.name }));
+				// Auto-dismiss after a brief moment.
+				autoSaveTimerRef.current = window.setTimeout(() => {
+					handleDismiss();
+				}, 2000);
 			} catch (err) {
+				autoSavedRef.current = false;
 				toast.error(
 					err instanceof Error
 						? err.message
@@ -367,16 +418,7 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 			} finally {
 				setSaving(false);
 			}
-		}, [downloadName, saving, t]);
-
-		const handleDismiss = useCallback(() => {
-			blobRef.current = null;
-			setDownloadName("recording.webm");
-			setSaving(false);
-			setSaved(false);
-			setElapsed(0);
-			setState("idle");
-		}, []);
+		}, [downloadName, handleDismiss, saving, t]);
 
 		const isLoading = state === "starting" || state === "stopping";
 		const isRecording = state === "recording";
