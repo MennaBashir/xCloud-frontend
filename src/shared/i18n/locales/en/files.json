@@ -9,8 +9,10 @@
 	},
 	"categories": {
 		"all": "All files",
+		"transcriptions": "Transcriptions",
 		"summarized": "Summarized files",
-		"recordings": "Recordings"
+		"recordings": "Recordings",
+		"notes": "Notes"
 	},
 	"kinds": {
 		"pdf": "PDF",

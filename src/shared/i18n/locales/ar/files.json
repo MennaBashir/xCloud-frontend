@@ -9,8 +9,10 @@
 	},
 	"categories": {
 		"all": "كل الملفات",
+		"transcriptions": "النصوص المفرغة",
 		"summarized": "الملفات الملخصة",
-		"recordings": "التسجيلات"
+		"recordings": "التسجيلات",
+		"notes": "الملاحظات"
 	},
 	"kinds": {
 		"pdf": "PDF",

@@ -1,4 +1,11 @@
 import { useTranslation } from "react-i18next";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
+import rehypeRaw from "rehype-raw";
+import rehypeSanitize from "rehype-sanitize";
+import rehypeSlug from "rehype-slug";
+import rehypeAutolinkHeadings from "rehype-autolink-headings";
+import rehypeHighlight from "rehype-highlight";
 
 import { cn } from "@/lib/utils";
 import {
@@ -139,6 +146,45 @@ function FileViewerBody({
           >
             <code>{text}</code>
           </pre>
+        </article>
+      );
+    }
+
+    // Markdown → render formatted so headings, lists, tables, code, and
+    // emphasis read like a real document instead of raw `#`/`**` syntax.
+    const lower = content.name.toLowerCase();
+    const isMarkdown =
+      lower.endsWith(".md") ||
+      lower.endsWith(".markdown") ||
+      mime.includes("markdown");
+
+    if (isMarkdown) {
+      return (
+        <article
+          className={cn(
+            "mx-auto w-full max-w-[88ch]",
+            "rounded-[var(--radius-lg)] border border-border bg-card",
+            "shadow-[0_1px_2px_oklch(0_0_0/0.04),0_24px_48px_-24px_oklch(0_0_0/0.18)]",
+            "px-5 sm:px-7 py-6 sm:py-8",
+          )}
+        >
+          <div className="markdown-body text-foreground/90 selection:bg-ai/20">
+            <ReactMarkdown
+              remarkPlugins={[remarkGfm]}
+              rehypePlugins={[
+                rehypeRaw,
+                rehypeSanitize,
+                rehypeSlug,
+                [
+                  rehypeAutolinkHeadings,
+                  { behavior: "wrap", properties: { className: "heading-anchor" } },
+                ],
+                rehypeHighlight,
+              ]}
+            >
+              {text}
+            </ReactMarkdown>
+          </div>
         </article>
       );
     }

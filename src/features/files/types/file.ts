@@ -20,12 +20,19 @@ export type FileKind =
 	| "other";
 
 /**
- * Each category maps to one fixed backend directory:
- *   all         → ~/Xcloud/transcriptions
- *   summarized  → ~/Xcloud/summarization
- *   recordings  → ~/Xcloud/recordings
+ * Each category maps to a fixed backend directory:
+ *   all            → merges every directory below
+ *   transcriptions → ~/Xcloud/transcriptions
+ *   summarized     → ~/Xcloud/summarization
+ *   recordings     → ~/Xcloud/recordings
+ *   notes          → ~/Xcloud/notes
  */
-export type FileCategory = "all" | "summarized" | "recordings";
+export type FileCategory =
+	| "all"
+	| "transcriptions"
+	| "summarized"
+	| "recordings"
+	| "notes";
 
 export type ViewMode = "list" | "grid";
 

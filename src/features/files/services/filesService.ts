@@ -16,11 +16,44 @@ import type {
 	FilesFilter,
 } from "../types/file";
 
-/** Fixed directories, one per dashboard tab. */
+/**
+ * Concrete directories that hold real files. The `all` tab is a virtual
+ * category that merges every directory below.
+ */
+const DIR_TRANSCRIPTIONS = "~/Xcloud/transcriptions";
+const DIR_SUMMARIZATION = "~/Xcloud/summarization";
+const DIR_RECORDINGS = "~/Xcloud/recordings";
+const DIR_NOTES = "~/Xcloud/notes";
+
+/** Maps each non-virtual category to its single backing directory. */
+const CATEGORY_DIR: Record<
+	Exclude<FileCategory, "all">,
+	string
+> = {
+	transcriptions: DIR_TRANSCRIPTIONS,
+	summarized: DIR_SUMMARIZATION,
+	recordings: DIR_RECORDINGS,
+	notes: DIR_NOTES,
+};
+
+/**
+ * Directories the `all` tab merges, paired with the category used for
+ * per-entry kind inference (so recordings still resolve to "recording").
+ */
+const ALL_SOURCES: Array<{
+	dir: string;
+	category: Exclude<FileCategory, "all">;
+}> = [
+	{ dir: DIR_TRANSCRIPTIONS, category: "transcriptions" },
+	{ dir: DIR_SUMMARIZATION, category: "summarized" },
+	{ dir: DIR_RECORDINGS, category: "recordings" },
+	{ dir: DIR_NOTES, category: "notes" },
+];
+
+/** Backwards-compatible lookup of a category's primary directory. */
 export const CATEGORY_DIRS: Record<FileCategory, string> = {
-	all: "~/Xcloud/transcriptions",
-	summarized: "~/Xcloud/summarization",
-	recordings: "~/Xcloud/recordings",
+	all: DIR_TRANSCRIPTIONS,
+	...CATEGORY_DIR,
 };
 
 /** Infer a UI kind from a filename extension. */
@@ -114,13 +147,23 @@ export type ListFilesResult = {
 	availableKinds: FileKind[];
 };
 
-export async function listFiles(
-	filter: FilesFilter,
-): Promise<ListFilesResult> {
-	const dir = CATEGORY_DIRS[filter.category];
-	const result = await filesGet.browseDirectory(dir);
+/**
+ * Browse a single directory and map its files into `FileItem`s. A missing
+ * directory (e.g. the user hasn't created any notes yet) resolves to an empty
+ * list rather than throwing, so the `all` merge stays resilient.
+ */
+async function listDirectory(
+	dir: string,
+	category: Exclude<FileCategory, "all">,
+): Promise<FileItem[]> {
+	let result: filesGet.BrowseResult;
+	try {
+		result = await filesGet.browseDirectory(dir);
+	} catch {
+		return [];
+	}
 
-	const items: FileItem[] = result.entries
+	return result.entries
 		.filter((e) => !e.is_directory)
 		.map((e) => {
 			const name = stripTrailingSlash(e.name);
@@ -129,13 +172,33 @@ export async function listFiles(
 				id: path,
 				path,
 				name,
-				kind: kindForEntry(name, e.mime_type, filter.category),
+				kind: kindForEntry(name, e.mime_type, category),
 				mimeType: e.mime_type ?? null,
 				sizeBytes: e.size ?? 0,
 				createdAt: e.modified,
 				updatedAt: e.modified,
 			};
 		});
+}
+
+export async function listFiles(
+	filter: FilesFilter,
+): Promise<ListFilesResult> {
+	let items: FileItem[];
+
+	if (filter.category === "all") {
+		const groups = await Promise.all(
+			ALL_SOURCES.map((src) => listDirectory(src.dir, src.category)),
+		);
+		// Deduplicate by absolute path in case directories overlap.
+		const byPath = new Map<string, FileItem>();
+		for (const group of groups) {
+			for (const item of group) byPath.set(item.path, item);
+		}
+		items = Array.from(byPath.values());
+	} else {
+		items = await listDirectory(CATEGORY_DIR[filter.category], filter.category);
+	}
 
 	const availableKinds = Array.from(new Set(items.map((f) => f.kind)));
 
