@@ -7,8 +7,12 @@ import {
 	Languages,
 	Lightbulb,
 	type LucideIcon,
+	Mic,
+	NotebookPen,
 	Scale,
+	Search,
 	Sparkles,
+	Video,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -24,6 +28,11 @@ const CATEGORY_ICON: Record<string, LucideIcon> = {
 	analysis: Scale,
 	creative: Lightbulb,
 	language: Languages,
+	// xcloud-specific categories
+	meeting: Video,
+	notes: NotebookPen,
+	transcript: Mic,
+	research: Search,
 };
 
 const TONES: Tone[] = ["ai", "emerald", "indigo", "amber"];

@@ -36,7 +36,11 @@ export default function ChatPage() {
 	const { sendMessage, stop } = useChat();
 	const { startNew } = useConversations();
 	const { available: ragAvailable } = useRag();
-	const [seedValue] = useState<string>("");
+	// `seedValue` is the prompt text injected into the input when a
+	// suggestion card is clicked. `seedNonce` lets the same suggestion be
+	// re-clicked and still re-seed the textarea (effect deps change).
+	const [seedValue, setSeedValue] = useState<string>("");
+	const [seedNonce, setSeedNonce] = useState(0);
 	const [useRagFlag, setUseRagFlag] = useState(false);
 	const [sidebarOpen, setSidebarOpen] = useState(true);
 	const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
@@ -55,8 +59,11 @@ export default function ChatPage() {
 		void sendMessage(value, { useRag: ragAvailable && useRagFlag });
 	};
 
+	// Suggestion cards (ChatWelcome) populate the input instead of sending
+	// directly, so the user can review or edit before submitting.
 	const handleSuggestion = (prompt: string) => {
-		void sendMessage(prompt, { useRag: ragAvailable && useRagFlag });
+		setSeedValue(prompt);
+		setSeedNonce((n) => n + 1);
 	};
 
 	const hasMessages = messages.length > 0;
@@ -173,6 +180,7 @@ export default function ChatPage() {
 							isStreaming={isStreaming}
 							hasMessages={hasMessages}
 							seedValue={seedValue}
+							seedNonce={seedNonce}
 							leftSlot={<ModelPicker />}
 							rightSlot={
 								ragAvailable ? (
