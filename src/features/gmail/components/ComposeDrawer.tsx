@@ -18,7 +18,7 @@ import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 import { useLanguage } from "@/shared/i18n/LanguageProvider";
 
-import { sendDraft } from "../mock/mockGmailService";
+import { sendDraft } from "../services/gmailService";
 import { useGmailStore } from "../store/gmailStore";
 
 type ComposeDrawerProps = {

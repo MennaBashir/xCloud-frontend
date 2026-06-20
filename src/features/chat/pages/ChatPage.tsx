@@ -19,6 +19,7 @@ import {
 import { useChat } from "../hooks/useChat";
 import { useConversations } from "../hooks/useConversations";
 import { useRag } from "../hooks/useRag";
+import { useChatHandoffStore } from "../store/chatHandoffStore";
 
 import { ConversationSidebar } from "../components/ConversationSidebar";
 import { ChatWelcome } from "../components/ChatWelcome";
@@ -58,6 +59,21 @@ export default function ChatPage() {
 	const handleSend = (value: string) => {
 		void sendMessage(value, { useRag: ragAvailable && useRagFlag });
 	};
+
+	// Consume a cross-feature handoff (e.g. "Summarize" from the email inbox):
+	// open a fresh conversation and auto-send the prompt once on mount.
+	const consumeHandoff = useChatHandoffStore((s) => s.consumePending);
+	useEffect(() => {
+		const handoff = consumeHandoff();
+		if (!handoff) return;
+		if (handoff.newConversation) {
+			startNew();
+		}
+		void sendMessage(handoff.prompt, {
+			useRag: ragAvailable && useRagFlag,
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	// Suggestion cards (ChatWelcome) populate the input instead of sending
 	// directly, so the user can review or edit before submitting.

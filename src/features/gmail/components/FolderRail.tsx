@@ -6,7 +6,6 @@ import {
 	type LucideIcon,
 	Send,
 	Star,
-	Tag,
 	Trash2,
 } from "lucide-react";
 
@@ -14,8 +13,6 @@ import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AnimatedNumber } from "@/shared/components/AnimatedNumber";
 import { useGmailStore } from "../store/gmailStore";
-import { LABELS } from "../mock/mockGmailService";
-import { labelToneClass } from "./mail-meta";
 import type { Folder } from "../types/mail";
 
 type FolderEntry = {
@@ -122,42 +119,6 @@ export function FolderRail({ counts }: FolderRailProps) {
 						);
 					})}
 				</nav>
-
-				<div className="mt-5 mb-2 px-3 text-[0.6875rem] font-medium uppercase tracking-[0.16em] text-muted-foreground">
-					{t("labels.title")}
-				</div>
-				<div className="flex flex-col gap-0.5">
-					{LABELS.map((label) => {
-						const active = labelId === label.id;
-						return (
-							<button
-								key={label.id}
-								type="button"
-								onClick={() => setLabelId(active ? undefined : label.id)}
-								className={cn(
-									"inline-flex items-center gap-2.5",
-									"h-9 px-3 rounded-[var(--radius-md)]",
-									"text-[0.875rem]",
-									"transition-colors duration-[var(--duration-fast)]",
-									active
-										? "bg-accent text-foreground font-medium"
-										: "text-muted-foreground hover:bg-accent/60 hover:text-foreground",
-								)}
-							>
-								<span
-									aria-hidden="true"
-									className={cn(
-										"grid size-4 place-items-center rounded-[var(--radius-xs)] ring-1 ring-inset shrink-0",
-										labelToneClass(label.tone),
-									)}
-								>
-									<Tag className="size-2.5" strokeWidth={2} />
-								</span>
-								<span className="truncate">{label.name}</span>
-							</button>
-						);
-					})}
-				</div>
 			</div>
 		</aside>
 	);

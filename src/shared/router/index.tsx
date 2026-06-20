@@ -14,8 +14,6 @@ import ChatPage from "@/features/chat/pages/ChatPage";
 import RagPage from "@/features/rag/pages/RagPage";
 
 import LoginPage from "@/features/auth/pages/LoginPage";
-import SignupPage from "@/features/auth/pages/SignupPage";
-import ForgotPasswordPage from "@/features/auth/pages/ForgotPasswordPage";
 
 import FilesPage from "@/features/files/pages/FilesPage";
 import NotificationsPage from "@/features/notifications/pages/NotificationsPage";
@@ -34,12 +32,16 @@ export const router = createBrowserRouter(
 				<Route path="/" element={<LandingPage />} />
 			</Route>
 
-			{/* Auth routes — bounce away if already signed in */}
+			{/* Auth — single Google-only entry point. Sign in and sign up are
+			    the same action, so /signup and /forgot-password alias to /login. */}
 			<Route element={<RedirectIfAuthenticated />}>
 				<Route path="/login" element={<LoginPage />} />
-				<Route path="/signup" element={<SignupPage />} />
-				<Route path="/forgot-password" element={<ForgotPasswordPage />} />
 			</Route>
+			<Route path="/signup" element={<Navigate to="/login" replace />} />
+			<Route
+				path="/forgot-password"
+				element={<Navigate to="/login" replace />}
+			/>
 
 			{/* Protected app shell */}
 			<Route element={<ProtectedRoute />}>

@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
 import {
 	Archive,
 	ArrowLeft,
-	CornerUpLeft,
-	Forward,
+	Code2,
 	MailOpen,
 	Sparkles,
 	Star,
 	Trash2,
+	Type,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -27,13 +28,15 @@ import {
 	archiveThread,
 	deleteThread,
 	markRead,
-	summarizeThread,
 	toggleStar,
-} from "../mock/mockGmailService";
+} from "../services/gmailService";
 import { useGmailStore } from "../store/gmailStore";
 import { useThread } from "../hooks/useThread";
+import { EmailBody, type EmailBodyMode } from "./EmailBody";
 import { fullTime, initials, labelToneClass } from "./mail-meta";
-import { LABELS } from "../mock/mockGmailService";
+import { LABELS } from "../services/gmailService";
+import { useChatHandoffStore } from "@/features/chat/store/chatHandoffStore";
+import { buildEmailSummaryPrompt } from "../lib/summaryPrompt";
 
 type ThreadViewProps = {
 	onRefresh: () => void;
@@ -43,10 +46,13 @@ type ThreadViewProps = {
 export function ThreadView({ onRefresh, onBack }: ThreadViewProps) {
 	const { t } = useTranslation("gmail");
 	const { language } = useLanguage();
+	const navigate = useNavigate();
+	const setHandoff = useChatHandoffStore((s) => s.setPending);
 	const threadId = useGmailStore((s) => s.selectedThreadId);
 	const selectThread = useGmailStore((s) => s.selectThread);
 	const { thread, loading, reload } = useThread(threadId);
 	const [summarizing, setSummarizing] = useState(false);
+	const [viewMode, setViewMode] = useState<EmailBodyMode>("rich");
 
 	// Auto-mark as read when a thread is opened
 	useEffect(() => {
@@ -99,15 +105,21 @@ export function ThreadView({ onRefresh, onBack }: ThreadViewProps) {
 		);
 	}
 
-	const handleSummarize = async () => {
+	const handleSummarize = () => {
+		// Hand the email content off to the Chat AI tab, which opens a fresh
+		// conversation and auto-sends the summary request.
 		setSummarizing(true);
-		try {
-			await summarizeThread(thread.id);
-			toast.success(t("thread.summary.label"));
-			reload();
-		} finally {
-			setSummarizing(false);
-		}
+		setHandoff({
+			prompt: buildEmailSummaryPrompt(thread),
+			title: thread.subject,
+			newConversation: true,
+		});
+		toast.success(
+			t("thread.summary.sentToChat", {
+				defaultValue: "Summarizing in Chat AI…",
+			}),
+		);
+		navigate("/app/chat");
 	};
 
 	const handleToggleStar = async () => {
@@ -176,6 +188,48 @@ export function ThreadView({ onRefresh, onBack }: ThreadViewProps) {
 					</div>
 				</div>
 				<div className="flex items-center gap-1 shrink-0">
+					<div
+						role="group"
+						aria-label={t("thread.view.label", { defaultValue: "View mode" })}
+						className="me-1 inline-flex items-center rounded-[var(--radius-md)] border border-border p-0.5"
+					>
+						<button
+							type="button"
+							onClick={() => setViewMode("rich")}
+							aria-pressed={viewMode === "rich"}
+							title={t("thread.view.rich", { defaultValue: "Rich" })}
+							className={cn(
+								"inline-flex items-center gap-1.5 h-7 px-2 rounded-[var(--radius-sm)]",
+								"text-[0.75rem] font-medium transition-colors duration-[var(--duration-fast)]",
+								viewMode === "rich"
+									? "bg-accent text-foreground"
+									: "text-muted-foreground hover:text-foreground",
+							)}
+						>
+							<Code2 className="size-3.5" strokeWidth={1.6} />
+							<span className="hidden sm:inline">
+								{t("thread.view.rich", { defaultValue: "Rich" })}
+							</span>
+						</button>
+						<button
+							type="button"
+							onClick={() => setViewMode("plain")}
+							aria-pressed={viewMode === "plain"}
+							title={t("thread.view.plain", { defaultValue: "Plain" })}
+							className={cn(
+								"inline-flex items-center gap-1.5 h-7 px-2 rounded-[var(--radius-sm)]",
+								"text-[0.75rem] font-medium transition-colors duration-[var(--duration-fast)]",
+								viewMode === "plain"
+									? "bg-accent text-foreground"
+									: "text-muted-foreground hover:text-foreground",
+							)}
+						>
+							<Type className="size-3.5" strokeWidth={1.6} />
+							<span className="hidden sm:inline">
+								{t("thread.view.plain", { defaultValue: "Plain" })}
+							</span>
+						</button>
+					</div>
 					<Button
 						type="button"
 						size="icon-sm"
@@ -240,30 +294,32 @@ export function ThreadView({ onRefresh, onBack }: ThreadViewProps) {
 									variant="ai"
 									onClick={handleSummarize}
 									disabled={summarizing}
-									className="gap-1.5"
+									className="gap-1.5 text-white [&_svg]:text-white "
 								>
 									{summarizing ? (
 										<>
 											<Spinner className="size-3.5" />
-											<span>{t("thread.summary.generating")}</span>
+											<span>{t("thread.summary.opening", { defaultValue: "Opening Chat…" })}</span>
 										</>
 									) : (
 										<>
 											<Sparkles className="size-3" strokeWidth={1.8} />
-											<span>{t("thread.summary.generate")}</span>
+											<span className="text-white">{t("thread.summary.generate")}</span>
 										</>
 									)}
 								</Button>
 							) : null}
 						</div>
 						{thread.aiSummary ? (
-							<p className="mt-2 text-[0.875rem] leading-relaxed text-foreground">
+							<p className="mt-2 text-[0.875rem] leading-relaxed text-white">
 								{thread.aiSummary}
 							</p>
 						) : (
-							<p className="mt-2 text-[0.8125rem] text-muted-foreground">
-								Run an AI summary to see decisions, owners, and next steps from
-								this thread.
+							<p className="mt-2 text-[0.8125rem] text-white">
+								{t("thread.summary.chatHint", {
+									defaultValue:
+										"Summarize this thread in Chat AI to get decisions, owners, and next steps.",
+								})}
 							</p>
 						)}
 					</div>
@@ -297,26 +353,13 @@ export function ThreadView({ onRefresh, onBack }: ThreadViewProps) {
 								</div>
 							</header>
 							<div className="px-4 py-4">
-								<p className="text-[0.9375rem] leading-relaxed text-foreground whitespace-pre-wrap">
-									{m.body}
-								</p>
+								<EmailBody body={m.body} mode={viewMode} />
 							</div>
 						</article>
 					))}
 				</div>
 			</div>
 
-			{/* Footer reply bar */}
-			<div className="flex-none border-t border-border bg-surface-muted/30 px-5 py-3 flex items-center gap-2">
-				<Button size="sm" variant="outline" className="gap-2">
-					<CornerUpLeft className="size-3.5 rtl-flip" strokeWidth={1.6} />
-					<span>{t("actions.reply")}</span>
-				</Button>
-				<Button size="sm" variant="ghost" className="gap-2">
-					<Forward className="size-3.5 rtl-flip" strokeWidth={1.6} />
-					<span>{t("actions.forward")}</span>
-				</Button>
-			</div>
 		</div>
 	);
 }
