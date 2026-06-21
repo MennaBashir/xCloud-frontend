@@ -3,7 +3,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, Plus } from "lucide-react";
 
 import {
 	Sheet,
@@ -19,6 +19,8 @@ import { useLanguage } from "@/shared/i18n/LanguageProvider";
 import { EventForm } from "@/features/calendar/components";
 import { useCalendarController } from "../hooks/useCalendarController";
 import "../styles/fullcalendar.css";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 const VIEW_TYPES: Array<{ labelKey: string; value: string }> = [
 	{ labelKey: "views.month", value: "dayGridMonth" },
@@ -36,7 +38,9 @@ const CalendarView = () => {
 		isModalOpen,
 		selectedEvent,
 		selectedDateRange,
+		isLoading,
 		events,
+		error,
 		setIsModalOpen,
 		handleViewChange,
 		handlePrev,
@@ -51,7 +55,30 @@ const CalendarView = () => {
 		handleEventDelete,
 	} = useCalendarController();
 
-	return (
+	const [hasLadedOnce, setHasLadedOnce] = useState(false);
+	useEffect(()=>{
+		if (!isLoading) setHasLadedOnce(true);
+	},[isLoading])
+
+	useEffect(() => {
+        if (!hasLadedOnce && error) {
+            toast.error(t("loadingError"));
+        }
+    }, [error]);
+
+	if (isLoading && !hasLadedOnce) {
+        return (
+            <div className="flex h-[670px] w-full items-center justify-center rounded-xl bg-gray-900/50">
+                <div className="flex flex-col items-center gap-4">
+                    <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
+					<p className="text-gray-400">{t("loading")}</p>
+                </div>
+            </div>
+        );
+    }
+
+	else {	
+		return (
 		<div className="flex-1 min-w-0 flex flex-col gap-5">
 			{/* Toolbar */}
 			<div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
@@ -215,6 +242,7 @@ const CalendarView = () => {
 			</Sheet>
 		</div>
 	);
+    }
 };
 
 export default CalendarView;

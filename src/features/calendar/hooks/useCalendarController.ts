@@ -15,7 +15,7 @@ export const useCalendarController = () => {
 	// --- STATE ---
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
-	const { events, addEvent, updateEvent, deleteEvent, resizeEvent, dropEvent } =
+	const { events ,error ,isLoading ,isFetching, addEvent, updateEvent, deleteEvent, resizeEvent, dropEvent } =
 		useCalendarEvents();
 
 	const calendarRef = useRef<FullCalendar | null>(null);
@@ -98,10 +98,11 @@ export const useCalendarController = () => {
 	};
 
 	const handleEventDelete = () => {
-		deleteEvent(selectedEvent?.id || "");
+		if(!selectedEvent) return;
+		deleteEvent(selectedEvent.id);
 		setIsModalOpen(false);
 	};
-	return {
+	return {	
 		handleViewChange,
 		handleDateSelect,
 		handleEventClick,
@@ -122,6 +123,9 @@ export const useCalendarController = () => {
 		dateTitle,
 		selectedDateRange,
 		isModalOpen,
+		isFetching,
+		isLoading,
 		events,
+		error,
 	};
 };
