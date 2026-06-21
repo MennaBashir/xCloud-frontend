@@ -13,7 +13,7 @@ import { useLanguage } from "@/shared/i18n/LanguageProvider";
 
 import { useGmailStore } from "../store/gmailStore";
 import { initials, labelToneClass, shortTime } from "./mail-meta";
-import { LABELS } from "../mock/mockGmailService";
+import { LABELS } from "../services/gmailService";
 import type { Thread } from "../types/mail";
 
 type ThreadListProps = {

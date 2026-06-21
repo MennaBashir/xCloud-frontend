@@ -11,6 +11,7 @@ export function useAuth() {
 	const error = useAuthStore((s) => s.error);
 	const login = useAuthStore((s) => s.login);
 	const signup = useAuthStore((s) => s.signup);
+	const loginWithGoogle = useAuthStore((s) => s.loginWithGoogle);
 	const logout = useAuthStore((s) => s.logout);
 	const requestPasswordReset = useAuthStore((s) => s.requestPasswordReset);
 	const clearError = useAuthStore((s) => s.clearError);
@@ -22,6 +23,7 @@ export function useAuth() {
 		error,
 		login,
 		signup,
+		loginWithGoogle,
 		logout,
 		requestPasswordReset,
 		clearError,

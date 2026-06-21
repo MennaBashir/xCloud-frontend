@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import {
 	getFolderCounts,
 	listThreads,
-} from "../mock/mockGmailService";
+} from "../services/gmailService";
 import { useGmailStore } from "../store/gmailStore";
 import type { Folder, Thread } from "../types/mail";
 

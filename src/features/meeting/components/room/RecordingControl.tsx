@@ -8,9 +8,11 @@ import {
 } from "react";
 import { useTranslation } from "react-i18next";
 import { toast } from "sonner";
-import { Circle, Download, Loader2, Square } from "lucide-react";
+import { CheckCircle2, Circle, Loader2, Save, Square } from "lucide-react";
 
 import { cn } from "@/lib/utils";
+import { filesPost } from "@/shared/api";
+import { audioRegistry } from "../../store/meetingStore";
 
 type RecState =
 	| "idle"
@@ -37,6 +39,18 @@ const MIME_CANDIDATES = [
 	"audio/ogg;codecs=opus",
 	"audio/mp4",
 ];
+
+// Dedicated mic constraints. The recorder always opens its OWN mic so it is
+// fully independent of the in-meeting mic (VideoSDK) — toggling the meeting
+// mic, camera, or screen share never touches this stream.
+const MIC_CONSTRAINTS: MediaStreamConstraints = {
+	audio: {
+		echoCancellation: true,
+		noiseSuppression: true,
+		autoGainControl: true,
+	},
+	video: false,
+};
 
 function pickSupportedMime(): string | null {
 	if (typeof MediaRecorder === "undefined") return null;
@@ -75,33 +89,104 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 		const { t } = useTranslation("meeting");
 		const [state, setState] = useState<RecState>("idle");
 		const [elapsed, setElapsed] = useState(0);
-		const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
 		const [downloadName, setDownloadName] = useState<string>(
 			"recording.webm",
 		);
+		const [saving, setSaving] = useState(false);
+		const [saved, setSaved] = useState(false);
 
+		// Hold the finalized recording so we can upload it to the backend
+		// (~/Xcloud/recordings) instead of triggering a browser download.
+		const blobRef = useRef<Blob | null>(null);
+		const autoSavedRef = useRef(false);
+		const autoSaveTimerRef = useRef<number | null>(null);
 		const recorderRef = useRef<MediaRecorder | null>(null);
 		const chunksRef = useRef<Blob[]>([]);
-		const streamRef = useRef<MediaStream | null>(null);
+		// Raw local mic stream (we own it, must stop its tracks).
+		const micStreamRef = useRef<MediaStream | null>(null);
 		const tickRef = useRef<number | null>(null);
 		const mimeRef = useRef<string>("audio/webm");
+		// When true the user explicitly asked to stop; track-`ended` events
+		// must NOT try to recover the mic in that case.
+		const intentionalStopRef = useRef(false);
+		// Guards against a double `onstop` / recovery race.
+		const recoveringRef = useRef(false);
+
+		// Web Audio mixing graph — combines the local mic with every remote
+		// participant's audio into a single recorded stream.
+		const audioCtxRef = useRef<AudioContext | null>(null);
+		const destRef = useRef<MediaStreamAudioDestinationNode | null>(null);
+		// Source nodes keyed by participant id so we can add late joiners and
+		// drop leavers without rebuilding the whole graph.
+		const sourceNodesRef = useRef<Map<string, MediaStreamAudioSourceNode>>(
+			new Map(),
+		);
+		const mixPollRef = useRef<number | null>(null);
 
 		const cleanupStream = useCallback(() => {
-			if (streamRef.current) {
-				streamRef.current.getTracks().forEach((track) => track.stop());
-				streamRef.current = null;
+			if (micStreamRef.current) {
+				micStreamRef.current
+					.getTracks()
+					.forEach((track) => track.stop());
+				micStreamRef.current = null;
 			}
 			if (tickRef.current !== null) {
 				window.clearInterval(tickRef.current);
 				tickRef.current = null;
 			}
+			if (mixPollRef.current !== null) {
+				window.clearInterval(mixPollRef.current);
+				mixPollRef.current = null;
+			}
+			sourceNodesRef.current.forEach((node) => {
+				try {
+					node.disconnect();
+				} catch {
+					/* noop */
+				}
+			});
+			sourceNodesRef.current.clear();
+			destRef.current = null;
+			if (audioCtxRef.current) {
+				const ctx = audioCtxRef.current;
+				audioCtxRef.current = null;
+				ctx.close().catch(() => {});
+			}
 		}, []);
+
+		// Attach a track-`ended` handler to the LOCAL mic. If the OS / another
+		// consumer drops the mic device mid-recording we gracefully FINALIZE
+		// whatever we've captured (flush + stop) into a downloadable file —
+		// never losing the recording or leaving it cut. Remote participant
+		// tracks dropping is non-fatal (handled by the mix poller).
+		const attachTrackEndGuard = useCallback((stream: MediaStream) => {
+			stream.getAudioTracks().forEach((track) => {
+				track.addEventListener("ended", () => {
+					// User-initiated stop already handles finalization.
+					if (intentionalStopRef.current) return;
+					if (recoveringRef.current) return;
+					const rec = recorderRef.current;
+					if (!rec || rec.state !== "recording") return;
+					recoveringRef.current = true;
+					try {
+						rec.requestData();
+						rec.stop();
+						toast.message(t("recording.saved"));
+					} catch {
+						/* noop */
+					}
+				});
+			});
+		}, [t]);
 
 		// Component-level unmount cleanup.
 		useEffect(() => {
 			return () => {
 				cleanupStream();
-				if (downloadUrl) URL.revokeObjectURL(downloadUrl);
+				blobRef.current = null;
+				if (autoSaveTimerRef.current !== null) {
+					window.clearTimeout(autoSaveTimerRef.current);
+				}
 			};
 			// eslint-disable-next-line react-hooks/exhaustive-deps
 		}, []);
@@ -125,19 +210,73 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 			mimeRef.current = mime;
 
 			setState("starting");
+			intentionalStopRef.current = false;
+			recoveringRef.current = false;
+			autoSavedRef.current = false;
 			try {
-				// Audio-only. No display media, no video.
-				const audioStream = await navigator.mediaDevices.getUserMedia({
-					audio: {
-						echoCancellation: true,
-						noiseSuppression: true,
-						autoGainControl: true,
-					},
-					video: false,
+				// 1. Open the local mic (our own independent stream).
+				const micStream =
+					await navigator.mediaDevices.getUserMedia(MIC_CONSTRAINTS);
+				micStreamRef.current = micStream;
+
+				// 2. Build a Web Audio mixing graph: local mic + every remote
+				//    participant's audio → one mixed destination stream. This is
+				//    what makes the recording capture ALL voices, not just ours.
+				const AudioCtx =
+					window.AudioContext ||
+					(window as unknown as { webkitAudioContext: typeof AudioContext })
+						.webkitAudioContext;
+				const ctx = new AudioCtx();
+				audioCtxRef.current = ctx;
+				const dest = ctx.createMediaStreamDestination();
+				destRef.current = dest;
+
+				// Local mic → mix.
+				ctx.createMediaStreamSource(micStream).connect(dest);
+
+				// Helper to wire a remote track into the mix exactly once.
+				const addRemote = (id: string, track: MediaStreamTrack) => {
+					if (sourceNodesRef.current.has(id)) return;
+					if (track.readyState !== "live") return;
+					try {
+						const node = ctx.createMediaStreamSource(
+							new MediaStream([track]),
+						);
+						node.connect(dest);
+						sourceNodesRef.current.set(id, node);
+					} catch {
+						/* noop */
+					}
+				};
+
+				// Wire all participants currently in the meeting.
+				audioRegistry.getTracks().forEach((track) => {
+					addRemote(track.id, track);
 				});
 
-				streamRef.current = audioStream;
-				const recorder = new MediaRecorder(audioStream, { mimeType: mime });
+				// Poll for late joiners / leavers every second and keep the mix
+				// in sync without rebuilding the graph.
+				mixPollRef.current = window.setInterval(() => {
+					const live = audioRegistry.getTracks();
+					const liveIds = new Set(live.map((tr) => tr.id));
+					live.forEach((tr) => addRemote(tr.id, tr));
+					// Drop sources whose track is gone.
+					sourceNodesRef.current.forEach((node, id) => {
+						if (!liveIds.has(id)) {
+							try {
+								node.disconnect();
+							} catch {
+								/* noop */
+							}
+							sourceNodesRef.current.delete(id);
+						}
+					});
+				}, 1000);
+
+				// 3. Record the MIXED stream, not the raw mic.
+				const recorder = new MediaRecorder(dest.stream, {
+					mimeType: mime,
+				});
 				chunksRef.current = [];
 
 				recorder.ondataavailable = (e) => {
@@ -145,6 +284,7 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 				};
 
 				recorder.onstop = () => {
+					recoveringRef.current = false;
 					const blob = new Blob(chunksRef.current, { type: mime });
 					if (blob.size === 0) {
 						// Nothing was recorded — bail without offering a broken download.
@@ -153,14 +293,43 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 						toast.error(t("recording.error.permission"));
 						return;
 					}
-					const url = URL.createObjectURL(blob);
 					const ts = new Date().toISOString().replace(/[:.]/g, "-");
 					const ext = extensionFor(mime);
-					setDownloadUrl(url);
-					setDownloadName(`sprintifai-meeting-${ts}.${ext}`);
+					const filename = `sprintifai-meeting-${ts}.${ext}`;
+					blobRef.current = blob;
+					setDownloadName(filename);
+					setSaved(false);
 					setState("ready");
 					cleanupStream();
 					toast.success(t("recording.saved"));
+					// Auto-save directly (not via useEffect) so it reliably fires even
+					// when the component unmounts shortly after (e.g. user leaves).
+					if (!autoSavedRef.current) {
+						autoSavedRef.current = true;
+						setSaving(true);
+						filesPost
+							.saveRecording(blob, filename)
+							.then((result) => {
+								setSaved(true);
+								toast.success(
+									t("recording.savedToLibrary", { name: result.name }),
+								);
+								autoSaveTimerRef.current = window.setTimeout(() => {
+									handleDismiss();
+								}, 2000);
+							})
+							.catch((err) => {
+								autoSavedRef.current = false;
+								toast.error(
+									err instanceof Error
+										? err.message
+										: t("recording.error.saveFailed"),
+								);
+							})
+							.finally(() => {
+								setSaving(false);
+							});
+					}
 				};
 
 				recorder.onerror = () => {
@@ -169,18 +338,9 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 					setState("error");
 				};
 
-				// Auto-stop if the user revokes mic access mid-recording.
-				audioStream.getAudioTracks().forEach((track) => {
-					track.addEventListener("ended", () => {
-						if (recorder.state === "recording") {
-							try {
-								recorder.stop();
-							} catch {
-								/* noop */
-							}
-						}
-					});
-				});
+				// Resilient: if the LOCAL mic device drops mid-recording,
+				// finalize the file gracefully instead of cutting / losing it.
+				attachTrackEndGuard(micStream);
 
 				// 1-second timeslices so the chunk list grows incrementally.
 				recorder.start(1000);
@@ -198,13 +358,19 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 				setState("idle");
 				return false;
 			}
-		}, [cleanupStream, state, t]);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+		}, [attachTrackEndGuard, cleanupStream, state, t]);
 
 		const stop = useCallback(() => {
 			const recorder = recorderRef.current;
 			if (!recorder || recorder.state !== "recording") return;
+			// Mark intentional so the track-`ended` recovery handler stands down.
+			intentionalStopRef.current = true;
 			setState("stopping");
 			try {
+				// Flush the trailing (<1s) buffer before stopping so the tail of
+				// the recording isn't lost.
+				recorder.requestData();
 				recorder.stop();
 			} catch {
 				/* noop */
@@ -220,25 +386,39 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 			[start, stop, getState],
 		);
 
-		const handleDownload = useCallback(() => {
-			if (!downloadUrl) return;
-			// Create a fresh anchor each time so repeat clicks work reliably.
-			const a = document.createElement("a");
-			a.href = downloadUrl;
-			a.download = downloadName;
-			a.rel = "noopener";
-			document.body.appendChild(a);
-			a.click();
-			document.body.removeChild(a);
-		}, [downloadUrl, downloadName]);
-
 		const handleDismiss = useCallback(() => {
-			if (downloadUrl) URL.revokeObjectURL(downloadUrl);
-			setDownloadUrl(null);
+			blobRef.current = null;
+			autoSavedRef.current = false;
 			setDownloadName("recording.webm");
+			setSaving(false);
+			setSaved(false);
 			setElapsed(0);
 			setState("idle");
-		}, [downloadUrl]);
+		}, []);
+
+		const handleSave = useCallback(async () => {
+			const blob = blobRef.current;
+			if (!blob || saving) return;
+			setSaving(true);
+			try {
+				const result = await filesPost.saveRecording(blob, downloadName);
+				setSaved(true);
+				toast.success(t("recording.savedToLibrary", { name: result.name }));
+				// Auto-dismiss after a brief moment.
+				autoSaveTimerRef.current = window.setTimeout(() => {
+					handleDismiss();
+				}, 2000);
+			} catch (err) {
+				autoSavedRef.current = false;
+				toast.error(
+					err instanceof Error
+						? err.message
+						: t("recording.error.saveFailed"),
+				);
+			} finally {
+				setSaving(false);
+			}
+		}, [downloadName, handleDismiss, saving, t]);
 
 		const isLoading = state === "starting" || state === "stopping";
 		const isRecording = state === "recording";
@@ -249,17 +429,28 @@ export const RecordingControl = forwardRef<RecordingControlHandle>(
 				<div className="inline-flex items-center gap-2">
 					<button
 						type="button"
-						onClick={handleDownload}
+						onClick={() => void handleSave()}
+						disabled={saving || saved}
 						className={cn(
 							"inline-flex items-center gap-2 h-9 px-3.5 rounded-full",
 							"bg-white text-zinc-950 hover:bg-white/95",
 							"text-[0.8125rem] font-medium",
 							"transition-[transform,opacity] duration-[var(--duration-fast)] ease-[cubic-bezier(0.32,0.72,0,1)]",
-							"active:scale-[0.96]",
+							"active:scale-[0.96] disabled:opacity-70 disabled:cursor-not-allowed",
 						)}
 					>
-						<Download className="size-3.5" strokeWidth={1.8} />
-						<span>{t("recording.download")}</span>
+						{saving ? (
+							<Loader2 className="size-3.5 animate-spin" strokeWidth={2} />
+						) : saved ? (
+							<CheckCircle2 className="size-3.5" strokeWidth={1.8} />
+						) : (
+							<Save className="size-3.5" strokeWidth={1.8} />
+						)}
+						<span>
+							{saved
+								? t("recording.savedDone")
+								: t("recording.saveToLibrary")}
+						</span>
 					</button>
 					<button
 						type="button"

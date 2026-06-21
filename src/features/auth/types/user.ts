@@ -47,6 +47,9 @@ export type AuthError = {
 		| "network"
 		| "validation"
 		| "username_in_use"
+		| "popup_blocked"
+		| "popup_closed"
+		| "oauth_unavailable"
 		| "unknown";
 	message: string;
 };

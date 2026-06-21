@@ -13,7 +13,7 @@ import {
 import { cn } from "@/lib/utils";
 import { AnimatedNumber } from "@/shared/components/AnimatedNumber";
 import { useGmailStore } from "../store/gmailStore";
-import { LABELS } from "../mock/mockGmailService";
+import { LABELS } from "../services/gmailService";
 import { labelToneClass } from "./mail-meta";
 import type { Folder } from "../types/mail";
 

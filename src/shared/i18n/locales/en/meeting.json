@@ -55,12 +55,16 @@
 		"starting": "Starting…",
 		"saved": "Recording saved",
 		"download": "Download recording",
+		"saveToLibrary": "Save to Library",
+		"savedDone": "Saved",
+		"savedToLibrary": "Saved {{name}} to your Recordings",
 		"autoStarted": "Auto-recording started",
 		"autoLabel": "Auto-record meeting (audio only)",
-		"autoHint": "Records your mic when the meeting starts. Downloads as audio when you stop.",
+		"autoHint": "Records your mic when the meeting starts. Saved to your Recordings library when you stop.",
 		"error": {
 			"unsupported": "Your browser doesn't support recording.",
 			"permission": "Microphone permission denied. Allow microphone access to record.",
+			"saveFailed": "Couldn't save the recording. Please try again.",
 			"autoFailed": "Couldn't auto-start recording. You can start it manually from the bottom bar."
 		}
 	},

@@ -31,21 +31,30 @@ const SORTABLE: Array<{ field: SortField; labelKey: string }> = [
 	{ field: "size", labelKey: "sort.size" },
 ];
 
-const KIND_FILTERS: FileKind[] = [
-	"recording",
+/** Preferred display order for kind filters. */
+const KIND_ORDER: FileKind[] = [
 	"transcript",
-	"deck",
-	"note",
-	"task",
-	"pdf",
-	"doc",
-	"image",
-	"video",
+	"recording",
 	"audio",
+	"video",
+	"note",
+	"doc",
+	"pdf",
+	"deck",
+	"image",
+	"task",
+	"other",
 ];
 
-export function FilesToolbar() {
+type FilesToolbarProps = {
+	/** Kinds actually present in the current directory — drives the filter list. */
+	availableKinds: FileKind[];
+};
+
+export function FilesToolbar({ availableKinds }: FilesToolbarProps) {
 	const { t } = useTranslation("files");
+
+	const kindFilters = KIND_ORDER.filter((k) => availableKinds.includes(k));
 
 	const query = useFilesStore((s) => s.query);
 	const setQuery = useFilesStore((s) => s.setQuery);
@@ -97,51 +106,53 @@ export function FilesToolbar() {
 			</div>
 
 			<div className="flex items-center gap-2 ms-auto flex-wrap">
-				{/* Filter */}
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button variant="outline" size="sm" className="gap-2">
-							<Filter className="size-3.5" strokeWidth={1.6} />
-							<span>{t("filters.label")}</span>
-							{filtersApplied > 0 ? (
-								<span className="inline-flex items-center justify-center rounded-full bg-foreground text-background text-[0.6875rem] font-medium min-w-5 h-5 px-1.5">
-									{filtersApplied}
-								</span>
-							) : null}
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent
-						align="end"
-						className="min-w-[14rem] rounded-[var(--radius-lg)]"
-					>
-						<DropdownMenuLabel className="text-[0.6875rem] uppercase tracking-[0.16em] text-muted-foreground">
-							{t("filters.kind")}
-						</DropdownMenuLabel>
-						<DropdownMenuSeparator />
-						{KIND_FILTERS.map((kind) => (
-							<DropdownMenuCheckboxItem
-								key={kind}
-								checked={kinds.includes(kind)}
-								onCheckedChange={() => toggleKind(kind)}
-								className="cursor-pointer"
-							>
-								<span>{t(`kinds.${kind}`)}</span>
-							</DropdownMenuCheckboxItem>
-						))}
-						{filtersApplied > 0 ? (
-							<>
-								<DropdownMenuSeparator />
-								<button
-									type="button"
-									onClick={() => clearKinds()}
-									className="w-full text-start px-2 py-1.5 text-[0.8125rem] text-muted-foreground hover:bg-accent hover:text-foreground rounded-[var(--radius-xs)] transition-colors"
+				{/* Filter — only when there's more than one kind to choose from */}
+				{kindFilters.length > 1 ? (
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button variant="outline" size="sm" className="gap-2">
+								<Filter className="size-3.5" strokeWidth={1.6} />
+								<span>{t("filters.label")}</span>
+								{filtersApplied > 0 ? (
+									<span className="inline-flex items-center justify-center rounded-full bg-foreground text-background text-[0.6875rem] font-medium min-w-5 h-5 px-1.5">
+										{filtersApplied}
+									</span>
+								) : null}
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent
+							align="end"
+							className="min-w-[14rem] rounded-[var(--radius-lg)]"
+						>
+							<DropdownMenuLabel className="text-[0.6875rem] uppercase tracking-[0.16em] text-muted-foreground">
+								{t("filters.kind")}
+							</DropdownMenuLabel>
+							<DropdownMenuSeparator />
+							{kindFilters.map((kind) => (
+								<DropdownMenuCheckboxItem
+									key={kind}
+									checked={kinds.includes(kind)}
+									onCheckedChange={() => toggleKind(kind)}
+									className="cursor-pointer"
 								>
-									{t("actions.clearFilters")}
-								</button>
-							</>
-						) : null}
-					</DropdownMenuContent>
-				</DropdownMenu>
+									<span>{t(`kinds.${kind}`)}</span>
+								</DropdownMenuCheckboxItem>
+							))}
+							{filtersApplied > 0 ? (
+								<>
+									<DropdownMenuSeparator />
+									<button
+										type="button"
+										onClick={() => clearKinds()}
+										className="w-full text-start px-2 py-1.5 text-[0.8125rem] text-muted-foreground hover:bg-accent hover:text-foreground rounded-[var(--radius-xs)] transition-colors"
+									>
+										{t("actions.clearFilters")}
+									</button>
+								</>
+							) : null}
+						</DropdownMenuContent>
+					</DropdownMenu>
+				) : null}
 
 				{/* Sort */}
 				<DropdownMenu>

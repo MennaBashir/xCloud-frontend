@@ -19,6 +19,7 @@ import {
 import { useChat } from "../hooks/useChat";
 import { useConversations } from "../hooks/useConversations";
 import { useRag } from "../hooks/useRag";
+import { useChatHandoffStore } from "../store/chatHandoffStore";
 
 import { ConversationSidebar } from "../components/ConversationSidebar";
 import { ChatWelcome } from "../components/ChatWelcome";
@@ -36,7 +37,11 @@ export default function ChatPage() {
 	const { sendMessage, stop } = useChat();
 	const { startNew } = useConversations();
 	const { available: ragAvailable } = useRag();
-	const [seedValue] = useState<string>("");
+	// `seedValue` is the prompt text injected into the input when a
+	// suggestion card is clicked. `seedNonce` lets the same suggestion be
+	// re-clicked and still re-seed the textarea (effect deps change).
+	const [seedValue, setSeedValue] = useState<string>("");
+	const [seedNonce, setSeedNonce] = useState(0);
 	const [useRagFlag, setUseRagFlag] = useState(false);
 	const [sidebarOpen, setSidebarOpen] = useState(true);
 	const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
@@ -55,8 +60,26 @@ export default function ChatPage() {
 		void sendMessage(value, { useRag: ragAvailable && useRagFlag });
 	};
 
+	// Consume a cross-feature handoff (e.g. "Summarize" from the email inbox):
+	// open a fresh conversation and auto-send the prompt once on mount.
+	const consumeHandoff = useChatHandoffStore((s) => s.consumePending);
+	useEffect(() => {
+		const handoff = consumeHandoff();
+		if (!handoff) return;
+		if (handoff.newConversation) {
+			startNew();
+		}
+		void sendMessage(handoff.prompt, {
+			useRag: ragAvailable && useRagFlag,
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	// Suggestion cards (ChatWelcome) populate the input instead of sending
+	// directly, so the user can review or edit before submitting.
 	const handleSuggestion = (prompt: string) => {
-		void sendMessage(prompt, { useRag: ragAvailable && useRagFlag });
+		setSeedValue(prompt);
+		setSeedNonce((n) => n + 1);
 	};
 
 	const hasMessages = messages.length > 0;
@@ -173,6 +196,7 @@ export default function ChatPage() {
 							isStreaming={isStreaming}
 							hasMessages={hasMessages}
 							seedValue={seedValue}
+							seedNonce={seedNonce}
 							leftSlot={<ModelPicker />}
 							rightSlot={
 								ragAvailable ? (

@@ -1,26 +1,18 @@
 {
 	"title": "Files",
-	"subtitle": "Recordings, decks, and meeting artifacts in one library.",
+	"subtitle": "Your transcriptions, summaries, and recordings in one library.",
 	"actions": {
-		"upload": "Upload",
-		"newFolder": "New folder",
 		"viewList": "List",
 		"viewGrid": "Grid",
 		"openPreview": "Open preview",
-		"download": "Download",
-		"rename": "Rename",
-		"delete": "Delete",
-		"share": "Share",
-		"copyLink": "Copy link",
-		"openMeeting": "Open meeting",
 		"clearFilters": "Clear filters"
 	},
 	"categories": {
-		"recent": "Recent",
 		"all": "All files",
+		"transcriptions": "Transcriptions",
+		"summarized": "Summarized files",
 		"recordings": "Recordings",
-		"tasks": "Saved tasks",
-		"notes": "Saved notes"
+		"notes": "Notes"
 	},
 	"kinds": {
 		"pdf": "PDF",
@@ -50,50 +42,38 @@
 		"applied_other": "{{count}} filters applied"
 	},
 	"search": {
-		"placeholder": "Search files, owners, tags…"
+		"placeholder": "Search files…"
 	},
 	"table": {
 		"name": "Name",
-		"owner": "Owner",
 		"updated": "Updated",
 		"size": "Size",
+		"created": "Created",
 		"type": "Type"
 	},
-	"meta": {
-		"sharedBy": "Shared by {{name}}",
-		"fromMeeting": "From meeting: {{title}}",
-		"sizeMb": "{{value}} MB",
-		"sizeKb": "{{value}} KB",
-		"sizeBytes": "{{value}} B"
-	},
 	"empty": {
-		"title": "Your library is empty",
-		"description": "Upload your first file or run a meeting to start collecting artifacts.",
-		"action": "Upload a file",
+		"title": "Nothing here yet",
+		"description": "Files will appear here once your transcriptions, summaries, and recordings are created.",
+		"errorTitle": "Couldn't load files",
 		"noResultsTitle": "No matches found",
-		"noResultsDescription": "Try a different search, clear filters, or change the category."
-	},
-	"upload": {
-		"title": "Upload files",
-		"description": "Drag files here or click to choose. Mock-mode — files are kept in memory until reload.",
-		"dropHere": "Drop files to upload",
-		"chooseFiles": "Choose files",
-		"uploading": "Uploading {{name}}…",
-		"success": "Uploaded {{count}} file",
-		"success_other": "Uploaded {{count}} files",
-		"close": "Close"
+		"noResultsDescription": "Try a different search or clear filters."
 	},
 	"preview": {
 		"about": "About",
-		"activity": "Activity",
+		"content": "Content",
+		"showContent": "Show file",
+		"loadError": "Couldn't load this file.",
+		"tooLarge": "This file is too large to preview.",
+		"tooLargeTitle": "File too large to preview",
+		"tooLargeDescription": "This file is too large to open here. You can preview it directly from this location on your device:",
+		"gotIt": "Got it",
+		"binaryNotice": "This file type can't be previewed inline.",
 		"details": {
 			"type": "Type",
 			"size": "Size",
-			"owner": "Owner",
 			"created": "Created",
 			"updated": "Updated",
-			"tags": "Tags",
-			"meeting": "Meeting"
+			"path": "Location"
 		}
 	},
 	"time": {

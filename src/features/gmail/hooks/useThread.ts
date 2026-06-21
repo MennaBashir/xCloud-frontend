@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { getThread } from "../mock/mockGmailService";
+import { getThread } from "../services/gmailService";
 import type { Thread } from "../types/mail";
 
 export function useThread(threadId: string | null): {

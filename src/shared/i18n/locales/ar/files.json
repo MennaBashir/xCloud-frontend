@@ -1,26 +1,18 @@
 {
 	"title": "الملفات",
-	"subtitle": "التسجيلات والعروض ومستندات الاجتماعات في مكتبة واحدة.",
+	"subtitle": "نصوصك وملخصاتك وتسجيلاتك في مكتبة واحدة.",
 	"actions": {
-		"upload": "رفع",
-		"newFolder": "مجلد جديد",
 		"viewList": "قائمة",
 		"viewGrid": "شبكة",
 		"openPreview": "فتح المعاينة",
-		"download": "تنزيل",
-		"rename": "إعادة تسمية",
-		"delete": "حذف",
-		"share": "مشاركة",
-		"copyLink": "نسخ الرابط",
-		"openMeeting": "فتح الاجتماع",
 		"clearFilters": "إزالة التصفية"
 	},
 	"categories": {
-		"recent": "الحديثة",
 		"all": "كل الملفات",
+		"transcriptions": "النصوص المفرغة",
+		"summarized": "الملفات الملخصة",
 		"recordings": "التسجيلات",
-		"tasks": "المهام المحفوظة",
-		"notes": "الملاحظات المحفوظة"
+		"notes": "الملاحظات"
 	},
 	"kinds": {
 		"pdf": "PDF",
@@ -53,53 +45,38 @@
 		"applied_other": "{{count}} تصفية مطبّقة"
 	},
 	"search": {
-		"placeholder": "ابحث في الملفات والمالكين والوسوم…"
+		"placeholder": "ابحث في الملفات…"
 	},
 	"table": {
 		"name": "الاسم",
-		"owner": "المالك",
 		"updated": "آخر تحديث",
 		"size": "الحجم",
+		"created": "تاريخ الإنشاء",
 		"type": "النوع"
 	},
-	"meta": {
-		"sharedBy": "شاركه {{name}}",
-		"fromMeeting": "من اجتماع: {{title}}",
-		"sizeMb": "{{value}} م.ب",
-		"sizeKb": "{{value}} ك.ب",
-		"sizeBytes": "{{value}} بايت"
-	},
 	"empty": {
-		"title": "مكتبتك فارغة",
-		"description": "ارفع أول ملف أو ابدأ اجتماعًا لتبدأ بجمع المستندات.",
-		"action": "رفع ملف",
+		"title": "لا شيء هنا بعد",
+		"description": "ستظهر الملفات هنا بمجرد إنشاء النصوص والملخصات والتسجيلات.",
+		"errorTitle": "تعذّر تحميل الملفات",
 		"noResultsTitle": "لا نتائج",
-		"noResultsDescription": "جرّب بحثًا آخر، أو امسح التصفية، أو غيّر الفئة."
-	},
-	"upload": {
-		"title": "رفع الملفات",
-		"description": "اسحب الملفات هنا أو اضغط للاختيار. الوضع التجريبي — تُحفظ الملفات في الذاكرة حتى إعادة التحميل.",
-		"dropHere": "أفلت الملفات للرفع",
-		"chooseFiles": "اختر الملفات",
-		"uploading": "جارٍ رفع {{name}}…",
-		"success_one": "تم رفع ملف واحد",
-		"success_two": "تم رفع ملفين",
-		"success_few": "تم رفع {{count}} ملفات",
-		"success_many": "تم رفع {{count}} ملفًا",
-		"success_other": "تم رفع {{count}} ملفًا",
-		"close": "إغلاق"
+		"noResultsDescription": "جرّب بحثًا آخر أو امسح التصفية."
 	},
 	"preview": {
 		"about": "عن الملف",
-		"activity": "النشاط",
+		"content": "المحتوى",
+		"showContent": "عرض الملف",
+		"loadError": "تعذّر تحميل هذا الملف.",
+		"tooLarge": "هذا الملف أكبر من أن تتم معاينته.",
+		"tooLargeTitle": "الملف أكبر من أن تتم معاينته",
+		"tooLargeDescription": "هذا الملف أكبر من أن يُفتح هنا. يمكنك معاينته مباشرةً من هذا الموقع على جهازك:",
+		"gotIt": "حسناً",
+		"binaryNotice": "لا يمكن معاينة هذا النوع من الملفات مباشرةً.",
 		"details": {
 			"type": "النوع",
 			"size": "الحجم",
-			"owner": "المالك",
 			"created": "أُنشئ",
 			"updated": "حُدِّث",
-			"tags": "الوسوم",
-			"meeting": "الاجتماع"
+			"path": "الموقع"
 		}
 	},
 	"time": {

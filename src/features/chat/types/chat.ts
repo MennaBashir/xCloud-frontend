@@ -28,6 +28,8 @@ export type Citation = {
 	detail: string;
 	/** External link for web sources. */
 	url?: string;
+	/** Absolute server path for file/rag sources — enables in-app preview. */
+	filePath?: string;
 };
 
 export type Conversation = {
@@ -38,6 +40,18 @@ export type Conversation = {
 	preview: string;
 };
 
+/** Known model families, used to pick a logo in the model picker. */
+export type ModelFamily =
+	| "qwen"
+	| "llama"
+	| "gemma"
+	| "mistral"
+	| "phi"
+	| "deepseek"
+	| "nomic"
+	| "command"
+	| "generic";
+
 export type ChatModel = {
 	/** Raw Ollama model id, e.g. `qwen3:1.7b`. */
 	id: string;
@@ -47,6 +61,8 @@ export type ChatModel = {
 	tagline?: string;
 	/** True for embedding models that cannot be used for chat. */
 	isEmbedding?: boolean;
+	/** Detected model family — drives which logo is shown beside the name. */
+	family: ModelFamily;
 };
 
 export type SuggestionPrompt = {

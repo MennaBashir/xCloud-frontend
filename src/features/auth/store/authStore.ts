@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 import { login as apiLogin, signup as apiSignup } from "../services/authApi";
+import { loginWithGoogle as apiLoginWithGoogle } from "../services/googleAuthApi";
 import type {
 	AuthError,
 	AuthStatus,
@@ -21,6 +22,7 @@ type AuthState = {
 type AuthActions = {
 	login: (input: LoginInput) => Promise<User>;
 	signup: (input: SignupInput) => Promise<User>;
+	loginWithGoogle: () => Promise<User>;
 	logout: () => void;
 	requestPasswordReset: (email: string) => Promise<void>;
 	clearError: () => void;
@@ -91,6 +93,29 @@ export const useAuthStore = create<AuthStore>()(
 				} catch (err) {
 					const authError = toAuthError(err);
 					set({ status: "error", error: authError });
+					throw authError;
+				}
+			},
+
+			loginWithGoogle: async () => {
+				set({ status: "authenticating", error: null });
+				try {
+					const { user, token } = await apiLoginWithGoogle();
+					set({
+						user,
+						token,
+						status: "authenticated",
+						error: null,
+					});
+					return user;
+				} catch (err) {
+					const authError = toAuthError(err);
+					// A cancelled popup is a user action, not a hard error — keep
+					// the form usable without a scary error banner.
+					set({
+						status: authError.code === "popup_closed" ? "idle" : "error",
+						error: authError.code === "popup_closed" ? null : authError,
+					});
 					throw authError;
 				}
 			},

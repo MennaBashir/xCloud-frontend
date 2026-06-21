@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { Check, ChevronsUpDown, Sparkles } from "lucide-react";
+import { Check, ChevronsUpDown } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import {
@@ -11,6 +11,7 @@ import {
 	DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useModels } from "../hooks/useModels";
+import { ModelLogo } from "./ModelLogo";
 
 export function ModelPicker() {
 	const { t } = useTranslation("chat");
@@ -35,7 +36,9 @@ export function ModelPicker() {
 				)}
 				aria-label={t("model.changeModel")}
 			>
-				<Sparkles className="size-3 text-ai" strokeWidth={1.8} />
+				{current ? (
+					<ModelLogo family={current.family} className="size-4" />
+				) : null}
 				<span className="max-w-[12rem] truncate">{triggerLabel}</span>
 				<ChevronsUpDown className="size-3 opacity-70" strokeWidth={1.6} />
 			</DropdownMenuTrigger>
@@ -69,7 +72,7 @@ export function ModelPicker() {
 							onSelect={() => setModelId(m.id)}
 							className="cursor-pointer items-start gap-2"
 						>
-							<span className="grid size-6 place-items-center mt-0.5">
+							<span className="grid size-4 place-items-center mt-0.5">
 								{active ? (
 									<Check
 										className="size-3.5 text-foreground"
@@ -77,6 +80,7 @@ export function ModelPicker() {
 									/>
 								) : null}
 							</span>
+							<ModelLogo family={m.family} className="mt-0.5" />
 							<span className="flex flex-col min-w-0">
 								<span className="text-[0.875rem] font-medium text-foreground truncate">
 									{m.label}

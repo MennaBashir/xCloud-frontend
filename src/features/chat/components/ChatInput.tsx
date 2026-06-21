@@ -12,6 +12,12 @@ type ChatInputProps = {
 	hasMessages: boolean;
 	/** Optional value to inject from outside (e.g. suggestion click). */
 	seedValue?: string;
+	/**
+	 * Bumped by the parent each time `seedValue` is re-applied. Lets the
+	 * user click the same suggestion twice and still re-seed the input
+	 * (e.g. after they cleared it). Ignored when `seedValue` is empty.
+	 */
+	seedNonce?: number;
 	/** Slot rendered to the left of the action button (e.g. model picker). */
 	leftSlot?: React.ReactNode;
 	/** Slot rendered just before the send button (e.g. RAG toggle). */
@@ -24,6 +30,7 @@ export function ChatInput({
 	isStreaming,
 	hasMessages,
 	seedValue,
+	seedNonce,
 	leftSlot,
 	rightSlot,
 }: ChatInputProps) {
@@ -31,14 +38,20 @@ export function ChatInput({
 	const [value, setValue] = useState("");
 	const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-	// External seed (e.g. when a suggestion card is clicked)
+	// External seed (e.g. when a suggestion card is clicked). Re-runs every
+	// time the parent bumps `seedNonce` so the same suggestion can be
+	// clicked twice in a row.
 	useEffect(() => {
-		if (seedValue && seedValue !== value) {
-			setValue(seedValue);
-			textareaRef.current?.focus();
+		if (!seedValue) return;
+		setValue(seedValue);
+		const el = textareaRef.current;
+		if (el) {
+			el.focus();
+			// Move caret to the end so the user can keep typing/editing.
+			const end = seedValue.length;
+			requestAnimationFrame(() => el.setSelectionRange(end, end));
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [seedValue]);
+	}, [seedValue, seedNonce]);
 
 	// Auto-resize
 	useEffect(() => {

@@ -33,6 +33,34 @@ type MeetingActions = {
 	reset: () => void;
 };
 
+/**
+ * Live registry of every REMOTE participant's mic audio track, keyed by
+ * participant id. Kept OUTSIDE reactive zustand state (a plain module-level
+ * Map) so registering/unregistering tracks never triggers re-renders. The
+ * recorder reads this synchronously to mix all voices into one file.
+ *
+ * Each ParticipantTile owns the lifecycle of its own entry.
+ */
+const remoteAudioTracks = new Map<string, MediaStreamTrack>();
+
+export const audioRegistry = {
+	register(participantId: string, track: MediaStreamTrack) {
+		remoteAudioTracks.set(participantId, track);
+	},
+	unregister(participantId: string) {
+		remoteAudioTracks.delete(participantId);
+	},
+	/** Snapshot of all currently-live remote audio tracks. */
+	getTracks(): MediaStreamTrack[] {
+		return Array.from(remoteAudioTracks.values()).filter(
+			(t) => t.readyState === "live",
+		);
+	},
+	clear() {
+		remoteAudioTracks.clear();
+	},
+};
+
 const INITIAL: MeetingState = {
 	mode: "joining",
 	meetingId: "",

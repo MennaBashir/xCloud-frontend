@@ -1,51 +1,56 @@
 import { useTranslation } from "react-i18next";
+import { toast } from "sonner";
+import { useEffect } from "react";
 
 import { Skeleton } from "@/components/ui/skeleton";
 
 import { FileRow } from "./FileRow";
+import { useFilePreview } from "./FilePreview";
 import type { FileItem } from "../types/file";
 
 type FilesListProps = {
 	items: FileItem[];
 	loading: boolean;
-	onOpen: (file: FileItem) => void;
-	onDelete: (file: FileItem) => void;
 };
 
-export function FilesList({
-	items,
-	loading,
-	onOpen,
-	onDelete,
-}: FilesListProps) {
+export function FilesList({ items, loading }: FilesListProps) {
 	const { t } = useTranslation("files");
+	const preview = useFilePreview();
+
+	useEffect(() => {
+		if (preview.error) toast.error(preview.error);
+	}, [preview.error]);
 
 	return (
-		<div className="rounded-[var(--radius-2xl)] border border-border bg-card overflow-hidden">
-			{/* Header (sm+) */}
-			<div className="hidden sm:grid grid-cols-[1fr_140px_120px_90px_40px] gap-4 px-4 py-2.5 border-b border-border bg-surface-muted/40 text-[0.6875rem] uppercase tracking-[0.16em] text-muted-foreground">
-				<span>{t("table.name")}</span>
-				<span>{t("table.owner")}</span>
-				<span>{t("table.updated")}</span>
-				<span>{t("table.size")}</span>
-				<span className="sr-only">Actions</span>
+		<>
+			<div className="rounded-[var(--radius-2xl)] border border-border bg-card overflow-hidden">
+				{/* Header (sm+) */}
+				<div className="hidden sm:grid grid-cols-[1fr_150px_100px_150px_120px] gap-4 px-4 py-2.5 border-b border-border bg-surface-muted/40 text-[0.6875rem] uppercase tracking-[0.16em] text-muted-foreground">
+					<span>{t("table.name")}</span>
+					<span>{t("table.updated")}</span>
+					<span>{t("table.size")}</span>
+					<span>{t("table.created")}</span>
+					<span className="sr-only">{t("preview.showContent")}</span>
+				</div>
+
+				<div className="p-1.5 flex flex-col gap-0.5">
+					{loading ? (
+						<SkeletonRows />
+					) : (
+						items.map((file) => (
+							<FileRow
+								key={file.id}
+								file={file}
+								onShow={(f) => void preview.open(f.path)}
+								loading={preview.loadingPath === file.path}
+							/>
+						))
+					)}
+				</div>
 			</div>
 
-			<div className="p-1.5 flex flex-col gap-0.5">
-				{loading ? (
-					<SkeletonRows />
-				) : (
-					items.map((file) => (
-						<FileRow
-							key={file.id}
-							file={file}
-							onOpen={onOpen}
-							onDelete={onDelete}
-						/>
-					))
-				)}
-			</div>
-		</div>
+			{preview.dialog}
+		</>
 	);
 }
 
@@ -55,7 +60,7 @@ function SkeletonRows() {
 			{Array.from({ length: 6 }).map((_, i) => (
 				<div
 					key={i}
-					className="grid grid-cols-[1fr_auto_auto_auto_auto] sm:grid-cols-[1fr_140px_120px_90px_40px] items-center gap-3 sm:gap-4 px-3 sm:px-4 py-3"
+					className="grid grid-cols-[1fr_auto] sm:grid-cols-[1fr_150px_100px_150px_120px] items-center gap-3 sm:gap-4 px-3 sm:px-4 py-3"
 				>
 					<div className="flex items-center gap-3 min-w-0">
 						<Skeleton className="size-10 rounded-[var(--radius-md)]" />
@@ -65,9 +70,9 @@ function SkeletonRows() {
 						</div>
 					</div>
 					<Skeleton className="hidden sm:block h-3 w-20" />
-					<Skeleton className="hidden sm:block h-3 w-14" />
 					<Skeleton className="hidden sm:block h-3 w-12" />
-					<Skeleton className="h-8 w-8 rounded-[var(--radius-sm)] justify-self-end" />
+					<Skeleton className="hidden sm:block h-3 w-24" />
+					<Skeleton className="h-8 w-24 rounded-[var(--radius-md)] justify-self-end sm:justify-self-start" />
 				</div>
 			))}
 		</>

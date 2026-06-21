@@ -10,7 +10,7 @@
  * Import the core helpers from here, or pull verb-scoped barrels:
  *   import { ApiError, authPost } from "@/shared/api";
  */
-export { request, ApiError } from "./client";
+export { request, ApiError, getApiBaseUrl, getStoredToken } from "./client";
 export type {
 	HttpMethod,
 	RequestOptions,

@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from "react";
 
-import { listFiles } from "../mock/mockFilesService";
+import { listFiles } from "../services/filesService";
 import { useFilesStore } from "../store/filesStore";
-import type { FileItem } from "../types/file";
+import type { FileItem, FileKind } from "../types/file";
 
 type UseFilesResult = {
 	items: FileItem[];
+	availableKinds: FileKind[];
 	loading: boolean;
 	error: string | null;
 	refresh: () => void;
@@ -23,6 +24,7 @@ export function useFiles(): UseFilesResult {
 	const sortDirection = useFilesStore((s) => s.sortDirection);
 
 	const [items, setItems] = useState<FileItem[]>([]);
+	const [availableKinds, setAvailableKinds] = useState<FileKind[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
 	const [reloadTick, setReloadTick] = useState(0);
@@ -42,7 +44,8 @@ export function useFiles(): UseFilesResult {
 		})
 			.then((next) => {
 				if (cancelled) return;
-				setItems(next);
+				setItems(next.items);
+				setAvailableKinds(next.availableKinds);
 			})
 			.catch((err: unknown) => {
 				if (cancelled) return;
@@ -57,5 +60,5 @@ export function useFiles(): UseFilesResult {
 		};
 	}, [category, query, kinds, sortField, sortDirection, reloadTick]);
 
-	return { items, loading, error, refresh };
+	return { items, availableKinds, loading, error, refresh };
 }

@@ -26,7 +26,12 @@
 		"summarize": "Summarize thread",
 		"send": "Send",
 		"discard": "Discard",
-		"backToInbox": "Inbox"
+		"backToInbox": "Inbox",
+		"sync": "Sync",
+		"syncResult_one": "Synced {{count}} new message",
+		"syncResult_other": "Synced {{count}} new messages",
+		"syncNoAccount": "No email account is connected. Sign in with Google to sync mail.",
+		"syncError": "Could not sync your inbox."
 	},
 	"search": {
 		"placeholder": "Search mail, people, labels…"
@@ -41,13 +46,21 @@
 	},
 	"thread": {
 		"toLabel": "To",
+		"view": {
+			"label": "View mode",
+			"rich": "Rich",
+			"plain": "Plain"
+		},
 		"unread": "Unread",
 		"messages_one": "{{count}} message",
 		"messages_other": "{{count}} messages",
 		"summary": {
 			"label": "AI summary",
-			"generate": "Summarize",
-			"generating": "Summarizing…"
+			"generate": "Summarize in Chat",
+			"generating": "Summarizing…",
+			"opening": "Opening Chat…",
+			"sentToChat": "Summarizing in Chat AI…",
+			"chatHint": "Summarize this thread in Chat AI to get decisions, owners, and next steps."
 		},
 		"deleted": "Moved to trash",
 		"archived": "Archived",
