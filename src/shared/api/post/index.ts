@@ -7,4 +7,5 @@ export * as googleAuthPost from "./googleAuth";
 export * as filesPost from "./files";
 export * as llmPost from "./llm";
 export * as ragPost from "./rag";
+export * as taskPost from "./task";
 export * as emailPost from "./email";

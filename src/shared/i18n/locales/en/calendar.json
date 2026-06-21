@@ -1,6 +1,14 @@
 {
 	"title": "Calendar",
 	"subtitle": "Tasks and decisions from your meetings, scheduled.",
+	"loading": "Loading events…",
+	"loadingError": "Failed to load events. Please try again later.",
+	"postError": "Failed to add event. Please try again later.",
+	"putError": "Failed to update event. Please try again later.",
+	"deleteError": "Failed to delete event. Please try again later.",
+	"postSuccess": "Event added successfully.",
+	"putSuccess": "Event updated successfully.",
+	"deleteSuccess": "Event deleted successfully.",
 	"views": {
 		"month": "Month",
 		"week": "Week",
