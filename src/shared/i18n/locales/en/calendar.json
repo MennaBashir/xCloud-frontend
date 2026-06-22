@@ -1,53 +1,82 @@
 {
-	"title": "Calendar",
-	"subtitle": "Tasks and decisions from your meetings, scheduled.",
-	"loading": "Loading events…",
-	"loadingError": "Failed to load events. Please try again later.",
-	"postError": "Failed to add event. Please try again later.",
-	"putError": "Failed to update event. Please try again later.",
-	"deleteError": "Failed to delete event. Please try again later.",
-	"postSuccess": "Event added successfully.",
-	"putSuccess": "Event updated successfully.",
-	"deleteSuccess": "Event deleted successfully.",
-	"views": {
-		"month": "Month",
-		"week": "Week",
-		"day": "Day",
-		"today": "Today"
-	},
-	"actions": {
-		"addEvent": "Add event",
-		"newEvent": "New event",
-		"editEvent": "Edit event",
-		"previous": "Previous",
-		"next": "Next"
-	},
-	"form": {
-		"title": "Title",
-		"titlePlaceholder": "Sprint planning",
-		"description": "Description",
-		"descriptionPlaceholder": "Add details, agenda, or notes…",
-		"start": "Starts",
-		"end": "Ends",
-		"allDay": "All day",
-		"color": "Color",
-		"done": "Mark as done",
-		"save": "Save event",
-		"update": "Update event",
-		"delete": "Delete event"
-	},
-	"upcoming": {
-		"title": "Upcoming",
-		"subtitle": "Your next scheduled events.",
-		"today": "Today",
-		"thisWeek": "This week",
-		"later": "Later",
-		"empty": "Nothing scheduled. Add an event to get started."
-	},
-	"list": {
-		"title": "Alerts",
-		"empty": "Nothing scheduled. Add an event to get started.",
-		"deleteConfirmTitle": "Delete this event?",
-		"deleteConfirmDescription": "This can't be undone."
-	}
+    "title": "Calendar",
+    "subtitle": "Tasks and decisions from your meetings, scheduled.",
+    "events": {
+        "loading": "Loading events…",
+        "loadingError": "Failed to load events. Please try again later.",
+        "postError": "Failed to add event. Please try again later.",
+        "putError": "Failed to update event. Please try again later.",
+        "deleteError": "Failed to delete event. Please try again later.",
+        "postSuccess": "Event added successfully.",
+        "putSuccess": "Event updated successfully.",
+        "deleteSuccess": "Event deleted successfully."
+    },
+    "reminders": {
+        "addError": "Failed to add reminder. Please try again later.",
+        "addSuccess": "Reminder added successfully.",
+        "deleteError": "Failed to delete reminder. Please try again later.",
+        "deleteSuccess": "Reminder deleted successfully."
+    },
+    "views": {
+        "month": "Month",
+        "week": "Week",
+        "day": "Day",
+        "today": "Today"
+    },
+    "actions": {
+        "add": "Add",
+        "cancel": "Cancel",
+        "addEvent": "Add event",
+        "newEvent": "New event",
+        "editEvent": "Edit event",
+        "previous": "Previous",
+        "next": "Next",
+        "addReminder": "Add Reminder"
+    },
+    "form": {
+        "title": "Title",
+        "titlePlaceholder": "Sprint planning",
+        "description": "Description",
+        "descriptionPlaceholder": "Add details, agenda, or notes…",
+        "start": "Starts",
+        "end": "Ends",
+        "allDay": "All day",
+        "color": "Color",
+        "done": "Mark as done",
+        "save": "Save event",
+        "update": "Update event",
+        "delete": "Delete event",
+        "reminder": "Reminder",
+        "remindAt": "Remind at",
+        "remindersList": "Reminders List",
+        "noReminders": "No reminders added",
+        "addReminderTitle": "Add Reminder",
+        "addReminderDesc": "Choose when you want to be reminded."
+    },
+    "upcoming": {
+        "title": "Upcoming",
+        "subtitle": "Your next scheduled events.",
+        "today": "Today",
+        "thisWeek": "This week",
+        "later": "Later",
+        "empty": "Nothing scheduled. Add an event to get started."
+    },
+    "list": {
+        "title": "Alerts",
+        "empty": "Nothing scheduled. Add an event to get started.",
+        "deleteConfirmTitle": "Delete this event?",
+        "deleteConfirmDescription": "This can't be undone."
+    },
+    "validation": {
+        "titleMin": "Title must be at least 2 characters long.",
+        "titleMax": "Title cannot exceed 100 characters.",
+        "descMax": "Description cannot exceed 500 characters.",
+        "startRequired": "Start date is required.",
+        "endRequired": "End date is required.",
+        "endAfterStart": "End date must be after start date."
+    },
+    "reminder": {
+        "title": "Reminder",
+        "body": "It's time for : {{title}}"
+    }
 }
