@@ -11,6 +11,7 @@ import { ShortcutsDialog } from "./ShortcutsDialog";
 import { useGlobalShortcuts } from "@/shared/hooks/useGlobalShortcuts";
 import { useNotifications } from "@/features/notifications/hooks/useNotifications";
 import { useSimulatedArrival } from "@/features/notifications/hooks/useSimulatedArrival";
+import { useReminderWatcher } from "@/features/calendar/hooks/useReminderWatcher";
 
 export function AppLayout() {
 	const { t } = useTranslation();
@@ -27,6 +28,8 @@ export function AppLayout() {
 	// Hydrate notifications + arm one simulated arrival per session
 	useNotifications();
 	useSimulatedArrival();
+
+	useReminderWatcher();
 
 	/**
 	 * IMPORTANT: We do NOT swap the rendered tree based on `isMeetingActive`.

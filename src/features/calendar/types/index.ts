@@ -8,4 +8,12 @@ export interface CalendarEvent {
 	backgroundColor?: string;
 	borderColor?: string;
 	done?: boolean;
+	hasReminders?: boolean;
+	reminders?: CalendarReminder[];
+}
+
+export interface CalendarReminder {
+    id?: string; 
+    task_id: string;
+	remind_at: string;
 }

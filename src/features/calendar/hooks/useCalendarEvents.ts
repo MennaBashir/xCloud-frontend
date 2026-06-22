@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import type { CalendarEvent } from "@/features/calendar/types";
+import type { CalendarEvent, CalendarReminder } from "@/features/calendar/types";
 import { toast } from "sonner";
 import { getTasks } from "@/shared/api/get/task";
 import { postTask } from "@/shared/api/post/task";
@@ -7,13 +7,17 @@ import { updateTask } from "@/shared/api/put/task";
 import { deleteTask } from "@/shared/api/delete/task";
 import { useAuthStore } from "@/features/auth/store/authStore";
 import { useTranslation } from "react-i18next"
-
+import { useReminder } from "./useReminder";
+import { useMemo } from "react";
 type UpdatePayload = { id: string } & Partial<CalendarEvent>;
 type MutationContext = { previousEvents?: CalendarEvent[] };
 
 export const useCalendarEvents = () => {
+
     const { t } = useTranslation("calendar");
+
     const token = useAuthStore((state) => state.token!);
+    
     const queryClient = useQueryClient();
     const QUERY_KEY = ["calendar-events"];
 
@@ -22,7 +26,20 @@ export const useCalendarEvents = () => {
         queryFn: () => getTasks({ token }),
     });
 
-
+    const {reminders, isLoadingReminders} = useReminder();
+    
+        const mergedEventsWithReminders = useMemo(()=>{
+            if (!events || !reminders) return events;
+            return events.map(e=>{
+                const eventReminders = reminders.filter((r:CalendarReminder)=> r.task_id === e.id);
+                return {
+                    ...e,
+                    hasReminders: eventReminders.length > 0,
+                    reminders: eventReminders,
+                }
+            })
+        },[events, reminders])
+   
     const addMutation = useMutation<CalendarEvent, Error, CalendarEvent, MutationContext>({
         mutationFn: (event) => postTask({ token, task: event }),
         onMutate: async (newEvent) => {
@@ -33,16 +50,16 @@ export const useCalendarEvents = () => {
 
             return { previousEvents };
         },
-        onError: (e_rr, _, context) => {
+        onError: (_err, _, context) => {
          if (context?.previousEvents !== undefined) {
             queryClient.setQueryData(QUERY_KEY, context.previousEvents);
         } else {
             queryClient.setQueryData(QUERY_KEY, []);
         }
-            toast.error(t("postError"));
+            toast.error(t("events.postError"));
         },
         onSuccess: () => {
-            toast.success(t("postSuccess"));
+            toast.success(t("events.postSuccess"));
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: QUERY_KEY });
@@ -63,12 +80,12 @@ export const useCalendarEvents = () => {
 
             return { previousEvents };
         },
-        onError: (err, _, context) => {
+        onError: (_err, _, context) => {
             queryClient.setQueryData(QUERY_KEY, context?.previousEvents);
-            toast.error(t("putError"));
+            toast.error(t("events.putError"));
         },
         onSuccess: () => {
-            toast.success(t("putSuccess"));
+            toast.success(t("events.putSuccess"));
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: QUERY_KEY });
@@ -87,24 +104,25 @@ export const useCalendarEvents = () => {
 
             return { previousEvents };
         },
-        onError: (err, _, context) => {
+        onError: (_err, _, context) => {
             queryClient.setQueryData(QUERY_KEY, context?.previousEvents);
-            toast.error(t("deleteError"));
+            toast.error(t("events.deleteError"));
         },
         onSuccess: () => {
-            toast.success(t("deleteSuccess"));
+            toast.success(t("events.deleteSuccess"));
         },
         onSettled: () => {
             queryClient.invalidateQueries({ queryKey: QUERY_KEY });
         },
     });
     return {
-        events,
-        isLoading,
+        events: mergedEventsWithReminders,
+        reminders,
+        isLoading: isLoading || isLoadingReminders,
         isFetching,
         error,
 
-        addEvent: (event: CalendarEvent) => addMutation.mutate(event),
+        addEvent: async (event: CalendarEvent) => await addMutation.mutateAsync(event),
 
         deleteEvent: (id: string) => deleteMutation.mutate(id),
 

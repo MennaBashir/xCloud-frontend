@@ -8,8 +8,10 @@ import type FullCalendar from "@fullcalendar/react";
 import { useEffect, useRef, useState } from "react";
 import useCalendarEvents from "./useCalendarEvents";
 import type { EventResizeDoneArg } from "@fullcalendar/interaction/index.js";
-import type { CalendarEvent } from "@/features/calendar/types";
-import { v4 as uuidv4 } from "uuid";
+import type { CalendarEvent, CalendarReminder } from "@/features/calendar/types";
+import { useReminder } from "./useReminder";
+import { useLocalReminders } from "./useLocalReminders";
+
 
 export const useCalendarController = () => {
 	// --- STATE ---
@@ -17,6 +19,10 @@ export const useCalendarController = () => {
 
 	const { events ,error ,isLoading ,isFetching, addEvent, updateEvent, deleteEvent, resizeEvent, dropEvent } =
 		useCalendarEvents();
+
+	const {addReminder, removeReminder, isAddingReminder ,reminderError, isRemovingReminder} = useReminder();
+
+	const { reminders: localReminders, deletedIds, clearLocalReminders } = useLocalReminders();
 
 	const calendarRef = useRef<FullCalendar | null>(null);
 
@@ -37,6 +43,7 @@ export const useCalendarController = () => {
 		if (!isModalOpen) {
 			setSelectedEvent(null);
 			setSelectedDateRange(null);
+			clearLocalReminders();
 		}
 	}, [isModalOpen]);
 
@@ -80,28 +87,59 @@ export const useCalendarController = () => {
 			allDay: clickInfo.event.allDay,
 			backgroundColor: clickInfo.event.backgroundColor,
 			borderColor: clickInfo.event.borderColor,
+			hasReminders: clickInfo.event.extendedProps.hasReminders,
+			reminders: clickInfo.event.extendedProps.reminders,
 		});
 		setIsModalOpen(true);
 	};
 
-	const handleEventSubmit = (eventData: CalendarEvent) => {
-		if (selectedEvent) {
-			updateEvent(selectedEvent.id, eventData);
-		} else {
-			const newEvent = {
-				...eventData,
-				id: uuidv4(),
-			};
-			addEvent(newEvent);
-		}
-		setIsModalOpen(false);
-	};
+	const handleEventSubmit = async (eventData: CalendarEvent) => {
+        const { reminders, hasReminders, id, ...taskData } = eventData as any;
+        
+        try {
+            let currentEventId = selectedEvent?.id;
+
+            if (selectedEvent) {
+                updateEvent(selectedEvent.id, taskData);
+            } else {
+                const newEvent = await addEvent(taskData);
+                if (newEvent && newEvent.id) {
+                    currentEventId = newEvent.id;
+                }
+            }
+
+            if (currentEventId) {
+                deletedIds.forEach((deletedId) => {
+                    removeReminder(deletedId);
+                });
+
+                const newReminders = localReminders.filter((r) => String(r.id).startsWith("temp-"));
+                newReminders.forEach((reminder) => {
+                    addReminder({
+                        task_id: currentEventId,
+                        remind_at: reminder.remind_at || (reminder as any).remindAt,
+                    });
+                });
+            }
+
+            clearLocalReminders();
+            setIsModalOpen(false);
+            
+        } catch (error) {
+            console.error("Error submitting event and reminders:", error);
+        }
+    };
 
 	const handleEventDelete = () => {
 		if(!selectedEvent) return;
 		deleteEvent(selectedEvent.id);
+		
+		selectedEvent.reminders?.forEach((reminder: CalendarReminder) => removeReminder(reminder.id!));
+		clearLocalReminders();
+		
 		setIsModalOpen(false);
 	};
+	
 	return {	
 		handleViewChange,
 		handleDateSelect,
@@ -127,5 +165,9 @@ export const useCalendarController = () => {
 		isLoading,
 		events,
 		error,
+
+		isAddingReminder,
+		isRemovingReminder,
+		reminderError
 	};
 };

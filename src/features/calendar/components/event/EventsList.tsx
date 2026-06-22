@@ -92,12 +92,12 @@ const EventsList = () => {
                 {isLoading && !hasLoadedOnce ? (
                     <div className="flex flex-1 flex-col items-center justify-center gap-4">
                         <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-                        <p className="text-sm text-muted-foreground">{t("loading")}</p>
+                        <p className="text-sm text-muted-foreground">{t("events.loading")}</p>
                     </div>
                 ) : error ? (
                     <div className="flex flex-1 flex-col items-center justify-center gap-4 text-center px-4">
                         <TriangleAlert className="h-8 w-8 text-destructive" />
-                        <p className="text-sm text-muted-foreground">{t("loadingError")}</p>
+                        <p className="text-sm text-muted-foreground">{t("events.loadingError")}</p>
                     </div>
                 ) : hasEvents ? (
                     <div className="flex flex-col gap-5">

@@ -3,7 +3,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { ChevronLeft, ChevronRight, Loader2, Plus } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, Plus, Bell } from "lucide-react";
 
 import {
 	Sheet,
@@ -55,6 +55,7 @@ const CalendarView = () => {
 		handleEventDelete,
 	} = useCalendarController();
 
+
 	const [hasLadedOnce, setHasLadedOnce] = useState(false);
 	useEffect(()=>{
 		if (!isLoading) setHasLadedOnce(true);
@@ -62,7 +63,7 @@ const CalendarView = () => {
 
 	useEffect(() => {
         if (!hasLadedOnce && error) {
-            toast.error(t("loadingError"));
+            toast.error(t("events.loadingError"));
         }
     }, [error]);
 
@@ -71,7 +72,7 @@ const CalendarView = () => {
             <div className="flex h-[670px] w-full items-center justify-center rounded-xl bg-gray-900/50">
                 <div className="flex flex-col items-center gap-4">
                     <Loader2 className="h-10 w-10 animate-spin text-blue-500" />
-					<p className="text-gray-400">{t("loading")}</p>
+					<p className="text-gray-400">{t("events.loading")}</p>
                 </div>
             </div>
         );
@@ -199,11 +200,25 @@ const CalendarView = () => {
 							eventDisplay="block"
 							height="auto"
 							eventClassNames={(arg) => {
-								const isDone = arg.event.extendedProps.done;
+								const isDone = arg.event.extendedProps.done;		
 								return cn(
 									"border-none text-primary-foreground cursor-pointer",
 									isDone && "opacity-50 line-through grayscale",
 								);
+							}}
+							eventContent={(arg)=> {
+								const hasReminders = arg.event.extendedProps.hasReminders;
+								const title = arg.event.title;
+								return (
+                                    <div className="flex items-center gap-1.5 w-full truncate overflow-hidden">
+                                        {hasReminders && (
+                                            <Bell className="size-3 shrink-0" strokeWidth={2.5} />
+                                        )}
+                                        <span className="truncate text-xs font-medium">
+                                            {title}
+                                        </span>
+                                    </div>
+                                );
 							}}
 						/>
 					</div>
