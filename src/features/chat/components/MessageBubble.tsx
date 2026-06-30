@@ -14,6 +14,7 @@ import {
 	Loader2,
 	RefreshCcw,
 	Sparkles,
+	Wrench,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -22,7 +23,7 @@ import {
 	useAuthStore,
 } from "@/features/auth/store/authStore";
 import { useFilePreview } from "@/features/files/components/FilePreview";
-import type { ChatMessage, Citation } from "../types/chat";
+import type { ChatMessage, Citation, ToolActivity } from "../types/chat";
 
 type MessageBubbleProps = {
 	message: ChatMessage;
@@ -129,6 +130,24 @@ export function MessageBubble({
 						{isStreaming && message.content ? <BlinkingCursor /> : null}
 					</div>
 				)}
+
+				{/* Agent tool activity */}
+				{isAssistant && (message.toolActivity?.length ?? 0) > 0 ? (
+					<div className="mt-3 flex flex-col gap-1.5">
+						<div className="text-[0.625rem] uppercase tracking-[0.16em] text-muted-foreground">
+							{t("message.toolActivity")}
+						</div>
+						<div className="flex flex-col gap-1.5">
+							{message.toolActivity?.map((tool) => (
+								<ToolActivityRow
+									key={tool.id}
+									tool={tool}
+									runningLabel={t("message.toolRunning")}
+								/>
+							))}
+						</div>
+					</div>
+				) : null}
 
 				{/* File results the AI found */}
 				{isAssistant && fileResults.length > 0 ? (
@@ -250,6 +269,54 @@ function ThinkingIndicator({ label }: { label: string }) {
 			</span>
 			<span className="bg-gradient-to-r from-muted-foreground via-foreground to-muted-foreground bg-[length:200%_100%] bg-clip-text text-transparent animate-shimmer">
 				{label}
+			</span>
+		</div>
+	);
+}
+
+function formatToolName(name: string): string {
+	return name
+		.split("_")
+		.map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+		.join(" ");
+}
+
+function ToolActivityRow({
+	tool,
+	runningLabel,
+}: {
+	tool: ToolActivity;
+	runningLabel: string;
+}) {
+	const running = tool.status === "running";
+	return (
+		<div
+			className={cn(
+				"flex items-center gap-2.5 min-w-0",
+				"rounded-[var(--radius-md)] border border-border bg-card",
+				"px-3 py-2 text-[0.8125rem]",
+			)}
+		>
+			<span className="grid size-7 place-items-center rounded-[var(--radius-sm)] bg-ai-tint text-ai ring-1 ring-inset ring-ai/20 shrink-0">
+				{running ? (
+					<Loader2 className="size-3.5 animate-spin" strokeWidth={1.7} />
+				) : (
+					<Wrench className="size-3.5" strokeWidth={1.7} />
+				)}
+			</span>
+			<span className="min-w-0 flex-1">
+				<span className="block truncate font-medium text-foreground">
+					{formatToolName(tool.name)}
+				</span>
+				{running ? (
+					<span className="block truncate text-[0.6875rem] text-muted-foreground">
+						{runningLabel}
+					</span>
+				) : tool.result ? (
+					<span className="block truncate text-[0.6875rem] text-muted-foreground">
+						{tool.result}
+					</span>
+				) : null}
 			</span>
 		</div>
 	);

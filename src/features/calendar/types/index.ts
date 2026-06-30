@@ -10,6 +10,8 @@ export interface CalendarEvent {
 	done?: boolean;
 	hasReminders?: boolean;
 	reminders?: CalendarReminder[];
+	googleEventId?: string;
+	location?: string;
 }
 
 export interface CalendarReminder {

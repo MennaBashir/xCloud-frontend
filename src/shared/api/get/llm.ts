@@ -136,3 +136,51 @@ export function streamChat({
 		onLine: (line) => onEvent(line as ChatStreamEvent),
 	});
 }
+
+// ---- Agentic chat ---------------------------------------------------------
+
+/**
+ * A single NDJSON event emitted by `/llm/agent/chat`.
+ *
+ * The agent loop can autonomously call tools (Gmail, Calendar, Google Tasks,
+ * local tasks, web search, RAG) before producing its final answer, so it
+ * emits extra `agent_start` / `tool_call` / `tool_result` events on top of the
+ * regular `content` / `done` events.
+ */
+export type AgentStreamEvent =
+	| { type: "chat_id"; data: string }
+	| { type: "agent_start" }
+	| { type: "tool_call"; name: string; args: Record<string, unknown> }
+	| { type: "tool_result"; name: string; result: string }
+	| { type: "content"; content: string }
+	| { type: "done"; thinking?: string | null };
+
+export type StreamAgentChatParams = {
+	token: string;
+	prompt: string;
+	chatId?: string;
+	think?: boolean;
+	signal?: AbortSignal;
+	onEvent: (event: AgentStreamEvent) => void;
+};
+
+/** Stream an agentic chat reply from `GET /llm/agent/chat`. */
+export function streamAgentChat({
+	token,
+	prompt,
+	chatId,
+	think,
+	signal,
+	onEvent,
+}: StreamAgentChatParams): Promise<void> {
+	return streamNDJSON("/llm/agent/chat", {
+		token,
+		signal,
+		query: {
+			prompt,
+			chat_id: chatId,
+			think,
+		},
+		onLine: (line) => onEvent(line as AgentStreamEvent),
+	});
+}

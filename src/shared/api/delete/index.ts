@@ -6,3 +6,4 @@ export * as ragDelete from "./rag";
 export * as taskDelete from "./task";
 export * as reminderDelete from "./reminder";  
 export * as emailDelete from "./email";
+export * as calendarDelete from "./calendar";

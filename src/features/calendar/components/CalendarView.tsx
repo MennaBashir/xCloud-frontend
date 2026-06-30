@@ -3,7 +3,7 @@ import dayGridPlugin from "@fullcalendar/daygrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import { ChevronLeft, ChevronRight, Loader2, Plus, Bell } from "lucide-react";
+import { ChevronLeft, ChevronRight, Loader2, Plus, Bell, RefreshCw } from "lucide-react";
 
 import {
 	Sheet,
@@ -53,6 +53,8 @@ const CalendarView = () => {
 		handleEventClick,
 		handleEventSubmit,
 		handleEventDelete,
+		syncWithGoogle,
+		isSyncing,
 	} = useCalendarController();
 
 
@@ -164,6 +166,20 @@ const CalendarView = () => {
 							);
 						})}
 					</div>
+
+					<Button
+						onClick={() => syncWithGoogle(false)}
+						disabled={isSyncing}
+						size="sm"
+						variant="outline"
+						className="gap-2"
+					>
+						<RefreshCw
+							className={cn("size-3.5", isSyncing && "animate-spin")}
+							strokeWidth={1.8}
+						/>
+						<span>{t("actions.syncGoogle")}</span>
+					</Button>
 
 					<Button
 						onClick={() => setIsModalOpen(true)}

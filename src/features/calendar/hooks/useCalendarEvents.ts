@@ -1,10 +1,10 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import type { CalendarEvent, CalendarReminder } from "@/features/calendar/types";
 import { toast } from "sonner";
-import { getTasks } from "@/shared/api/get/task";
-import { postTask } from "@/shared/api/post/task";
-import { updateTask } from "@/shared/api/put/task";
-import { deleteTask } from "@/shared/api/delete/task";
+import { getCalendarEvents } from "@/shared/api/get/calendar";
+import { postCalendarEvent, syncCalendar } from "@/shared/api/post/calendar";
+import { updateCalendarEvent } from "@/shared/api/put/calendar";
+import { deleteCalendarEvent } from "@/shared/api/delete/calendar";
 import { useAuthStore } from "@/features/auth/store/authStore";
 import { useTranslation } from "react-i18next"
 import { useReminder } from "./useReminder";
@@ -23,7 +23,7 @@ export const useCalendarEvents = () => {
 
     const { data: events = [], isLoading, error , isFetching } = useQuery({
         queryKey: QUERY_KEY,
-        queryFn: () => getTasks({ token }),
+        queryFn: () => getCalendarEvents({ token, daysAhead: 365, daysBehind: 365 }),
     });
 
     const {reminders, isLoadingReminders} = useReminder();
@@ -41,7 +41,7 @@ export const useCalendarEvents = () => {
         },[events, reminders])
    
     const addMutation = useMutation<CalendarEvent, Error, CalendarEvent, MutationContext>({
-        mutationFn: (event) => postTask({ token, task: event }),
+        mutationFn: (event) => postCalendarEvent({ token, event }),
         onMutate: async (newEvent) => {
             await queryClient.cancelQueries({ queryKey: QUERY_KEY });
             const previousEvents = queryClient.getQueryData<CalendarEvent[]>(QUERY_KEY);
@@ -67,7 +67,7 @@ export const useCalendarEvents = () => {
     });
 
     const updateMutation = useMutation<CalendarEvent, Error, UpdatePayload, MutationContext>({
-        mutationFn: ({ id, ...data }) => updateTask({ token, taskId: id, task: data as CalendarEvent }),
+        mutationFn: ({ id, ...data }) => updateCalendarEvent({ token, eventId: id, event: data }),
         onMutate: async (updatedEvent) => {
             await queryClient.cancelQueries({ queryKey: QUERY_KEY });
             const previousEvents = queryClient.getQueryData<CalendarEvent[]>(QUERY_KEY);
@@ -93,7 +93,7 @@ export const useCalendarEvents = () => {
     });
 
     const deleteMutation = useMutation<void, Error, string, MutationContext>({
-        mutationFn: (id) => deleteTask({ token, taskId: id }),
+        mutationFn: (id) => deleteCalendarEvent({ token, eventId: id }),
         onMutate: async (idToDelete) => {
             await queryClient.cancelQueries({ queryKey: QUERY_KEY });
             const previousEvents = queryClient.getQueryData<CalendarEvent[]>(QUERY_KEY);
@@ -115,6 +115,31 @@ export const useCalendarEvents = () => {
             queryClient.invalidateQueries({ queryKey: QUERY_KEY });
         },
     });
+
+    const syncMutation = useMutation({
+        mutationFn: ({ silent: _silent = false }: { silent?: boolean } = {}) =>
+            syncCalendar({ token }),
+        onSuccess: (result, variables) => {
+            const silent = variables?.silent ?? false;
+            const changed =
+                result.pushed + result.pulled + result.updated + result.deleted > 0;
+            if (!silent || changed) {
+                toast.success(
+                    t("events.syncSuccess", {
+                        pushed: result.pushed,
+                        pulled: result.pulled,
+                    }),
+                );
+            }
+            queryClient.invalidateQueries({ queryKey: QUERY_KEY });
+        },
+        onError: (_err, variables) => {
+            if (!variables?.silent) {
+                toast.error(t("events.syncError"));
+            }
+        },
+    });
+
     return {
         events: mergedEventsWithReminders,
         reminders,
@@ -138,9 +163,16 @@ export const useCalendarEvents = () => {
         toggleDone: (id: string) => {
             const eventToToggle = events.find((e) => e.id === id);
             if (eventToToggle) {
-                updateMutation.mutate({ id, done: !eventToToggle.done });
+                queryClient.setQueryData<CalendarEvent[]>(QUERY_KEY, (old = []) =>
+                    old.map((e) =>
+                        e.id === id ? { ...e, done: !e.done } : e
+                    )
+                );
             }
         },
+
+        syncWithGoogle: (silent = false) => syncMutation.mutate({ silent }),
+        isSyncing: syncMutation.isPending,
     };
 };
 

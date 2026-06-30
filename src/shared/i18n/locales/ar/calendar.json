@@ -9,7 +9,9 @@
         "deleteError": "فشل في حذف الحدث. حاول مرة أخرى لاحقًا.",
         "postSuccess": "تمت إضافة الحدث بنجاح.",
         "putSuccess": "تم تحديث الحدث بنجاح.",
-        "deleteSuccess": "تم حذف الحدث بنجاح."
+        "deleteSuccess": "تم حذف الحدث بنجاح.",
+        "syncSuccess": "تمت المزامنة مع تقويم Google. تم الرفع {{pushed}}، والسحب {{pulled}}.",
+        "syncError": "فشل المزامنة مع تقويم Google. تأكد من ربط حساب Google الخاص بك."
     },
     "reminders": {
         "addError": "فشل في إضافة التذكير. حاول مرة أخرى لاحقًا.",
@@ -31,7 +33,8 @@
         "editEvent": "تعديل الحدث",
         "previous": "السابق",
         "next": "التالي",
-        "addReminder": "إضافة التنبيه"
+        "addReminder": "إضافة التنبيه",
+        "syncGoogle": "المزامنة مع Google"
     },
     "form": {
         "title": "العنوان",

@@ -70,7 +70,9 @@
 		"previewFile": "Click to preview file",
 		"openInNewTab": "Open in new tab",
 		"filesFound_one": "{{count}} file found",
-		"filesFound_other": "{{count}} files found"
+		"filesFound_other": "{{count}} files found",
+		"toolActivity": "Actions taken",
+		"toolRunning": "Running…"
 	},
 	"model": {
 		"label": "Model",
