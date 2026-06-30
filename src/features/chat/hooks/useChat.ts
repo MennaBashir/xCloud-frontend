@@ -9,7 +9,7 @@ import {
 	makeUserMessage,
 	useChatStore,
 } from "../store/chatStore";
-import { apiSourcesToCitations } from "../lib/adapters";
+import type { ToolActivity } from "../types/chat";
 
 export type SendMessageOptions = {
 	useRag?: boolean;
@@ -17,8 +17,17 @@ export type SendMessageOptions = {
 	think?: boolean;
 };
 
+let toolSeq = 0;
+const nextToolId = () => `tool_${Date.now()}_${toolSeq++}`;
+
 /**
- * Real backend chat hook.
+ * Real backend chat hook — backed by the **agentic** chat endpoint
+ * (`GET /llm/agent/chat`).
+ *
+ * The agent can autonomously call tools (Gmail, Calendar, Google Tasks, local
+ * tasks, web search, RAG) before answering, so the stream also carries
+ * `tool_call` / `tool_result` events which we surface as `toolActivity` on the
+ * assistant message.
  *
  * Flow:
  *   1. Ensure a backend chat exists (create it with the selected model on the
@@ -94,12 +103,10 @@ export function useChat() {
 			setAbortController(controller);
 
 			try {
-				await llmGet.streamChat({
+				await llmGet.streamAgentChat({
 					token,
 					prompt: trimmed,
 					chatId: conversationId,
-					useRag: options.useRag,
-					useWebSearch: options.useWebSearch,
 					think: options.think,
 					signal: controller.signal,
 					onEvent: (event) => {
@@ -115,20 +122,52 @@ export function useChat() {
 									conversationId = event.data;
 								}
 								break;
+							case "agent_start":
+								break;
+							case "tool_call": {
+								const entry: ToolActivity = {
+									id: nextToolId(),
+									name: event.name,
+									args: event.args,
+									status: "running",
+								};
+								updateMessage(assistant.id, (m) => ({
+									...m,
+									toolActivity: [
+										...(m.toolActivity ?? []),
+										entry,
+									],
+								}));
+								break;
+							}
+							case "tool_result":
+								updateMessage(assistant.id, (m) => {
+									const activity = [...(m.toolActivity ?? [])];
+									// Resolve the most recent running call with
+									// the same tool name.
+									for (let i = activity.length - 1; i >= 0; i--) {
+										if (
+											activity[i].name === event.name &&
+											activity[i].status === "running"
+										) {
+											activity[i] = {
+												...activity[i],
+												result: event.result,
+												status: "done",
+											};
+											break;
+										}
+									}
+									return { ...m, toolActivity: activity };
+								});
+								break;
 							case "content":
 								updateMessage(assistant.id, (m) => ({
 									...m,
 									content: m.content + event.content,
 								}));
 								break;
-							case "sources":
-								updateMessage(assistant.id, (m) => ({
-									...m,
-									citations: apiSourcesToCitations(event.data),
-								}));
-								break;
 							case "done":
-							case "thinking":
 							default:
 								break;
 						}

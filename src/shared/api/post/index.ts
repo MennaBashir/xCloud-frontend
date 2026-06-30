@@ -10,3 +10,4 @@ export * as ragPost from "./rag";
 export * as taskPost from "./task";
 export * as emailPost from "./email";
 export * as reminderPost from "./reminder";
+export * as calendarPost from "./calendar";

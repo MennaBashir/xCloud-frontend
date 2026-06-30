@@ -19,6 +19,20 @@ export type ChatMessage = {
 	status: MessageStatus;
 	/** Optional citations for assistant messages (meeting / file references). */
 	citations?: Citation[];
+	/**
+	 * Tool calls the agent made while answering (Gmail, Calendar, Tasks, web,
+	 * RAG). Populated only for agentic chat replies.
+	 */
+	toolActivity?: ToolActivity[];
+};
+
+/** A single tool invocation surfaced by the agentic chat loop. */
+export type ToolActivity = {
+	id: string;
+	name: string;
+	args?: Record<string, unknown>;
+	result?: string;
+	status: "running" | "done";
 };
 
 export type Citation = {

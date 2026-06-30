@@ -9,7 +9,9 @@
         "deleteError": "Failed to delete event. Please try again later.",
         "postSuccess": "Event added successfully.",
         "putSuccess": "Event updated successfully.",
-        "deleteSuccess": "Event deleted successfully."
+        "deleteSuccess": "Event deleted successfully.",
+        "syncSuccess": "Synced with Google Calendar. Pushed {{pushed}}, pulled {{pulled}}.",
+        "syncError": "Failed to sync with Google Calendar. Make sure your Google account is linked."
     },
     "reminders": {
         "addError": "Failed to add reminder. Please try again later.",
@@ -31,7 +33,8 @@
         "editEvent": "Edit event",
         "previous": "Previous",
         "next": "Next",
-        "addReminder": "Add Reminder"
+        "addReminder": "Add Reminder",
+        "syncGoogle": "Sync with Google"
     },
     "form": {
         "title": "Title",

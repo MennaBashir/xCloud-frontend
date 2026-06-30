@@ -17,7 +17,7 @@ export const useCalendarController = () => {
 	// --- STATE ---
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
-	const { events ,error ,isLoading ,isFetching, addEvent, updateEvent, deleteEvent, resizeEvent, dropEvent } =
+	const { events ,error ,isLoading ,isFetching, addEvent, updateEvent, deleteEvent, resizeEvent, dropEvent, syncWithGoogle, isSyncing } =
 		useCalendarEvents();
 
 	const {addReminder, removeReminder, isAddingReminder ,reminderError, isRemovingReminder} = useReminder();
@@ -46,6 +46,19 @@ export const useCalendarController = () => {
 			clearLocalReminders();
 		}
 	}, [isModalOpen]);
+
+	// Auto-sync with Google Calendar once when the calendar mounts so that
+	// events added/deleted directly in Google show up on the site.
+	// Guarded so StrictMode's double-mount can't fire it twice.
+	const syncRef = useRef(syncWithGoogle);
+	syncRef.current = syncWithGoogle;
+	const hasAutoSynced = useRef(false);
+	useEffect(() => {
+		if (hasAutoSynced.current) return;
+		hasAutoSynced.current = true;
+		syncRef.current(true);
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
 
 	// --- HANDLERS ---
 	const handleViewChange = (view: string) => {
@@ -165,6 +178,9 @@ export const useCalendarController = () => {
 		isLoading,
 		events,
 		error,
+
+		syncWithGoogle,
+		isSyncing,
 
 		isAddingReminder,
 		isRemovingReminder,
