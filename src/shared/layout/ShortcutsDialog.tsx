@@ -27,6 +27,7 @@ const GROUPS: ShortcutGroup[] = [
 		titleKey: "shortcuts.groups.general",
 		shortcuts: [
 			{ keys: ["⌘", "K"], labelKey: "shortcuts.openCommand" },
+			{ keys: ["⌘", "B"], labelKey: "shortcuts.toggleSidebar" },
 			{ keys: ["?"], labelKey: "shortcuts.openHelp" },
 		],
 	},
@@ -137,13 +138,14 @@ export function ShortcutsDialog() {
 function defaultLabel(key: string): string {
 	const map: Record<string, string> = {
 		"shortcuts.openCommand": "Open command palette",
+		"shortcuts.toggleSidebar": "Toggle sidebar",
 		"shortcuts.openHelp": "Open this dialog",
 		"shortcuts.goFiles": "Go to Files",
 		"shortcuts.goCalendar": "Go to Calendar",
 		"shortcuts.goMeeting": "Go to Meeting",
 		"shortcuts.goChat": "Go to Chat AI",
 		"shortcuts.goRag": "Go to RAG",
-		"shortcuts.goInbox": "Go to Inbox",
+		"shortcuts.goInbox": "Go to Gmail",
 		"shortcuts.goHome": "Go to landing page",
 	};
 	return map[key] ?? key;

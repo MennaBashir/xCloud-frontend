@@ -7,10 +7,17 @@ import {
 	CircleCheck,
 	FolderClosed,
 	Inbox,
+	MessageSquare,
+	Mic,
+	MicOff,
+	Monitor,
+	PhoneOff,
 	PlayCircle,
 	Sparkles,
+	Users,
 	Video,
 } from "lucide-react";
+import type { LucideIcon } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -276,6 +283,60 @@ function HeroTitleSecondLine({
 /* ──────────────────────────────────────────────────────────────────────────
  * MockupCore — same content as before, padding tuned for centered layout.
  * ──────────────────────────────────────────────────────────────────────── */
+type Participant = {
+	name: string;
+	initials: string;
+	role: string;
+	from: string;
+	to: string;
+	fg: string;
+	speaking: boolean;
+	muted: boolean;
+};
+
+const PARTICIPANTS: Participant[] = [
+	{
+		name: "Priya Raman",
+		initials: "PR",
+		role: "Product Lead",
+		from: "oklch(0.74 0.16 285)",
+		to: "oklch(0.62 0.19 245)",
+		fg: "oklch(0.98 0.01 250)",
+		speaking: true,
+		muted: false,
+	},
+	{
+		name: "Marcus Vale",
+		initials: "MV",
+		role: "Engineering",
+		from: "oklch(0.78 0.13 162)",
+		to: "oklch(0.62 0.16 162)",
+		fg: "oklch(0.98 0.01 160)",
+		speaking: false,
+		muted: true,
+	},
+	{
+		name: "Aisha Karim",
+		initials: "AK",
+		role: "Design",
+		from: "oklch(0.82 0.14 75)",
+		to: "oklch(0.7 0.16 50)",
+		fg: "oklch(0.18 0.02 60)",
+		speaking: false,
+		muted: false,
+	},
+	{
+		name: "Devon Tate",
+		initials: "DT",
+		role: "Marketing",
+		from: "oklch(0.74 0.16 25)",
+		to: "oklch(0.6 0.18 15)",
+		fg: "oklch(0.98 0.01 20)",
+		speaking: false,
+		muted: true,
+	},
+];
+
 function MockupCore() {
 	const tasks = [
 		{
@@ -342,27 +403,13 @@ function MockupCore() {
 
 					{/* Video tiles */}
 					<div className="grid grid-cols-2 gap-2.5">
-						{[0, 1, 2, 3].map((i) => (
-							<div
-								key={i}
-								className="aspect-[4/3] rounded-[var(--radius-lg)] bg-surface-muted ring-1 ring-inset ring-border relative overflow-hidden"
-								style={{
-									backgroundImage:
-										"radial-gradient(at " +
-										[30, 70, 40, 60][i] +
-										"% " +
-										[30, 60, 70, 40][i] +
-										"%, oklch(0.55 0.2 " +
-										[285, 245, 162, 25][i] +
-										" / 0.4) 0px, transparent 60%)",
-								}}
-							>
-								<span className="absolute bottom-2 start-2 inline-flex items-center gap-1.5 rounded-full bg-black/60 backdrop-blur-sm text-white px-2 py-0.5 text-[0.6875rem] font-medium">
-									{["Priya", "Marcus", "Aisha", "Devon"][i]}
-								</span>
-							</div>
+						{PARTICIPANTS.map((person) => (
+							<ParticipantTile key={person.initials} person={person} />
 						))}
 					</div>
+
+					{/* Meeting control bar — mirrors the real in-call BottomBar */}
+					<MeetingControlBar />
 
 					{/* Caption */}
 					<div className="mt-4 rounded-[var(--radius-md)] border border-border bg-surface-muted/60 px-3 py-2.5 flex items-start gap-2">
@@ -451,6 +498,157 @@ function MockupCore() {
 				</div>
 			</div>
 		</div>
+	);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * ParticipantTile — a real meeting-account tile: gradient avatar with the
+ * person's initials, a name + role label, live mic state, and a speaking
+ * ring for the active speaker. Reads like a real roster, not flat swatches.
+ * ──────────────────────────────────────────────────────────────────────── */
+function ParticipantTile({ person }: { person: Participant }) {
+	const gradientId = `tile-grad-${person.initials.toLowerCase()}`;
+	return (
+		<div
+			className={cn(
+				"aspect-[4/3] rounded-[var(--radius-lg)] bg-surface-muted relative overflow-hidden",
+				"ring-1 ring-inset",
+				person.speaking
+					? "ring-2 ring-success"
+					: "ring-border",
+			)}
+		>
+			{/* Camera feed stand-in — soft tinted vignette */}
+			<div
+				aria-hidden="true"
+				className="absolute inset-0"
+				style={{
+					backgroundImage: `radial-gradient(at 50% 38%, ${person.from} / 0.28, transparent 68%)`,
+				}}
+			/>
+
+			{/* Account avatar */}
+			<div className="absolute inset-0 grid place-items-center">
+				<span className="relative inline-grid place-items-center size-11 sm:size-12">
+					<svg
+						width="48"
+						height="48"
+						viewBox="0 0 48 48"
+						className="absolute inset-0 rounded-full"
+						aria-hidden="true"
+					>
+						<defs>
+							<linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
+								<stop offset="0%" stopColor={person.from} />
+								<stop offset="100%" stopColor={person.to} />
+							</linearGradient>
+						</defs>
+						<circle cx="24" cy="24" r="24" fill={`url(#${gradientId})`} />
+					</svg>
+					<span
+						className="relative text-[0.8125rem] font-semibold tracking-tight"
+						style={{ color: person.fg }}
+					>
+						{person.initials}
+					</span>
+				</span>
+			</div>
+
+			{/* Name card — full name + role, with a live mic chip */}
+			<div className="absolute inset-x-2 bottom-2 flex items-center gap-2 rounded-[var(--radius-sm)] bg-black/55 backdrop-blur-md px-2 py-1.5 ring-1 ring-inset ring-white/10">
+				<span
+					className={cn(
+						"grid size-5 shrink-0 place-items-center rounded-full",
+						person.muted ? "bg-white/15" : "bg-success/85",
+					)}
+				>
+					{person.muted ? (
+						<MicOff className="size-3 text-white/80" strokeWidth={1.8} />
+					) : (
+						<Mic className="size-3 text-white" strokeWidth={1.8} />
+					)}
+				</span>
+				<span className="flex flex-col min-w-0 leading-tight">
+					<span className="truncate text-[0.6875rem] font-semibold text-white">
+						{person.name}
+					</span>
+					<span className="truncate text-[0.5625rem] text-white/60">
+						{person.role}
+					</span>
+				</span>
+			</div>
+
+			{/* Speaking pulse */}
+			{person.speaking && (
+				<span className="absolute top-2 end-2 inline-flex items-center gap-1 rounded-full bg-success/90 text-white px-1.5 py-0.5 text-[0.5625rem] font-semibold uppercase tracking-wide">
+					<span className="size-1 rounded-full bg-white animate-pulse" />
+					Speaking
+				</span>
+			)}
+		</div>
+	);
+}
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * MeetingControlBar — a static mirror of the real in-call BottomBar. Same
+ * control cluster (mic / cam / share / record / chat / participants / leave)
+ * so the landing preview reads like the actual product, not a generic card.
+ * ──────────────────────────────────────────────────────────────────────── */
+function MeetingControlBar() {
+	return (
+		<div className="mt-4 flex items-center gap-2 rounded-[var(--radius-lg)] bg-foreground/[0.04] ring-1 ring-inset ring-border px-2.5 py-2">
+			<div className="flex-1 flex items-center justify-center gap-1.5">
+				<CtrlButton icon={Mic} label="Mic on" state="on" />
+				<CtrlButton icon={Video} label="Camera on" state="on" />
+				<CtrlButton icon={Monitor} label="Share screen" />
+				<CtrlButton icon={CircleCheck} label="Recording" state="rec" />
+				<CtrlButton icon={MessageSquare} label="Chat" />
+				<CtrlButton icon={Users} label="Participants" badge={4} />
+			</div>
+			<CtrlButton icon={PhoneOff} label="Leave" state="leave" />
+		</div>
+	);
+}
+
+function CtrlButton({
+	icon: Icon,
+	label,
+	state,
+	badge,
+}: {
+	icon: LucideIcon;
+	label: string;
+	state?: "on" | "rec" | "leave";
+	badge?: number;
+}) {
+	return (
+		<span
+			role="img"
+			aria-label={label}
+			className={cn(
+				"relative grid size-8 sm:size-9 place-items-center rounded-full ring-1 ring-inset",
+				state === "leave"
+					? "bg-destructive text-white ring-transparent shadow-[0_1px_2px_oklch(0_0_0/0.12)]"
+					: state === "rec"
+						? "bg-destructive/12 text-destructive ring-destructive/25"
+						: state === "on"
+							? "bg-surface-muted text-foreground ring-border"
+							: "bg-card text-muted-foreground ring-border",
+			)}
+		>
+			<Icon className="size-3.5 sm:size-4" strokeWidth={1.7} />
+			{state === "rec" && (
+				<span
+					aria-hidden="true"
+					className="absolute -top-0.5 -end-0.5 size-1.5 rounded-full bg-destructive animate-pulse"
+				/>
+			)}
+			{typeof badge === "number" && (
+				<span className="absolute -top-1 -end-1 grid min-w-4 h-4 place-items-center rounded-full bg-ai px-1 text-[0.5625rem] font-semibold text-ai-foreground ring-2 ring-card">
+					{badge}
+				</span>
+			)}
+		</span>
 	);
 }
 

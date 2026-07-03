@@ -1,7 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { BellRing, Clock, Plus, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, type ControllerRenderProps } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
@@ -168,8 +168,10 @@ const formatReminderDate = (isoString: string) => {
         }).format(date);
     };
 
-    // Fake Field object for the DatePicker inside the Dialog
-    const fakeFieldProps = {
+    // The reminder DatePicker lives outside react-hook-form, so we hand it a
+    // field-shaped object with the same properties RHF would provide. This lets
+    // us reuse the same DatePicker without wiring a real form field.
+    const fakeFieldProps: ControllerRenderProps = {
         value: newReminderTime,
         onChange: (value: string) => setNewReminderTime(value),
         onBlur: () => {},
@@ -432,10 +434,10 @@ const formatReminderDate = (isoString: string) => {
                         <Label className="text-[0.8125rem] font-medium">
                             {t("form.remindAt")}
                         </Label>
-                        {/* Using the fakeFieldProps to interact with the DatePicker */}
+                        {/* fakeFieldProps stands in for a react-hook-form field */}
                         <DatePicker
                             disabled={false}
-                            fieldValidation={fakeFieldProps as any} 
+                            fieldValidation={fakeFieldProps}
                         />
                     </div>
 

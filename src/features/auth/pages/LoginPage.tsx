@@ -5,6 +5,7 @@ import { AlertCircle } from "lucide-react";
 
 import { AuthLayout } from "../components/AuthLayout";
 import { GoogleSignInButton } from "../components/GoogleSignInButton";
+import { HowItWorks } from "../components/HowItWorks";
 import { useAuth } from "../hooks/useAuth";
 import { useAuthStore } from "../store/authStore";
 import type { User } from "../types/user";
@@ -88,6 +89,8 @@ export default function LoginPage() {
         <p className="text-[0.75rem] leading-relaxed text-muted-foreground/80 text-center">
           {t("auth:google.terms")}
         </p>
+
+        <HowItWorks />
 
         <button
           type="button"

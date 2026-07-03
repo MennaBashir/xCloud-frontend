@@ -9,7 +9,7 @@
 		"calendar": "Calendar",
 		"chat": "Chat AI",
 		"rag": "Documents",
-		"gmail": "Inbox",
+		"gmail": "Gmail",
 		"home": "Home",
 		"settings": "Settings"
 	},
@@ -39,7 +39,9 @@
 		"backToHome": "Back to home",
 		"watchDemo": "Watch demo",
 		"viewAll": "View all",
-		"retry": "Try again"
+		"retry": "Try again",
+		"collapseSidebar": "Collapse sidebar",
+		"expandSidebar": "Expand sidebar"
 	},
 	"theme": {
 		"label": "Theme",
@@ -72,13 +74,14 @@
 		"title": "Keyboard shortcuts",
 		"description": "Move faster through SprintifAI without touching your mouse.",
 		"openCommand": "Open command palette",
+		"toggleSidebar": "Toggle sidebar",
 		"openHelp": "Open this dialog",
 		"goFiles": "Go to Files",
 		"goCalendar": "Go to Calendar",
 		"goMeeting": "Go to Meeting",
 		"goChat": "Go to Chat AI",
 		"goRag": "Go to Documents",
-		"goInbox": "Go to Inbox",
+		"goInbox": "Go to Gmail",
 		"goHome": "Go to landing page",
 		"groups": {
 			"general": "General",

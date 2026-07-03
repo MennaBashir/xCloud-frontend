@@ -91,7 +91,7 @@ export function ThreadView({ onRefresh, onBack }: ThreadViewProps) {
 							className="gap-2 -ms-2"
 						>
 							<ArrowLeft className="size-4 rtl-flip" strokeWidth={1.6} />
-							<span>{t("actions.backToInbox", { defaultValue: "Inbox" })}</span>
+							<span>{t("actions.backToInbox", { defaultValue: "Gmail" })}</span>
 						</Button>
 					</div>
 				) : null}
@@ -154,7 +154,7 @@ export function ThreadView({ onRefresh, onBack }: ThreadViewProps) {
 						className="gap-2 -ms-2"
 					>
 						<ArrowLeft className="size-4 rtl-flip" strokeWidth={1.6} />
-						<span>{t("actions.backToInbox", { defaultValue: "Inbox" })}</span>
+						<span>{t("actions.backToInbox", { defaultValue: "Gmail" })}</span>
 					</Button>
 				</div>
 			) : null}

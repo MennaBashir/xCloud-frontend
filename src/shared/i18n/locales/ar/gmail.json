@@ -1,8 +1,8 @@
 {
-	"title": "البريد",
+	"title": "Gmail",
 	"subtitle": "افرز الرسائل أسرع بفضل ملخّصات الذكاء الاصطناعي.",
 	"folders": {
-		"inbox": "صندوق الوارد",
+		"inbox": "Gmail",
 		"starred": "المميّزة بنجمة",
 		"sent": "المرسلة",
 		"drafts": "المسوّدات",
@@ -26,7 +26,7 @@
 		"summarize": "تلخيص المحادثة",
 		"send": "إرسال",
 		"discard": "تجاهل",
-		"backToInbox": "البريد",
+		"backToInbox": "Gmail",
 		"sync": "مزامنة",
 		"syncResult_zero": "لا توجد رسائل جديدة",
 		"syncResult_one": "تمت مزامنة رسالة جديدة",

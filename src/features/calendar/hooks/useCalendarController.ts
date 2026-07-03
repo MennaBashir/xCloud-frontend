@@ -12,17 +12,50 @@ import type { CalendarEvent, CalendarReminder } from "@/features/calendar/types"
 import { useReminder } from "./useReminder";
 import { useLocalReminders } from "./useLocalReminders";
 
-
+/**
+ * useCalendarController — the "brain" behind the calendar screen.
+ *
+ * It wires three concerns together and hands the UI a ready-to-use set of
+ * state + event handlers:
+ *   1. Events      — CRUD + Google sync (via `useCalendarEvents`)
+ *   2. Reminders   — saved reminders on the server (via `useReminder`)
+ *   3. Draft reminders — reminders the user is adding/removing in the open
+ *      modal before saving (via `useLocalReminders`)
+ *
+ * The FullCalendar `<FullCalendar ref={calendarRef} />` instance is controlled
+ * through `calendarRef` (prev/next/today/changeView).
+ */
 export const useCalendarController = () => {
 	// --- STATE ---
 	const [isModalOpen, setIsModalOpen] = useState(false);
 
-	const { events ,error ,isLoading ,isFetching, addEvent, updateEvent, deleteEvent, resizeEvent, dropEvent, syncWithGoogle, isSyncing } =
-		useCalendarEvents();
+	const {
+		events,
+		error,
+		isLoading,
+		isFetching,
+		addEvent,
+		updateEvent,
+		deleteEvent,
+		resizeEvent,
+		dropEvent,
+		syncWithGoogle,
+		isSyncing,
+	} = useCalendarEvents();
 
-	const {addReminder, removeReminder, isAddingReminder ,reminderError, isRemovingReminder} = useReminder();
+	const {
+		addReminder,
+		removeReminder,
+		isAddingReminder,
+		reminderError,
+		isRemovingReminder,
+	} = useReminder();
 
-	const { reminders: localReminders, deletedIds, clearLocalReminders } = useLocalReminders();
+	const {
+		reminders: localReminders,
+		deletedIds,
+		clearLocalReminders,
+	} = useLocalReminders();
 
 	const calendarRef = useRef<FullCalendar | null>(null);
 
@@ -56,8 +89,8 @@ export const useCalendarController = () => {
 	useEffect(() => {
 		if (hasAutoSynced.current) return;
 		hasAutoSynced.current = true;
+		// Read the latest sync fn from the ref so we can run only once on mount.
 		syncRef.current(true);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	// --- HANDLERS ---
@@ -107,8 +140,13 @@ export const useCalendarController = () => {
 	};
 
 	const handleEventSubmit = async (eventData: CalendarEvent) => {
-        const { reminders, hasReminders, id, ...taskData } = eventData as any;
-        
+        // `reminders` and `hasReminders` are UI-only fields. Strip them so we
+        // send just the event data the backend expects. (The payload mapper
+        // ignores `id`, so we can safely leave it on `taskData`.) Reminders are
+        // saved separately below.
+        const { reminders: _reminders, hasReminders: _hasReminders, ...taskData } =
+            eventData;
+
         try {
             let currentEventId = selectedEvent?.id;
 
@@ -122,15 +160,20 @@ export const useCalendarController = () => {
             }
 
             if (currentEventId) {
+                // Delete any reminders the user removed while editing.
                 deletedIds.forEach((deletedId) => {
                     removeReminder(deletedId);
                 });
 
-                const newReminders = localReminders.filter((r) => String(r.id).startsWith("temp-"));
+                // New reminders start with a "temp-" id until the backend
+                // assigns a real one. Persist only those.
+                const newReminders = localReminders.filter((r) =>
+                    String(r.id).startsWith("temp-"),
+                );
                 newReminders.forEach((reminder) => {
                     addReminder({
                         task_id: currentEventId,
-                        remind_at: reminder.remind_at || (reminder as any).remindAt,
+                        remind_at: reminder.remind_at,
                     });
                 });
             }
