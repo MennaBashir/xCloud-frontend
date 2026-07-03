@@ -83,7 +83,7 @@
 			}
 		},
 		"gmail": {
-			"eyebrow": "Inbox",
+			"eyebrow": "Gmail",
 			"title": "Read 3 emails. Skip the other 97.",
 			"description": "Every thread gets an AI summary before you open it. Reply in your own voice with drafts that already know the context.",
 			"bullets": {

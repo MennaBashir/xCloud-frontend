@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { useCommandPalette } from "@/shared/layout/command-palette-store";
 import { useShortcutsStore } from "@/shared/layout/shortcuts-store";
+import { useSidebar } from "@/shared/layout/sidebar-store";
 
 const SEQUENCE_TIMEOUT_MS = 800;
 
@@ -24,6 +25,7 @@ function isTypingInField(target: EventTarget | null): boolean {
  * Global keyboard shortcuts.
  *
  *  ⌘K / Ctrl+K   — open command palette (already handled in CommandPalette)
+ *  ⌘B / Ctrl+B   — toggle the sidebar (collapse / expand)
  *  ?             — open shortcuts help
  *  g then f      — go to Files
  *  g then c      — go to Calendar
@@ -39,6 +41,7 @@ export function useGlobalShortcuts() {
 	const navigate = useNavigate();
 	const openCommandPalette = useCommandPalette((s) => s.open);
 	const openShortcuts = useShortcutsStore((s) => s.open);
+	const toggleSidebar = useSidebar((s) => s.toggle);
 	const leaderRef = useRef<{ key: string; at: number } | null>(null);
 
 	useEffect(() => {
@@ -53,6 +56,13 @@ export function useGlobalShortcuts() {
 			if (event.key.toLowerCase() === "k" && (event.metaKey || event.ctrlKey)) {
 				event.preventDefault();
 				openCommandPalette();
+				return;
+			}
+
+			// ⌘B / Ctrl+B — toggle the sidebar
+			if (event.key.toLowerCase() === "b" && (event.metaKey || event.ctrlKey)) {
+				event.preventDefault();
+				toggleSidebar();
 				return;
 			}
 
@@ -101,5 +111,5 @@ export function useGlobalShortcuts() {
 
 		window.addEventListener("keydown", handler);
 		return () => window.removeEventListener("keydown", handler);
-	}, [navigate, openCommandPalette, openShortcuts]);
+	}, [navigate, openCommandPalette, openShortcuts, toggleSidebar]);
 }

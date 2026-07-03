@@ -34,9 +34,11 @@ function initials(name: string) {
 
 type UserMenuProps = {
 	className?: string;
+	/** Icon-only rendering for a collapsed sidebar rail. */
+	collapsed?: boolean;
 };
 
-export function UserMenu({ className }: UserMenuProps) {
+export function UserMenu({ className, collapsed = false }: UserMenuProps) {
 	const { t } = useTranslation();
 	const navigate = useNavigate();
 	const user = useAuthStore(selectUser);
@@ -56,10 +58,13 @@ export function UserMenu({ className }: UserMenuProps) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger
+				aria-label={collapsed ? user.name : undefined}
+				title={collapsed ? user.name : undefined}
 				className={cn(
-					"group/usermenu inline-flex items-center gap-3 w-full",
-					"px-2 py-2 rounded-[var(--radius-md)]",
+					"group/usermenu inline-flex items-center w-full",
+					"rounded-[var(--radius-md)]",
 					"text-start",
+					collapsed ? "justify-center px-1 py-2" : "gap-3 px-2 py-2",
 					"hover:bg-sidebar-accent transition-colors duration-[var(--duration-fast)] ease-[cubic-bezier(0.32,0.72,0,1)]",
 					"focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-sidebar",
 					className,
@@ -71,18 +76,22 @@ export function UserMenu({ className }: UserMenuProps) {
 						{initials(user.name)}
 					</AvatarFallback>
 				</Avatar>
-				<div className="flex flex-col min-w-0 flex-1">
-					<span className="text-[0.8125rem] font-medium text-foreground truncate">
-						{user.name}
-					</span>
-					<span className="text-[0.6875rem] text-muted-foreground truncate">
-						{user.email}
-					</span>
-				</div>
-				<ChevronUp
-					className="size-3.5 text-muted-foreground shrink-0"
-					strokeWidth={1.6}
-				/>
+				{!collapsed ? (
+					<>
+						<div className="flex flex-col min-w-0 flex-1">
+							<span className="text-[0.8125rem] font-medium text-foreground truncate">
+								{user.name}
+							</span>
+							<span className="text-[0.6875rem] text-muted-foreground truncate">
+								{user.email}
+							</span>
+						</div>
+						<ChevronUp
+							className="size-3.5 text-muted-foreground shrink-0"
+							strokeWidth={1.6}
+						/>
+					</>
+				) : null}
 			</DropdownMenuTrigger>
 
 			<DropdownMenuContent

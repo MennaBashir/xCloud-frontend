@@ -25,6 +25,17 @@ export default defineConfig([
 				"warn",
 				{ allowConstantExport: true },
 			],
+			// Allow intentionally-unused names when they start with "_"
+			// (e.g. destructuring to drop a field, or a required-but-unused arg).
+			"@typescript-eslint/no-unused-vars": [
+				"error",
+				{
+					argsIgnorePattern: "^_",
+					varsIgnorePattern: "^_",
+					caughtErrorsIgnorePattern: "^_",
+					destructuredArrayIgnorePattern: "^_",
+				},
+			],
 		},
 	},
 ]);

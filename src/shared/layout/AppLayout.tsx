@@ -10,7 +10,6 @@ import { RouteTransition } from "./RouteTransition";
 import { ShortcutsDialog } from "./ShortcutsDialog";
 import { useGlobalShortcuts } from "@/shared/hooks/useGlobalShortcuts";
 import { useNotifications } from "@/features/notifications/hooks/useNotifications";
-import { useSimulatedArrival } from "@/features/notifications/hooks/useSimulatedArrival";
 import { useReminderWatcher } from "@/features/calendar/hooks/useReminderWatcher";
 
 export function AppLayout() {
@@ -25,9 +24,8 @@ export function AppLayout() {
 	}, [location.pathname]);
 
 	useGlobalShortcuts();
-	// Hydrate notifications + arm one simulated arrival per session
+	// Hydrate notifications once for the whole app shell (bell + page share it)
 	useNotifications();
-	useSimulatedArrival();
 
 	useReminderWatcher();
 

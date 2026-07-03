@@ -4,10 +4,17 @@ import { motion } from "motion/react";
 import {
 	CalendarDays,
 	Check,
+	CircleCheck,
 	FolderClosed,
 	type LucideIcon,
 	Inbox,
+	MessageSquare,
+	Mic,
+	MicOff,
+	Monitor,
+	PhoneOff,
 	Sparkles,
+	Users,
 	Video,
 } from "lucide-react";
 
@@ -274,6 +281,206 @@ function HubStage() {
  * StageCard — wider Meeting card with built-in decision bar at the bottom edge
  * ════════════════════════════════════════════════════════════════════════════ */
 
+type StageParticipant = {
+	name: string;
+	role: string;
+	initials: string;
+	from: string;
+	to: string;
+	fg: string;
+	speaking: boolean;
+	muted: boolean;
+};
+
+const STAGE_PARTICIPANTS: StageParticipant[] = [
+	{
+		name: "Priya Raman",
+		role: "Product Lead",
+		initials: "PR",
+		from: "oklch(0.74 0.16 285)",
+		to: "oklch(0.62 0.19 245)",
+		fg: "oklch(0.98 0.01 250)",
+		speaking: true,
+		muted: false,
+	},
+	{
+		name: "Marcus Vale",
+		role: "Engineering",
+		initials: "MV",
+		from: "oklch(0.78 0.13 162)",
+		to: "oklch(0.62 0.16 162)",
+		fg: "oklch(0.98 0.01 160)",
+		speaking: false,
+		muted: true,
+	},
+	{
+		name: "Aisha Karim",
+		role: "Design",
+		initials: "AK",
+		from: "oklch(0.82 0.14 75)",
+		to: "oklch(0.7 0.16 50)",
+		fg: "oklch(0.18 0.02 60)",
+		speaking: false,
+		muted: false,
+	},
+	{
+		name: "Devon Tate",
+		role: "Marketing",
+		initials: "DT",
+		from: "oklch(0.74 0.16 25)",
+		to: "oklch(0.6 0.18 15)",
+		fg: "oklch(0.98 0.01 20)",
+		speaking: false,
+		muted: true,
+	},
+];
+
+function StageParticipantTile({ person }: { person: StageParticipant }) {
+	const gradientId = `stage-grad-${person.initials.toLowerCase()}`;
+	return (
+		<div
+			className={cn(
+				"aspect-[16/10] rounded-[var(--radius-sm)] bg-surface-muted relative overflow-hidden",
+				"ring-1 ring-inset",
+				person.speaking ? "ring-2 ring-success" : "ring-border/70",
+			)}
+		>
+			{/* Camera feed stand-in — soft tinted vignette */}
+			<div
+				aria-hidden="true"
+				className="absolute inset-0"
+				style={{
+					backgroundImage: `radial-gradient(at 50% 40%, ${person.from} / 0.24, transparent 66%)`,
+				}}
+			/>
+
+			{/* Account avatar */}
+			<div className="absolute inset-0 grid place-items-center">
+				<span className="relative inline-grid place-items-center size-8 xs:size-9">
+					<svg
+						width="36"
+						height="36"
+						viewBox="0 0 36 36"
+						className="absolute inset-0 rounded-full"
+						aria-hidden="true"
+					>
+						<defs>
+							<linearGradient id={gradientId} x1="0" y1="0" x2="1" y2="1">
+								<stop offset="0%" stopColor={person.from} />
+								<stop offset="100%" stopColor={person.to} />
+							</linearGradient>
+						</defs>
+						<circle cx="18" cy="18" r="18" fill={`url(#${gradientId})`} />
+					</svg>
+					<span
+						className="relative text-[0.625rem] font-semibold tracking-tight"
+						style={{ color: person.fg }}
+					>
+						{person.initials}
+					</span>
+				</span>
+			</div>
+
+			{/* Name card — full name + role, with a live mic chip */}
+			<div className="absolute inset-x-1.5 bottom-1.5 flex items-center gap-1.5 rounded-[var(--radius-xs)] bg-black/55 backdrop-blur-md px-1.5 py-1 ring-1 ring-inset ring-white/10">
+				<span
+					className={cn(
+						"grid size-4 shrink-0 place-items-center rounded-full",
+						person.muted ? "bg-white/15" : "bg-success/85",
+					)}
+				>
+					{person.muted ? (
+						<MicOff className="size-2.5 text-white/80" strokeWidth={1.9} />
+					) : (
+						<Mic className="size-2.5 text-white" strokeWidth={1.9} />
+					)}
+				</span>
+				<span className="flex flex-col min-w-0 leading-none gap-0.5">
+					<span className="truncate text-[0.5625rem] font-semibold text-white">
+						{person.name}
+					</span>
+					<span className="hidden xs:block truncate text-[0.5rem] text-white/60">
+						{person.role}
+					</span>
+				</span>
+			</div>
+
+			{/* Speaking badge */}
+			{person.speaking && (
+				<span className="absolute top-1.5 end-1.5 inline-flex items-center gap-1 rounded-full bg-success/85 text-white px-1.5 py-0.5 text-[0.5rem] font-medium">
+					<span
+						aria-hidden="true"
+						className="size-1 rounded-full bg-white motion-safe:animate-pulse"
+					/>
+					<span className="hidden xs:inline">Speaking</span>
+				</span>
+			)}
+		</div>
+	);
+}
+
+/* ────────────────────────────────────────────────────────────────────────
+ * StageControlBar — compact mirror of the real in-call BottomBar so the
+ * "connected surfaces" preview reads like the actual meeting product.
+ * ──────────────────────────────────────────────────────────────────────── */
+function StageControlBar() {
+	return (
+		<div className="flex items-center gap-1.5 rounded-[var(--radius-md)] bg-foreground/[0.04] ring-1 ring-inset ring-border px-2 py-1.5">
+			<div className="flex-1 flex items-center justify-center gap-1 xs:gap-1.5">
+				<StageCtrlButton icon={Mic} label="Mic on" state="on" />
+				<StageCtrlButton icon={Video} label="Camera on" state="on" />
+				<StageCtrlButton icon={Monitor} label="Share screen" />
+				<StageCtrlButton icon={CircleCheck} label="Recording" state="rec" />
+				<StageCtrlButton icon={MessageSquare} label="Chat" />
+				<StageCtrlButton icon={Users} label="Participants" badge={4} />
+			</div>
+			<StageCtrlButton icon={PhoneOff} label="Leave" state="leave" />
+		</div>
+	);
+}
+
+function StageCtrlButton({
+	icon: Icon,
+	label,
+	state,
+	badge,
+}: {
+	icon: LucideIcon;
+	label: string;
+	state?: "on" | "rec" | "leave";
+	badge?: number;
+}) {
+	return (
+		<span
+			role="img"
+			aria-label={label}
+			className={cn(
+				"relative grid size-6 xs:size-7 place-items-center rounded-full ring-1 ring-inset",
+				state === "leave"
+					? "bg-destructive text-white ring-transparent shadow-[0_1px_2px_oklch(0_0_0/0.12)]"
+					: state === "rec"
+						? "bg-destructive/12 text-destructive ring-destructive/25"
+						: state === "on"
+							? "bg-surface-muted text-foreground ring-border"
+							: "bg-card text-muted-foreground ring-border",
+			)}
+		>
+			<Icon className="size-3 xs:size-3.5" strokeWidth={1.7} />
+			{state === "rec" && (
+				<span
+					aria-hidden="true"
+					className="absolute -top-0.5 -end-0.5 size-1.5 rounded-full bg-destructive motion-safe:animate-pulse"
+				/>
+			)}
+			{typeof badge === "number" && (
+				<span className="absolute -top-1 -end-1 grid min-w-3.5 h-3.5 place-items-center rounded-full bg-ai px-0.5 text-[0.5rem] font-semibold text-ai-foreground ring-2 ring-card">
+					{badge}
+				</span>
+			)}
+		</span>
+	);
+}
+
 const StageCard = memo(function StageCard() {
 	const { t } = useTranslation("landing");
 
@@ -318,36 +525,15 @@ const StageCard = memo(function StageCard() {
 				</div>
 
 				{/* Video tiles */}
-				<div className="grid grid-cols-2 gap-2 p-3">
-					{[0, 1, 2, 3].map((i) => (
-						<div
-							key={i}
-							className="aspect-[16/10] rounded-[var(--radius-sm)] bg-surface-muted ring-1 ring-inset ring-border/70 relative overflow-hidden"
-							style={{
-								backgroundImage:
-									"radial-gradient(at " +
-									[28, 72, 38, 62][i] +
-									"% " +
-									[32, 60, 70, 38][i] +
-									"%, oklch(0.55 0.2 " +
-									[285, 245, 162, 25][i] +
-									" / 0.42) 0px, transparent 60%)",
-							}}
-						>
-							<span className="absolute bottom-1.5 start-1.5 inline-flex items-center gap-1.5 rounded-full bg-black/60 text-white px-1.5 py-0.5 text-[0.5625rem] font-medium">
-								{["Priya", "Marcus", "Aisha", "Devon"][i]}
-							</span>
-							{i === 0 ? (
-								<span className="absolute top-1.5 end-1.5 inline-flex items-center gap-1 rounded-full bg-success/85 text-white px-1.5 py-0.5 text-[0.5rem] font-medium">
-									<span
-										aria-hidden="true"
-										className="size-1 rounded-full bg-white"
-									/>
-									<span className="hidden xs:inline">Speaking</span>
-								</span>
-							) : null}
-						</div>
+				<div className="grid grid-cols-2 gap-2 px-3 pt-3 pb-2">
+					{STAGE_PARTICIPANTS.map((person) => (
+						<StageParticipantTile key={person.initials} person={person} />
 					))}
+				</div>
+
+				{/* Meeting control bar — mirrors the real in-call BottomBar */}
+				<div className="px-3 pb-3">
+					<StageControlBar />
 				</div>
 
 				{/* Decision bar — the payload "leaves" the meeting through this strip */}

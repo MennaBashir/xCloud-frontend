@@ -5,16 +5,15 @@ import {
 	listNotifications,
 	markAllRead as markAllReadApi,
 	markRead as markReadApi,
-} from "../mock/mockNotificationsService";
+} from "../services/notificationsService";
 import { useNotificationsStore } from "../store/notificationsStore";
 
 /**
  * Bootstraps the notifications list once per session and exposes
- * idempotent mark/dismiss callbacks that keep mock service + store
- * in sync.
+ * idempotent mark/dismiss callbacks that keep the service + store in sync.
  *
- * Designed to be mounted at app shell level (AppLayout) so the bell + page
- * share the same data and no double-fetch occurs.
+ * Mounted once at app shell level (AppLayout) so the bell + page share the
+ * same data and no double-fetch occurs.
  */
 export function useNotifications() {
 	const hasHydrated = useNotificationsStore((s) => s.hasHydrated);
