@@ -3,7 +3,6 @@ import {
 	FileText,
 	Folder,
 	Mic,
-	NotebookPen,
 	Sparkles,
 	type LucideIcon,
 } from "lucide-react";
@@ -27,7 +26,6 @@ const TABS: TabDef[] = [
 	},
 	{ key: "summarized", icon: Sparkles, labelKey: "categories.summarized" },
 	{ key: "recordings", icon: Mic, labelKey: "categories.recordings" },
-	{ key: "notes", icon: NotebookPen, labelKey: "categories.notes" },
 ];
 
 export function CategoryTabs() {

@@ -10,6 +10,12 @@ type Options = {
 	selector?: string;
 	/** Re-run the reveal whenever any of these change (e.g. filter/sort/folder). */
 	deps?: unknown[];
+	/**
+	 * The scrollable element the items live inside. Defaults to the window.
+	 * Pass this when the list scrolls inside an `overflow-y-auto` container
+	 * (otherwise items below the initial viewport never reveal).
+	 */
+	scroller?: RefObject<HTMLElement | null>;
 };
 
 /**
@@ -31,7 +37,7 @@ export function useListReveal(
 	scope: RefObject<HTMLElement | null>,
 	options: Options = {},
 ): void {
-	const { selector = "[data-list-item]", deps = [] } = options;
+	const { selector = "[data-list-item]", deps = [], scroller } = options;
 	const lastRunRef = useRef<number>(0);
 
 	useGSAP(
@@ -62,7 +68,9 @@ export function useListReveal(
 						transformOrigin: "center top",
 					});
 
+					const scrollerEl = scroller?.current ?? undefined;
 					const triggers = ScrollTrigger.batch(items, {
+						scroller: scrollerEl,
 						start: "top 92%",
 						once: true,
 						interval: 0.05,

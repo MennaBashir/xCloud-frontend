@@ -31,8 +31,12 @@ export default function GmailPage() {
 	const selectedThreadId = useGmailStore((s) => s.selectedThreadId);
 	const selectThread = useGmailStore((s) => s.selectThread);
 	const listScope = useRef<HTMLDivElement>(null);
+	const listScroller = useRef<HTMLDivElement>(null);
 	const [syncing, setSyncing] = useState(false);
-	useListReveal(listScope, { deps: [threads.length, loading] });
+	useListReveal(listScope, {
+		deps: [threads.length, loading],
+		scroller: listScroller,
+	});
 
 	const handleToggleStar = async (id: string) => {
 		await toggleStar(id);
@@ -140,7 +144,7 @@ export default function GmailPage() {
 						)}
 					>
 						<InboxToolbar />
-						<div className="flex-1 min-h-0 overflow-y-auto">
+						<div ref={listScroller} className="flex-1 min-h-0 overflow-y-auto">
 							<ThreadList
 								threads={threads}
 								loading={loading}
