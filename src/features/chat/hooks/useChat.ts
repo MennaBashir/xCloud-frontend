@@ -102,11 +102,14 @@ export function useChat() {
 			const controller = new AbortController();
 			setAbortController(controller);
 
+			let streamError: string | null = null;
+
 			try {
 				await llmGet.streamAgentChat({
 					token,
 					prompt: trimmed,
 					chatId: conversationId,
+					model: modelId,
 					think: options.think,
 					signal: controller.signal,
 					onEvent: (event) => {
@@ -167,12 +170,24 @@ export function useChat() {
 									content: m.content + event.content,
 								}));
 								break;
+							case "error":
+								streamError = event.message;
+								break;
 							case "done":
 							default:
 								break;
 						}
 					},
 				});
+
+				if (streamError) {
+					updateMessage(assistant.id, (m) => ({
+						...m,
+						status: "error",
+						content: m.content || streamError || "",
+					}));
+					return;
+				}
 
 				updateMessage(assistant.id, (m) => ({
 					...m,

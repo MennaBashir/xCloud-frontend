@@ -82,7 +82,32 @@
 		"label": "النموذج",
 		"changeModel": "تغيير النموذج",
 		"loading": "جارٍ تحميل النماذج…",
-		"empty": "لا توجد نماذج متاحة"
+		"empty": "لا توجد نماذج متاحة",
+		"sectionTitle": "نماذج {{provider}}",
+		"defaultBadge": "افتراضي",
+		"setDefault": "تعيين {{model}} كنموذج افتراضي",
+		"defaultSet": "تم تعيين {{model}} كنموذج افتراضي",
+		"defaultReset": "تمت إعادة النموذج الافتراضي إلى تلقائي",
+		"defaultError": "تعذّر تعيين النموذج الافتراضي",
+		"resetDefault": "إعادة الافتراضي إلى تلقائي"
+	},
+	"provider": {
+		"label": "المزوّد",
+		"none": "لم يتم اختيار مزوّد",
+		"defaultSection": "الافتراضي",
+		"customSection": "مزوّدون مخصّصون",
+		"apiKeyRequired": "يتطلب مفتاح API",
+		"switched": "تم التبديل إلى {{provider}}",
+		"switchError": "تعذّر تبديل المزوّد",
+		"configure": "إعداد {{provider}}",
+		"configTitle": "إعداد {{provider}}",
+		"configDescription": "أدخل مفتاح API وعنوان الخدمة لهذا المزوّد. تُحفظ الأسرار على الخادم.",
+		"secretSaved": "•••••• (محفوظ)",
+		"configSaved": "تم حفظ إعدادات {{provider}}",
+		"configError": "تعذّر حفظ الإعدادات",
+		"save": "حفظ",
+		"saving": "جارٍ الحفظ…",
+		"cancel": "إلغاء"
 	},
 	"rag": {
 		"label": "المستندات",

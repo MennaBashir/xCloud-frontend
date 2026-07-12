@@ -64,10 +64,12 @@ export type ModelFamily =
 	| "deepseek"
 	| "nomic"
 	| "command"
+	| "openai"
+	| "gemini"
 	| "generic";
 
 export type ChatModel = {
-	/** Raw Ollama model id, e.g. `qwen3:1.7b`. */
+	/** Raw provider model id, e.g. `qwen3:1.7b` or `gpt-4o-mini`. */
 	id: string;
 	/** Human-friendly label derived from the id. */
 	label: string;
@@ -77,6 +79,23 @@ export type ChatModel = {
 	isEmbedding?: boolean;
 	/** Detected model family — drives which logo is shown beside the name. */
 	family: ModelFamily;
+};
+
+/** A configurable field on an LLM provider (API key, base URL, …). */
+export type ProviderField = {
+	key: string;
+	label: string;
+	secret: boolean;
+	hasValue: boolean;
+	placeholder: string;
+};
+
+/** An LLM provider (Ollama, OpenAI, Alibaba, Gemini) from `GET /llm/providers`. */
+export type ChatProvider = {
+	id: string;
+	label: string;
+	isCurrent: boolean;
+	fields: ProviderField[];
 };
 
 export type SuggestionPrompt = {
