@@ -7,6 +7,7 @@ import type { llmGet } from "@/shared/api";
 import type {
 	ChatMessage,
 	ChatModel,
+	ChatProvider,
 	Citation,
 	Conversation,
 	ModelFamily,
@@ -17,21 +18,22 @@ export function isEmbeddingModel(modelId: string): boolean {
 	return /embed/i.test(modelId);
 }
 
-/** Detect the model family from a raw Ollama model id (for its logo). */
+/** Detect the model family from a raw provider model id (for its logo). */
 export function detectModelFamily(id: string): ModelFamily {
 	const s = id.toLowerCase();
 	if (/embed|nomic/.test(s)) return "nomic";
 	if (/qwen/.test(s)) return "qwen";
 	if (/llama|llava/.test(s)) return "llama";
-	if (/gemma/.test(s)) return "gemma";
+	if (/gemma|gemini/.test(s)) return /gemini/.test(s) ? "gemini" : "gemma";
 	if (/mistral|mixtral/.test(s)) return "mistral";
 	if (/phi/.test(s)) return "phi";
 	if (/deepseek/.test(s)) return "deepseek";
 	if (/command|cohere/.test(s)) return "command";
+	if (/gpt|^o\d|davinci|chatgpt/.test(s)) return "openai";
 	return "generic";
 }
 
-/** Turn a raw Ollama model id into a friendly label, e.g. `qwen3:1.7b` → `Qwen3 1.7b`. */
+/** Turn a raw provider model id into a friendly label, e.g. `qwen3:1.7b` → `Qwen3 1.7b`. */
 export function modelToChatModel(id: string): ChatModel {
 	const [name, tag] = id.split(":");
 	const pretty = name
@@ -45,6 +47,24 @@ export function modelToChatModel(id: string): ChatModel {
 		isEmbedding: embedding,
 		family: detectModelFamily(id),
 	};
+}
+
+/** Map `GET /llm/providers` payload into UI provider entries. */
+export function apiProvidersToChatProviders(
+	providers: Record<string, llmGet.ApiProvider>,
+): ChatProvider[] {
+	return Object.entries(providers).map(([id, p]) => ({
+		id,
+		label: p.label,
+		isCurrent: p.current,
+		fields: p.fields.map((f) => ({
+			key: f.key,
+			label: f.label,
+			secret: f.secret,
+			hasValue: f.has_value,
+			placeholder: f.placeholder,
+		})),
+	}));
 }
 
 export function apiChatToConversation(

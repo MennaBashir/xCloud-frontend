@@ -39,9 +39,28 @@ export type ApiSuggestedPrompt = {
 	category: string;
 };
 
-/** `["qwen3:1.7b", "nomic-embed-text:latest"]` — or `{ error }` if Ollama is down. */
+export type ApiProviderField = {
+	key: string;
+	label: string;
+	secret: boolean;
+	has_value: boolean;
+	placeholder: string;
+};
+
+export type ApiProvider = {
+	label: string;
+	current: boolean;
+	fields: ApiProviderField[];
+};
+
+/** `["qwen3:1.7b", "nomic-embed-text:latest"]` — or `{ error }` if the provider is down. */
 export function listModels(): Promise<string[] | { error: string }> {
 	return request<string[] | { error: string }>("GET", "/llm/models");
+}
+
+/** Provider registry keyed by provider id (`ollama`, `openai`, `alibaba`, `gemini`). */
+export function listProviders(): Promise<Record<string, ApiProvider>> {
+	return request<Record<string, ApiProvider>>("GET", "/llm/providers");
 }
 
 export function getDefaultModel(): Promise<{ default_model: string | null }> {
@@ -88,7 +107,8 @@ export type ChatStreamEvent =
 	| { type: "sources"; data: ChatSource[] }
 	| { type: "content"; content: string }
 	| { type: "thinking"; content: string }
-	| { type: "done"; thinking: string | null };
+	| { type: "done"; thinking: string | null }
+	| { type: "error"; message: string; model?: string };
 
 export type ChatSource = {
 	id?: string | number;
@@ -106,6 +126,8 @@ export type StreamChatParams = {
 	token: string;
 	prompt: string;
 	chatId?: string;
+	/** Model override for this request (falls back to the chat's model). */
+	model?: string;
 	useRag?: boolean;
 	useWebSearch?: boolean;
 	think?: boolean;
@@ -117,6 +139,7 @@ export function streamChat({
 	token,
 	prompt,
 	chatId,
+	model,
 	useRag,
 	useWebSearch,
 	think,
@@ -129,6 +152,7 @@ export function streamChat({
 		query: {
 			prompt,
 			chat_id: chatId,
+			model,
 			use_rag: useRag,
 			use_web_search: useWebSearch,
 			think,
@@ -153,12 +177,15 @@ export type AgentStreamEvent =
 	| { type: "tool_call"; name: string; args: Record<string, unknown> }
 	| { type: "tool_result"; name: string; result: string }
 	| { type: "content"; content: string }
-	| { type: "done"; thinking?: string | null };
+	| { type: "done"; thinking?: string | null }
+	| { type: "error"; message: string; model?: string };
 
 export type StreamAgentChatParams = {
 	token: string;
 	prompt: string;
 	chatId?: string;
+	/** Model override for this request (falls back to the chat's model). */
+	model?: string;
 	think?: boolean;
 	signal?: AbortSignal;
 	onEvent: (event: AgentStreamEvent) => void;
@@ -169,6 +196,7 @@ export function streamAgentChat({
 	token,
 	prompt,
 	chatId,
+	model,
 	think,
 	signal,
 	onEvent,
@@ -179,6 +207,7 @@ export function streamAgentChat({
 		query: {
 			prompt,
 			chat_id: chatId,
+			model,
 			think,
 		},
 		onLine: (line) => onEvent(line as AgentStreamEvent),

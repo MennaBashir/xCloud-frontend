@@ -19,6 +19,7 @@ export function createChat(
 	});
 }
 
+/** Set the default model. Pass `"auto"` to reset to auto-detection. */
 export function setDefaultModel(
 	token: string,
 	name: string,
@@ -26,5 +27,31 @@ export function setDefaultModel(
 	return request("POST", "/llm/models", {
 		token,
 		query: { name },
+	});
+}
+
+/** Switch the active LLM provider (`ollama`, `openai`, `alibaba`, `gemini`). */
+export function setProvider(
+	token: string,
+	provider: string,
+): Promise<{ message: string; settings: Record<string, unknown> }> {
+	return request("POST", "/llm/providers/set", {
+		token,
+		query: { provider },
+	});
+}
+
+/** Configure a provider's API key and/or base URL. */
+export function configureProvider(
+	token: string,
+	params: { provider: string; apiKey?: string; baseUrl?: string },
+): Promise<{ message: string }> {
+	return request("POST", "/llm/providers/config", {
+		token,
+		query: {
+			provider: params.provider,
+			api_key: params.apiKey,
+			base_url: params.baseUrl,
+		},
 	});
 }

@@ -23,7 +23,7 @@ import type {
 const DIR_TRANSCRIPTIONS = "~/Xcloud/transcriptions";
 const DIR_SUMMARIZATION = "~/Xcloud/summarization";
 const DIR_RECORDINGS = "~/Xcloud/recordings";
-const DIR_NOTES = "~/Xcloud/notes";
+const DIR_NOTES = "~/Xcloud/notes"; 
 
 /** Maps each non-virtual category to its single backing directory. */
 const CATEGORY_DIR: Record<

@@ -78,7 +78,32 @@
 		"label": "Model",
 		"changeModel": "Change model",
 		"loading": "Loading models…",
-		"empty": "No models available"
+		"empty": "No models available",
+		"sectionTitle": "{{provider}} models",
+		"defaultBadge": "Default",
+		"setDefault": "Set {{model}} as default",
+		"defaultSet": "Default model set to {{model}}",
+		"defaultReset": "Default model reset to auto",
+		"defaultError": "Could not set the default model",
+		"resetDefault": "Reset default to auto"
+	},
+	"provider": {
+		"label": "Provider",
+		"none": "No provider selected",
+		"defaultSection": "Default",
+		"customSection": "Custom providers",
+		"apiKeyRequired": "API key required",
+		"switched": "Switched to {{provider}}",
+		"switchError": "Could not switch provider",
+		"configure": "Configure {{provider}}",
+		"configTitle": "Configure {{provider}}",
+		"configDescription": "Set the API key and endpoint for this provider. Secrets are stored on the server.",
+		"secretSaved": "•••••• (saved)",
+		"configSaved": "{{provider}} configuration saved",
+		"configError": "Could not save the configuration",
+		"save": "Save",
+		"saving": "Saving…",
+		"cancel": "Cancel"
 	},
 	"rag": {
 		"label": "Documents",
